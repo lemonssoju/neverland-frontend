@@ -1,9 +1,10 @@
 import { SafeAreaView, Text } from 'react-native';
+import FeedUpload from '../components/Write/FeedUpload';
 
 const Write = () => {
   return (
-    <SafeAreaView>
-      <Text>작성</Text>
+    <SafeAreaView style={{flex: 1}}>
+      <FeedUpload />
     </SafeAreaView>
   );
 };
