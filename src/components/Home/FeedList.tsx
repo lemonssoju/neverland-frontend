@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { FlatList, SafeAreaView } from 'react-native';
 import FeedItem from './FeedItem';
+import SearchBar from '../common/SearchBar';
 
 const data = [
   {
@@ -25,8 +27,14 @@ const data = [
 ]
 
 const FeedList = () => {
+  const [search, setSearch] = useState<string>('');
+
   return (
     <SafeAreaView>
+      <SearchBar
+        search={search}
+        setSearch={setSearch}
+      />
       <FlatList
         data={data}
         renderItem={({item}) => {
