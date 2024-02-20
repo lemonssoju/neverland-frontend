@@ -4,6 +4,8 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { BLACK, MINT, WHITE } from './src/styles/GlobalColor';
+
 import HomeScreen from './src/pages/Home';
 import GroupScreen from './src/pages/Group';
 import WriteScreen from './src/pages/Write';
@@ -22,7 +24,7 @@ const GlobalTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#0D0C0C'
+    background: BLACK
   }
 }
 
@@ -56,7 +58,7 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: '#0D0C0C',
+        backgroundColor: BLACK,
         paddingHorizontal: 10,
       }}
     >
@@ -108,17 +110,17 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           >
             {
               {
-                0: <HomeIcon color={isFocused ? '#10F1AD' : 'white'} />,
-                1: <GroupIcon color={isFocused ? '#10F1AD' : 'white'} />,
-                2: <WriteIcon color={isFocused ? '#10F1AD' : 'white'} />,
-                3: <ProfileIcon color={isFocused ? '#10F1AD' : 'white'} />,
-                4: <SettingsIcon color={isFocused ? '#10F1AD' : 'white'} />,
+                0: <HomeIcon color={isFocused ? MINT : WHITE} />,
+                1: <GroupIcon color={isFocused ? MINT : WHITE}  />,
+                2: <WriteIcon color={isFocused ? MINT : WHITE}  />,
+                3: <ProfileIcon color={isFocused ? MINT : WHITE}  />,
+                4: <SettingsIcon color={isFocused ? MINT : WHITE}  />,
               }[index]
             }
 
             <Text
               style={{
-                color: isFocused ? '#10F1AD' : 'white',
+                color: isFocused ? MINT : WHITE ,
                 marginVertical: 5,
                 fontSize: 12,
               }}
