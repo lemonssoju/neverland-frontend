@@ -1,7 +1,12 @@
 import { useState } from 'react';
-import { FlatList, SafeAreaView } from 'react-native';
+import { Text, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import styled from 'styled-components/native';
+import { WHITE } from '../../styles/GlobalColor';
+
 import FeedItem from './FeedItem';
 import SearchBar from '../common/SearchBar';
+
+import SearchIcon from '../../assets/common/Search.svg';
 
 const data = [
   {
@@ -27,14 +32,15 @@ const data = [
 ]
 
 const FeedList = () => {
-  const [search, setSearch] = useState<string>('');
 
   return (
-    <SafeAreaView>
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-      />
+    <SafeAreaView style={{flex: 1}}>
+      <Header>
+        <Text style={{color: WHITE, fontSize: 24, fontWeight: '700'}}>neverland</Text>
+        <TouchableOpacity>
+          <SearchIcon />
+        </TouchableOpacity>
+      </Header>
       <FlatList
         data={data}
         renderItem={({item}) => {
@@ -50,5 +56,12 @@ const FeedList = () => {
     </SafeAreaView>
   )
 }
+
+const Header = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+`
 
 export default FeedList;
