@@ -8,7 +8,7 @@ interface FeedItemProps {
   rep_pic: string;
 }
 
-const FeedItem = ({ title, rep_pic }: FeedItemProps) => {
+export const UserItem = ({ title, rep_pic }: FeedItemProps) => {
   const { width, height } = Dimensions.get('window');
   const navigation = useNavigation<StackNavigationProp<HomeStackParams>>();
   return (
@@ -17,6 +17,8 @@ const FeedItem = ({ title, rep_pic }: FeedItemProps) => {
       <Text style={{textAlign: 'center'}}>{title}</Text>
     </TouchableOpacity>
   )
-}
+};
 
-export default FeedItem;
+export const AppItem = ({}) => {
+  
+};
