@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef, useMemo, useCallback } from 'react';
 import { View, Text, FlatList, SafeAreaView, TouchableOpacity, useWindowDimensions } from 'react-native';
-import { TabView, TabBar } from 'react-native-tab-view';
 import styled from 'styled-components/native';
-import { BLACK, MINT, WHITE } from '../../styles/GlobalColor';
-import { B14, B16 } from '../../styles/GlobalText';
-
+import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
+import { B14, B16, R14 } from '../../styles/GlobalText';
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { AppItem, UserItem } from './FeedItem';
+import BottomButton from '../common/BottomButton';
 import SearchIcon from '../../assets/common/Search.svg';
+import ArrowIcon from '../../assets/common/Arrow.svg';
 
 const UserData = [
   {
@@ -52,6 +53,24 @@ const FeedList = () => {
     { key: 2, title: '00s', label: '00년대' },
     { key: 3, title: '10s', label: '10년대' }
   ]);
+
+  const [categories, setCategories] = useState<string[]>([]);
+  const categoryRef = useRef<BottomSheetModal>(null);
+  const categorySnapPoints = useMemo(() => [350], []);
+
+  const openCategory = () => {
+    categoryRef.current?.present();
+  };
+
+  const closeCategory = () => {
+    categoryRef.current?.close();
+  }
+
+  const renderCategoryBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop style={{flex: 1}} {...props} onPress={closeCategory} pressBehavior='close' appearsOnIndex={0} disappearsOnIndex={-1} />,
+    [],
+  );
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <Header>
@@ -74,6 +93,26 @@ const FeedList = () => {
         data={UserData}
         numColumns={2}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={() => {
+          return (
+            <View style={{flexDirection: 'row', paddingTop: 15, paddingBottom: 5, paddingHorizontal: 10}}>
+              <DropDownButton onPress={openCategory}>
+                <R14 style={{color: BLACK, marginRight: 5}}>
+                  {categories.length > 0 ? 
+                    (categories.length > 1 ? `카테고리 ${categories.length}` : categories) 
+                    :
+                    '카테고리'
+                  }
+                </R14>
+                <ArrowIcon />
+              </DropDownButton>
+              <DropDownButton>
+                <R14 style={{color: BLACK, marginRight: 5}}>최신순</R14>
+                <ArrowIcon />
+              </DropDownButton>
+            </View>
+          )
+        }}
         renderItem={({item}) => {
           const { category, title, rep_pic, hashtag } = item;
           return (
@@ -107,6 +146,40 @@ const FeedList = () => {
           )
         }}
       />
+      <BottomSheetModalProvider>
+        <BottomSheetModal
+          snapPoints={categorySnapPoints}
+          ref={categoryRef}
+          backdropComponent={renderCategoryBackdrop}
+          handleStyle={{backgroundColor: LIGHTBLACK, borderTopLeftRadius: 25, borderTopRightRadius: 25}}
+          handleIndicatorStyle={{backgroundColor: '#3F3F3F', width: 60}}
+          backgroundStyle={{backgroundColor: LIGHTBLACK}}
+        >
+          <View style={{paddingHorizontal: 20, paddingVertical: 5}}>
+            <B16 style={{color: MINT, marginBottom: 10}}>카테고리</B16>
+            <FlatList
+              data={['영화', '드라마', '애니메이션', '패션', '음악', '예능']}
+              numColumns={2}
+              style={{marginBottom: 5}}
+              renderItem={({item}: any) => {
+                return (
+                  <CategoryButton pressed={categories.includes(item)}
+                    onPress={() => {
+                      categories.includes(item) ? 
+                      setCategories(categories.filter((category: any) => category !== item))
+                      : 
+                      setCategories([...categories, item])
+                    }}
+                  >
+                    <B16 style={{color: categories.includes(item) ? BLACK : WHITE}}>{item}</B16>
+                  </CategoryButton>
+                )
+              }}
+            />
+            <BottomButton label={'적용하기'} onPress={closeCategory} />
+          </View>
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
     </SafeAreaView>
   )
 }
@@ -134,4 +207,23 @@ const TopMenuItem = styled.TouchableOpacity<{ pressed: boolean }>`
   border-color: ${MINT};
 `
 
+const DropDownButton = styled.TouchableOpacity`
+  background: ${MINT};
+  border-radius: 24px;
+  flex-direction: row;
+  padding: 7px 14px;
+  align-items: center;
+  margin-right: 10px;
+`
+
+const CategoryButton = styled.TouchableOpacity<{ pressed: boolean }>`
+  background: ${props => props.pressed ? MINT : BLACK};
+  border-radius: 18px;
+  width: 160px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  margin-vertical: 10px;
+  margin-right: 30px;
+`
 export default FeedList;
