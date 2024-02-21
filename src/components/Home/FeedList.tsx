@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { FlatList, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, SafeAreaView, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { TabView, TabBar } from 'react-native-tab-view';
+import styled from 'styled-components/native';
+import { MINT, WHITE } from '../../styles/GlobalColor';
+
 import FeedItem from './FeedItem';
-import SearchBar from '../common/SearchBar';
 
 const data = [
   {
@@ -27,14 +30,8 @@ const data = [
 ]
 
 const FeedList = () => {
-  const [search, setSearch] = useState<string>('');
-
   return (
-    <SafeAreaView>
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-      />
+    <SafeAreaView style={{flex: 1}}>
       <FlatList
         data={data}
         renderItem={({item}) => {
