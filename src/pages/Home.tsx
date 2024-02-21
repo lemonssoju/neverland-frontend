@@ -1,9 +1,9 @@
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
-import FeedMain from '../components/Home/FeedMain';
+import FeedList from '../components/Home/FeedList';
 import FeedDetail from '../components/Home/FeedDetail';
 
 export type HomeStackParams = {
-  FeedMain: undefined;
+  FeedList: undefined;
   FeedDetail: undefined;
 }
 
@@ -15,7 +15,7 @@ const Home = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name='FeedMain' component={FeedMain} />
+      <Stack.Screen name='FeedList' component={FeedList} />
       <Stack.Screen name='FeedDetail' component={FeedDetail} />
     </Stack.Navigator>
   );
