@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -38,15 +39,17 @@ export type TabProps = {
 
 function App(): JSX.Element {
   return (
-    <NavigationContainer theme={GlobalTheme}>
-      <Stack.Navigator
-        screenOptions={() => ({
-          headerShown: false,
-        })}>
-        <Stack.Screen name='HomeTab' component={HomeTab} />
-        {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <NavigationContainer theme={GlobalTheme}>
+        <Stack.Navigator
+          screenOptions={() => ({
+            headerShown: false,
+          })}>
+          <Stack.Screen name='HomeTab' component={HomeTab} />
+          {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 
