@@ -7,12 +7,13 @@ import BackButton from '../common/BackButton';
 import HeartButton from '../common/HeartButton';
 import EditButton from '../common/EditButton';
 import RecommendItem from './RecommendItem';
+import CommentInput from '../common/CommentInput';
+import CommentItem from '../common/CommentItem';
 import { B12, B16, B14, B20 } from '../../styles/GlobalText';
 import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
 
 import DotsIcon from '../../assets/common/Dots.svg';
 import MusicIcon from '../../assets/common/Music.svg';
-import HeartIcon from '../../assets/common/Heart.svg';
 
 interface FeedDetailProps {
   title: string;
@@ -64,7 +65,7 @@ const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navi
         <View style={{position: 'absolute', backgroundColor: BLACK, opacity: 0.2, width: '100%', height: '100%'}} />
         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 60}}>
           <BackButton onPress={() => navigation.goBack()} />
-          { user  && 
+          { user === feed.writer && 
             <TouchableOpacity onPress={() => setDotPressed(!dotPressed)} style={{width: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}>
               <DotsIcon transform={[{ rotate: dotPressed ? '90deg' : '0deg'}]} />
             </TouchableOpacity>
@@ -103,7 +104,6 @@ const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navi
             )
           }}
         />
-        <View style={{height: 1, backgroundColor: LIGHTBLACK, marginTop: 20}} />
       </View>
       <YoutubePlayer
         height={0}
@@ -114,6 +114,27 @@ const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navi
     </>
   )
 }
+
+const commentData = [
+  {
+    writer: '피터팬',
+    date: '2023.11.23',
+    content: '1998년으로 돌아간 거 같아요!',
+    profile: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169'
+  },
+  {
+    writer: '피터팬',
+    date: '2023.11.23',
+    content: '1998년으로 돌아간 거 같아요!',
+    profile: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169'
+  },
+  {
+    writer: '피터팬',
+    date: '2023.11.23',
+    content: '1998년으로 돌아간 거 같아요!',
+    profile: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169'
+  },
+]
 
 const FeedDetail = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedDetail'>) => {
   const [feed, setFeed] = useState<FeedDetailProps>({
@@ -127,15 +148,26 @@ const FeedDetail = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedDetai
     musicUrl: 'https://youtu.be/BYyVDi8BpZw?si=uBQTU4JpzLrIU84f',
     like: true
   });
+  const [comment, setComment] = useState<string>('');
   
   return (
     <View>
       <FlatList
-        data={[]}
-        ListHeaderComponent={() => <DetailSection feed={feed} navigation={navigation} user={'황은정'} />}
+        data={commentData}
+        ListHeaderComponent={() => 
+          <>
+            <DetailSection feed={feed} navigation={navigation} user={'황은정'} />
+            <View style={{height: 1, backgroundColor: LIGHTBLACK, marginVertical: 20, marginHorizontal: 30}} />
+            <View style={{paddingHorizontal: 30}}>
+              <B12 style={{color: MINT, marginBottom: 10}}>댓글</B12>
+              <CommentInput comment={comment} setComment={setComment} onPress={() => {}} />
+            </View>
+          </>
+        }
         renderItem={({item}: any) => {
+          const { writer, date, content, profile } = item;
           return (
-            <></>
+            <CommentItem writer={writer} date={date} content={content} profile={profile} onEdit={() => {}} onDelete={() => {}} />
           )
         }}
       />
