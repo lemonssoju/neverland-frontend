@@ -1,5 +1,7 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { View, Text, FlatList, SafeAreaView, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { HomeStackParams } from '../../pages/Home';
 import styled from 'styled-components/native';
 import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
 import { B14, B16, R14 } from '../../styles/GlobalText';
@@ -47,7 +49,7 @@ const AppData = [
   },
 ]
 
-const FeedList = () => {
+const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>) => {
   const [era, setEra] = useState<string>('세상');
   const tabs = [
     { title: '전체', label: '세상' },
@@ -102,7 +104,7 @@ const FeedList = () => {
     <SafeAreaView style={{flex: 1}}>
       <Header>
         <Text style={{color: WHITE, fontSize: 24, fontWeight: '700'}}>neverland</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('FeedSearch')}>
           <SearchIcon />
         </TouchableOpacity>
       </Header>
@@ -131,11 +133,11 @@ const FeedList = () => {
                     '카테고리'
                   }
                 </R14>
-                <ArrowIcon />
+                <ArrowIcon color={BLACK} />
               </DropDownButton>
               <DropDownButton onPress={openOrder}>
                 <R14 style={{color: BLACK, marginRight: 5}}>{order}</R14>
-                <ArrowIcon />
+                <ArrowIcon color={BLACK} />
               </DropDownButton>
             </View>
           )
