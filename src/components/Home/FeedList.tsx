@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback } from 'react';
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { View, Text, FlatList, SafeAreaView, TouchableOpacity, useWindowDimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
@@ -48,24 +48,29 @@ const AppData = [
 ]
 
 const FeedList = () => {
-  const [index, setIndex] = useState<number>(0);
-  const [routes] = useState([
-    { key: 0, title: '전체', label: '세상' },
-    { key: 1, title: '90s', label: '90년대' },
-    { key: 2, title: '00s', label: '00년대' },
-    { key: 3, title: '10s', label: '10년대' }
-  ]);
+  const [era, setEra] = useState<string>('세상');
+  const tabs = [
+    { title: '전체', label: '세상' },
+    { title: '90s', label: '90년대' },
+    { title: '00s', label: '00년대' },
+    { title: '10s', label: '10년대' }
+  ];
 
   // 카테고리 모달
   const [categories, setCategories] = useState<string[]>([]);
+  const [prevCategories, setPrevCategories] = useState<string[]>([]);
   const categoryRef = useRef<BottomSheetModal>(null);
   const categorySnapPoints = useMemo(() => [350], []);
 
   const openCategory = () => {
+    setPrevCategories([...categories]);
     categoryRef.current?.present();
   };
 
   const closeCategory = () => {
+    if (categories.length === 0) {
+      setCategories([...prevCategories]);
+    }
     categoryRef.current?.close();
   }
 
@@ -73,9 +78,9 @@ const FeedList = () => {
     (props: any) => <BottomSheetBackdrop style={{flex: 1}} {...props} onPress={closeCategory} pressBehavior='close' appearsOnIndex={0} disappearsOnIndex={-1} />,
     [],
   );
-
+  
   // 정렬 모달
-  const [order, setOrder] = useState<string>('');
+  const [order, setOrder] = useState<string>('최신순');
   const orderRef = useRef<BottomSheetModal>(null);
   const orderSnapPoints = useMemo(() => [200], []);
 
@@ -83,7 +88,7 @@ const FeedList = () => {
     orderRef.current?.present();
   }
 
-  const closeOrder = (item: any) => {
+  const closeOrder = (item: string) => {
     setOrder(item);
     orderRef.current?.close();
   }
@@ -102,10 +107,10 @@ const FeedList = () => {
         </TouchableOpacity>
       </Header>
       <TopMenuBar>
-        {routes.map((item) => {
+        {tabs.map((item, index) => {
           return (
-            <TopMenuItem key={item.key} onPress={() => setIndex(item.key) } pressed={item.key === index}>
-              <B14 style={{color: item.key === index ? MINT : WHITE}}>{item.title}</B14>
+            <TopMenuItem key={index} onPress={() => setEra(item.label) } pressed={item.label === era}>
+              <B14 style={{color: item.label === era ? MINT : WHITE}}>{item.title}</B14>
             </TopMenuItem>
           )
         })}
@@ -149,7 +154,7 @@ const FeedList = () => {
         ListFooterComponent={() => {
           return (
             <>
-              <B16 style={{padding: 10, marginTop: 5}}>세상에 이런 일이!</B16>
+              <B16 style={{padding: 10, marginTop: 5}}>{era}에 이런 일이!</B16>
               <FlatList
                 data={AppData}
                 horizontal
@@ -176,6 +181,7 @@ const FeedList = () => {
           handleStyle={{backgroundColor: LIGHTBLACK, borderTopLeftRadius: 25, borderTopRightRadius: 25}}
           handleIndicatorStyle={{backgroundColor: '#3F3F3F', width: 60}}
           backgroundStyle={{backgroundColor: LIGHTBLACK}}
+          onDismiss={closeCategory}
         >
           <View style={{paddingHorizontal: 20, paddingVertical: 5}}>
             <B16 style={{color: MINT, marginBottom: 10}}>카테고리</B16>
@@ -188,7 +194,7 @@ const FeedList = () => {
                   <CategoryButton pressed={categories.includes(item)}
                     onPress={() => {
                       categories.includes(item) ? 
-                      setCategories(categories.filter((category: any) => category !== item))
+                      setCategories(categories.filter((category: string) => category !== item))
                       : 
                       setCategories([...categories, item])
                     }}
