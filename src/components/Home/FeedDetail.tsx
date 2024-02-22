@@ -47,6 +47,17 @@ const RecommendData = [
 const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navigation: any, user: string }) => {
   const [like, setLike] = useState<boolean>(feed.like);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
+  const [playing, setPlaying] = useState(false);
+  const onStateChange = useCallback((state: string) => {
+    if (state === 'ended') {
+      setPlaying(false);
+    }
+  }, []);
+  const extractVideoId = (url: string): string => {
+    const match = url.match(/be\/([^?]+)/);
+    return match ? match[1] : '';
+  }
+  const videoId = extractVideoId(feed.musicUrl ? feed.musicUrl : '');
   return (
     <>
       <ImageBackground source={{uri: feed.rep_pic}} style={{width: '100%', height: 300}} imageStyle={{width: '100%', height: 300}}>
@@ -60,10 +71,10 @@ const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navi
           }
           { dotPressed && <EditButton onEdit={() => {}} onDelete={() => {}} style={{top: 40, right: 15}} /> }
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 160, padding: 10}}>
+        <TouchableOpacity onPress={() => setPlaying(!playing)} style={{flexDirection: 'row', alignItems: 'center', marginTop: 160, padding: 10}}>
           <MusicIcon />
           <B12 style={{marginLeft: 5}}>{feed.music}</B12>
-        </View>
+        </TouchableOpacity>
       </ImageBackground>
       <View style={{paddingHorizontal: 30}}>
         <View style={{marginTop: 15, width: '80%'}}>
@@ -94,6 +105,12 @@ const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navi
         />
         <View style={{height: 1, backgroundColor: LIGHTBLACK, marginTop: 20}} />
       </View>
+      <YoutubePlayer
+        height={0}
+        play={playing}
+        videoId={videoId}
+        onChangeState={onStateChange}
+      />
     </>
   )
 }
@@ -110,32 +127,9 @@ const FeedDetail = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedDetai
     musicUrl: 'https://youtu.be/BYyVDi8BpZw?si=uBQTU4JpzLrIU84f',
     like: true
   });
-
-  
-  const [playing, setPlaying] = useState(false);
-  const onStateChange = useCallback((state: string) => {
-    if (state === 'ended') {
-      setPlaying(false);
-    }
-  }, []);
-  const extractVideoId = (url: string): string => {
-    const match = url.match(/be\/([^?]+)/);
-    return match ? match[1] : '';
-  }
-  const videoId = extractVideoId(feed.musicUrl ? feed.musicUrl : '');
   
   return (
     <View>
-        {/* <Text>피드 디테일</Text>
-        <TouchableOpacity style={{borderWidth: 1, padding: 10}} onPress={() => setPlaying(!playing)}>
-          <Text>{playing ? '중지':'재생'}</Text>
-        </TouchableOpacity>
-        <YoutubePlayer
-          height={300}
-          play={playing}
-          videoId={videoId}
-          onChangeState={onStateChange}
-        /> */}
       <FlatList
         data={[]}
         ListHeaderComponent={() => <DetailSection feed={feed} navigation={navigation} user={'황은정'} />}
