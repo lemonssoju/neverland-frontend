@@ -31,6 +31,7 @@ export default function SearchBar({
         style={{padding: 10, backgroundColor: LIGHTBLACK, borderRadius: 10, color: '#BBBBBB', fontWeight: '700'}}
         onEndEditing={() => setFocus(false)}
         onChange={() => setFocus(true)}
+        returnKeyType='search'
         {...rest}
       />
       <TouchableOpacity style={{position: 'absolute', right: 10}} onPress={() => {search.length > 0 && !focus ? setSearch('') : setSearch(search)}} >

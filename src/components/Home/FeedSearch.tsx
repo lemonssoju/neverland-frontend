@@ -10,6 +10,27 @@ import { LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
 import { B16, R14, R16 } from '../../styles/GlobalText';
 import CloseIcon from '../../assets/common/Close.svg';
 
+const UserData = [
+  {
+    category: '영화',
+    title: '8월의 크리스마스',
+    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    hashtag: ['로맨스', '멜로', '90년대']
+  },
+  {
+    category: '영화',
+    title: '8월의 크리스마스',
+    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    hashtag: ['로맨스', '멜로', '90년대']
+  },
+  {
+    category: '영화',
+    title: '8월의 크리스마스',
+    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    hashtag: ['로맨스', '멜로', '90년대']
+  },
+]
+
 const FeedSearch = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedSearch'>) => {
   const [search, setSearch] = useState<string>('');
   const recommendData = ['나팔바지', '지브리', '크리스마스', '디즈니', '핑클', '소녀시대', '상속자들', '동방신기'];
@@ -27,7 +48,22 @@ const FeedSearch = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedSearc
         />
       </View>
       { search.length > 0 ? (
-        <></>
+        <FlatList
+          data={UserData}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item}) => {
+            const { category, title, rep_pic, hashtag } = item;
+            return (
+              <UserItem
+                category={category}
+                title={title}
+                rep_pic={rep_pic}
+                hashtag={hashtag}
+              />
+            )
+          }}
+        />
       ) : (
         <View style={{padding: 15}}>
           <View>
