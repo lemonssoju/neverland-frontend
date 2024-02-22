@@ -13,6 +13,7 @@ import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
 import DotsIcon from '../../assets/common/Dots.svg';
 import MusicIcon from '../../assets/common/Music.svg';
 import HeartIcon from '../../assets/common/Heart.svg';
+import CommentInput from '../common/CommentInput';
 
 interface FeedDetailProps {
   title: string;
@@ -103,7 +104,6 @@ const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navi
             )
           }}
         />
-        <View style={{height: 1, backgroundColor: LIGHTBLACK, marginTop: 20}} />
       </View>
       <YoutubePlayer
         height={0}
@@ -127,12 +127,22 @@ const FeedDetail = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedDetai
     musicUrl: 'https://youtu.be/BYyVDi8BpZw?si=uBQTU4JpzLrIU84f',
     like: true
   });
+  const [comment, setComment] = useState<string>('');
   
   return (
     <View>
       <FlatList
         data={[]}
-        ListHeaderComponent={() => <DetailSection feed={feed} navigation={navigation} user={'황은정'} />}
+        ListHeaderComponent={() => 
+          <>
+            <DetailSection feed={feed} navigation={navigation} user={'황은정'} />
+            <View style={{height: 1, backgroundColor: LIGHTBLACK, marginVertical: 20, marginHorizontal: 30}} />
+            <View style={{paddingHorizontal: 30}}>
+              <B12 style={{color: MINT, marginBottom: 10}}>댓글</B12>
+              <CommentInput comment={comment} setComment={setComment} onPress={() => {}} />
+            </View>
+          </>
+        }
         renderItem={({item}: any) => {
           return (
             <></>
