@@ -2,16 +2,17 @@ import { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
 import { HomeStackParams } from '../../pages/Home';
 import { StackScreenProps } from '@react-navigation/stack';
-import BackButton from '../common/BackButton';
-import RecommendItem from './RecommendItem';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import BackButton from '../common/BackButton';
+import HeartButton from '../common/HeartButton';
+import EditButton from '../common/EditButton';
+import RecommendItem from './RecommendItem';
 import { B12, B16, B14, B20 } from '../../styles/GlobalText';
-import { BLACK, LIGHTBLACK, MINT } from '../../styles/GlobalColor';
+import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
 
 import DotsIcon from '../../assets/common/Dots.svg';
 import MusicIcon from '../../assets/common/Music.svg';
 import HeartIcon from '../../assets/common/Heart.svg';
-import HeartButton from '../common/HeartButton';
 
 interface FeedDetailProps {
   title: string;
@@ -45,15 +46,19 @@ const RecommendData = [
 
 const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navigation: any, user: string }) => {
   const [like, setLike] = useState<boolean>(feed.like);
+  const [dotPressed, setDotPressed] = useState<boolean>(false);
   return (
     <>
       <ImageBackground source={{uri: feed.rep_pic}} style={{width: '100%', height: 300}} imageStyle={{width: '100%', height: 300}}>
         <View style={{position: 'absolute', backgroundColor: BLACK, opacity: 0.2, width: '100%', height: '100%'}} />
         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 60}}>
           <BackButton onPress={() => navigation.goBack()} />
-          <TouchableOpacity style={{width: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}>
-            <DotsIcon />
-          </TouchableOpacity>
+          { user  && 
+            <TouchableOpacity onPress={() => setDotPressed(!dotPressed)} style={{width: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}>
+              <DotsIcon transform={[{ rotate: dotPressed ? '90deg' : '0deg'}]} />
+            </TouchableOpacity>
+          }
+          { dotPressed && <EditButton onEdit={() => {}} onDelete={() => {}} style={{top: 40, right: 15}} /> }
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 160, padding: 10}}>
           <MusicIcon />
