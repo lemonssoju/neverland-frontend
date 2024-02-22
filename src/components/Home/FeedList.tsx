@@ -6,8 +6,10 @@ import { B14, B16, R14 } from '../../styles/GlobalText';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { AppItem, UserItem } from './FeedItem';
 import BottomButton from '../common/BottomButton';
+
 import SearchIcon from '../../assets/common/Search.svg';
 import ArrowIcon from '../../assets/common/Arrow.svg';
+import CheckIcon from '../../assets/common/Check.svg';
 
 const UserData = [
   {
@@ -54,6 +56,7 @@ const FeedList = () => {
     { key: 3, title: '10s', label: '10년대' }
   ]);
 
+  // 카테고리 모달
   const [categories, setCategories] = useState<string[]>([]);
   const categoryRef = useRef<BottomSheetModal>(null);
   const categorySnapPoints = useMemo(() => [350], []);
@@ -68,6 +71,25 @@ const FeedList = () => {
 
   const renderCategoryBackdrop = useCallback(
     (props: any) => <BottomSheetBackdrop style={{flex: 1}} {...props} onPress={closeCategory} pressBehavior='close' appearsOnIndex={0} disappearsOnIndex={-1} />,
+    [],
+  );
+
+  // 정렬 모달
+  const [order, setOrder] = useState<string>('');
+  const orderRef = useRef<BottomSheetModal>(null);
+  const orderSnapPoints = useMemo(() => [200], []);
+
+  const openOrder = () => {
+    orderRef.current?.present();
+  }
+
+  const closeOrder = (item: any) => {
+    setOrder(item);
+    orderRef.current?.close();
+  }
+
+  const renderOrderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop style={{flex: 1}} {...props} onPress={closeOrder} pressBehavior='close' appearsOnIndex={0} disappearsOnIndex={-1} />,
     [],
   );
 
@@ -106,8 +128,8 @@ const FeedList = () => {
                 </R14>
                 <ArrowIcon />
               </DropDownButton>
-              <DropDownButton>
-                <R14 style={{color: BLACK, marginRight: 5}}>최신순</R14>
+              <DropDownButton onPress={openOrder}>
+                <R14 style={{color: BLACK, marginRight: 5}}>{order}</R14>
                 <ArrowIcon />
               </DropDownButton>
             </View>
@@ -179,6 +201,29 @@ const FeedList = () => {
             <BottomButton label={'적용하기'} onPress={closeCategory} />
           </View>
         </BottomSheetModal>
+        <BottomSheetModal
+          snapPoints={orderSnapPoints}
+          ref={orderRef}
+          backdropComponent={renderOrderBackdrop}
+          handleStyle={{backgroundColor: LIGHTBLACK, borderTopLeftRadius: 25, borderTopRightRadius: 25}}
+          handleIndicatorStyle={{backgroundColor: '#3F3F3F', width: 60}}
+          backgroundStyle={{backgroundColor: LIGHTBLACK}}
+        >
+          <View style={{paddingHorizontal: 20, paddingVertical: 5}}>
+            <B16 style={{color: MINT, marginBottom: 20}}>정렬</B16>
+            <FlatList
+              data={['최신순', '인기순']}
+              renderItem={({item}: any) => {
+                return (
+                  <OrderButton onPress={() => closeOrder(item)}>
+                    <B16 style={{color: order===item ? MINT : WHITE}}>{item}</B16>
+                    {order===item && <CheckIcon />}
+                  </OrderButton>
+                )
+              }}
+            />
+          </View>
+        </BottomSheetModal>
       </BottomSheetModalProvider>
     </SafeAreaView>
   )
@@ -225,5 +270,12 @@ const CategoryButton = styled.TouchableOpacity<{ pressed: boolean }>`
   align-items: center;
   margin-vertical: 10px;
   margin-right: 30px;
+`
+
+const OrderButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0px;
 `
 export default FeedList;
