@@ -11,12 +11,12 @@ interface EditButtonProps {
 const EditButton = ({ onEdit, onDelete, style }: EditButtonProps) => {
   return (
     <View style={{position: 'absolute', backgroundColor: BLACK, width: 100, borderRadius: 12, ...style}}>
-      <TouchableOpacity onPress={onEdit} style={{paddingVertical: 10, paddingHorizontal: 35}}>
-        <B14>수정</B14>
+      <TouchableOpacity onPress={onEdit} style={{paddingVertical: 10}}>
+        <B14 style={{textAlign: 'center'}}>수정</B14>
       </TouchableOpacity>
       <View style={{height: 1, width: '100%', backgroundColor: WHITE}} />
-      <TouchableOpacity onPress={onDelete} style={{paddingVertical: 10, paddingHorizontal: 35}}>
-        <B14>삭제</B14>
+      <TouchableOpacity onPress={onDelete} style={{paddingVertical: 10}}>
+        <B14 style={{textAlign: 'center'}}>삭제</B14>
       </TouchableOpacity>
     </View>
   )
