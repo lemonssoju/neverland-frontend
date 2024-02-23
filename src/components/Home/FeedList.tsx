@@ -90,8 +90,7 @@ const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>)
     orderRef.current?.present();
   }
 
-  const closeOrder = (item: string) => {
-    setOrder(item);
+  const closeOrder = () => {
     orderRef.current?.close();
   }
 
@@ -216,6 +215,7 @@ const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>)
           handleStyle={{backgroundColor: LIGHTBLACK, borderTopLeftRadius: 25, borderTopRightRadius: 25}}
           handleIndicatorStyle={{backgroundColor: '#3F3F3F', width: 60}}
           backgroundStyle={{backgroundColor: LIGHTBLACK}}
+          onDismiss={closeOrder}
         >
           <View style={{paddingHorizontal: 20, paddingVertical: 5}}>
             <B16 style={{color: MINT, marginBottom: 20}}>정렬</B16>
@@ -223,7 +223,7 @@ const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>)
               data={['최신순', '인기순']}
               renderItem={({item}: any) => {
                 return (
-                  <OrderButton onPress={() => closeOrder(item)}>
+                  <OrderButton onPress={() => {setOrder(item); orderRef.current?.close();}}>
                     <B16 style={{color: order===item ? MINT : WHITE}}>{item}</B16>
                     {order===item && <CheckIcon />}
                   </OrderButton>
