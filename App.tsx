@@ -2,7 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import {
+  createBottomTabNavigator,
+  BottomTabBarProps,
+} from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { BLACK, MINT, WHITE } from './src/styles/GlobalColor';
@@ -25,9 +28,9 @@ const GlobalTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: BLACK
-  }
-}
+    background: BLACK,
+  },
+};
 
 export type TabProps = {
   Home: undefined;
@@ -39,13 +42,13 @@ export type TabProps = {
 
 function App(): JSX.Element {
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer theme={GlobalTheme}>
         <Stack.Navigator
           screenOptions={() => ({
             headerShown: false,
           })}>
-          <Stack.Screen name='HomeTab' component={HomeTab} />
+          <Stack.Screen name="HomeTab" component={HomeTab} />
           {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
         </Stack.Navigator>
       </NavigationContainer>
@@ -63,8 +66,7 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         justifyContent: 'space-around',
         backgroundColor: BLACK,
         paddingHorizontal: 10,
-      }}
-    >
+      }}>
       {state.routes.map((route, index) => {
         const isFocused = state.index == index;
         const onPress = () => {
@@ -81,11 +83,12 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
               });
             else navigation.navigate(route.name, { id: undefined });
           } else if (route.name == 'Write') {
-            if (isFocused)
-              navigation.reset({
-                routes: [{ name: route.name, params: { id: undefined } }],
-              });
-            else navigation.navigate(route.name, { id: undefined });
+            // if (isFocused)
+            //   navigation.reset({
+            //     routes: [{ name: route.name, params: { id: undefined } }],
+            //   });
+            // else navigation.navigate(route.name, { id: undefined });
+            navigation.navigate('Home', { screen: 'FeedUpload' });
           } else if (route.name == 'Profile') {
             if (isFocused)
               navigation.reset({
@@ -109,46 +112,44 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-            }}
-          >
+            }}>
             {
               {
                 0: <HomeIcon color={isFocused ? MINT : WHITE} />,
-                1: <GroupIcon color={isFocused ? MINT : WHITE}  />,
-                2: <WriteIcon color={isFocused ? MINT : WHITE}  />,
-                3: <ProfileIcon color={isFocused ? MINT : WHITE}  />,
-                4: <SettingsIcon color={isFocused ? MINT : WHITE}  />,
+                1: <GroupIcon color={isFocused ? MINT : WHITE} />,
+                2: <WriteIcon color={isFocused ? MINT : WHITE} />,
+                3: <ProfileIcon color={isFocused ? MINT : WHITE} />,
+                4: <SettingsIcon color={isFocused ? MINT : WHITE} />,
               }[index]
             }
 
             <Text
               style={{
-                color: isFocused ? MINT : WHITE ,
+                color: isFocused ? MINT : WHITE,
                 marginVertical: 5,
                 fontSize: 12,
-              }}
-            >
+              }}>
               {route.name}
             </Text>
           </TouchableOpacity>
         );
       })}
     </View>
-  )
-}
+  );
+};
 
 const Tab = createBottomTabNavigator<TabProps>();
 const HomeTab = (): JSX.Element => {
   return (
     <Tab.Navigator
-      tabBar={(props) => <CustomTab {...props} />}
-      initialRouteName='Home'
+      tabBar={props => <CustomTab {...props} />}
+      initialRouteName="Home"
       screenOptions={() => ({
         headerShown: false,
       })}>
       <Tab.Screen name={'Home'} component={HomeScreen} />
       <Tab.Screen name={'Group'} component={GroupScreen} />
-      <Tab.Screen name={'Write'} component={WriteScreen} />
+      <Tab.Screen name={'Write'} component={WriteScreen} listeners={() => ({ tabPress: (e: any) => { e.preventDefault() }})} />
       <Tab.Screen name={'Profile'} component={ProfileScreen} />
       <Tab.Screen name={'Settings'} component={SettingsScreen} />
     </Tab.Navigator>
