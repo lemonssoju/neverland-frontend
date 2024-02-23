@@ -7,6 +7,8 @@ import styled from 'styled-components/native';
 import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
+import PhotoButton from '../common/PhotoButton';
+import { Asset } from 'react-native-image-picker';
 import { CategoryModal } from '../common/BottomModal';
 import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
 import { B12, B14 } from '../../styles/GlobalText';
@@ -37,6 +39,12 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
   const [categories, setCategories] = useState<string[]>([]);
   const [categoryVisible, setCategoryVisible] = useState<boolean>(false);
   const [musicVisible, setMusicVisible] = useState<boolean>(false);
+  const [photo, setPhoto] = useState<Asset[]>([{
+    fileName: '',
+    width: 0,
+    height: 0,
+    uri: ''
+  }]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: BLACK}}>
@@ -73,9 +81,7 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
         <LinkIcon />
       </TouchableOpacity>
       <PhotoBox>
-        <TouchableOpacity>
-          <PhotoIcon />
-        </TouchableOpacity>
+        <PhotoButton photo={photo} setPhoto={setPhoto} />
       </PhotoBox>
       <View style={{paddingHorizontal: 20}}>
         <B14 style={{marginBottom: 10}}>내용 *</B14>
