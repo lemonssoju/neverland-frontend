@@ -85,7 +85,6 @@ export const CategoryModal = ({
 
   useEffect(() => {
     if (unique) limitArray(categories);
-    console.log('prev', prevCategories, 'curr', categories)
   }, [categories])
 
   return (

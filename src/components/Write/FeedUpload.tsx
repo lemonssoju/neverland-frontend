@@ -8,8 +8,8 @@ import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import { CategoryModal } from '../common/BottomModal';
-import { BLACK, WHITE } from '../../styles/GlobalColor';
-import { B14 } from '../../styles/GlobalText';
+import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
+import { B12, B14 } from '../../styles/GlobalText';
 import ArrowIcon from '../../assets/common/Arrow.svg';
 import LinkIcon from '../../assets/common/Link.svg';
 import PhotoIcon from '../../assets/common/Photo.svg';
@@ -36,6 +36,7 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
   });
   const [categories, setCategories] = useState<string[]>([]);
   const [categoryVisible, setCategoryVisible] = useState<boolean>(false);
+  const [musicVisible, setMusicVisible] = useState<boolean>(false);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: BLACK}}>
@@ -68,7 +69,7 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
         placeholder='가수 - 제목 형식으로 입력해주세요.'
         description='우측 아이콘을 클릭해 유튜브 링크를 삽입해주세요.'
       />
-      <TouchableOpacity style={{position: 'absolute', right: 20, top: 298}}>
+      <TouchableOpacity style={{position: 'absolute', right: 20, top: 298}} onPress={() => setMusicVisible(true)}>
         <LinkIcon />
       </TouchableOpacity>
       <PhotoBox>
@@ -89,6 +90,32 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
       <BottomSheetModalProvider>
         <CategoryModal categories={categories} setCategories={setCategories} categoryVisible={categoryVisible} setCategoryVisible={setCategoryVisible} unique />
       </BottomSheetModalProvider>
+      <Modal visible={musicVisible} transparent>
+        <View style={{backgroundColor: LIGHTBLACK, position: 'absolute', width: '80%', height: 150, top: 330, alignSelf: 'center', borderRadius: 24, paddingVertical: 15}}>
+          <Input
+            label='Youtube' 
+            value={feed.musicUrl} 
+            onChangeText={(musicUrl) => {setFeed({ ...feed, musicUrl: musicUrl})}}
+            placeholder='유튜브 링크를 삽입해주세요.'
+          />
+          <View style={{flexDirection: 'row', paddingHorizontal: 20, justifyContent: 'space-between'}}>
+            <TouchableOpacity 
+              style={{paddingVertical: 15, paddingHorizontal: 52, backgroundColor: MINT, borderRadius: 12}} 
+              onPress={() => {
+                setFeed({ ...feed, musicUrl: ''}); setMusicVisible(false)
+              }}
+            >
+              <B14 style={{color: BLACK}}>취소</B14>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={{paddingVertical: 15, paddingHorizontal: 52, backgroundColor: MINT, borderRadius: 12}}
+              onPress={() => setMusicVisible(false)}
+            >
+              <B14 style={{color: BLACK}}>완료</B14>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }
