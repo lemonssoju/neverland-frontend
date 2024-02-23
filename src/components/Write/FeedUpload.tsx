@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 import { Text, TextInput, SafeAreaView, View, TouchableOpacity, Dimensions, Image, Alert, Modal } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParams } from '../../pages/Home';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import styled from 'styled-components/native';
 import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
-import { BLACK, WHITE } from '../../styles/GlobalColor';
-import { B14 } from '../../styles/GlobalText';
+import PhotoButton from '../common/PhotoButton';
+import { Asset } from 'react-native-image-picker';
+import { CategoryModal } from '../common/BottomModal';
+import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
+import { B12, B14 } from '../../styles/GlobalText';
 import ArrowIcon from '../../assets/common/Arrow.svg';
 import LinkIcon from '../../assets/common/Link.svg';
 import PhotoIcon from '../../assets/common/Photo.svg';
@@ -32,6 +36,16 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
     music: '',
     musicUrl: '',
   });
+  const [categories, setCategories] = useState<string[]>([]);
+  const [categoryVisible, setCategoryVisible] = useState<boolean>(false);
+  const [musicVisible, setMusicVisible] = useState<boolean>(false);
+  const [photo, setPhoto] = useState<Asset[]>([{
+    fileName: '',
+    width: 0,
+    height: 0,
+    uri: ''
+  }]);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: BLACK}}>
       <CustomHeader label='작성하기' onClose={() => {navigation.goBack()}} />
@@ -51,8 +65,8 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
       />
       <View style={{paddingHorizontal: 20, marginTop: 5, marginBottom: 15, flexDirection: 'row'}}>
         <B14>콘텐츠 선택 *</B14>
-        <DropDownButton>
-          <B14>{feed.category}영화</B14>
+        <DropDownButton onPress={() => setCategoryVisible(true)}>
+          <B14>{categories.length > 0 ? categories[0] : `카테고리`}</B14>
           <ArrowIcon color={WHITE} strokeWidth={2} />
         </DropDownButton>
       </View>
@@ -63,13 +77,11 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
         placeholder='가수 - 제목 형식으로 입력해주세요.'
         description='우측 아이콘을 클릭해 유튜브 링크를 삽입해주세요.'
       />
-      <TouchableOpacity style={{position: 'absolute', right: 20, top: 298}}>
+      <TouchableOpacity style={{position: 'absolute', right: 20, top: 298}} onPress={() => setMusicVisible(true)}>
         <LinkIcon />
       </TouchableOpacity>
       <PhotoBox>
-        <TouchableOpacity>
-          <PhotoIcon />
-        </TouchableOpacity>
+        <PhotoButton photo={photo} setPhoto={setPhoto} />
       </PhotoBox>
       <View style={{paddingHorizontal: 20}}>
         <B14 style={{marginBottom: 10}}>내용 *</B14>
@@ -81,6 +93,35 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
         />
         <BottomButton label='등록' onPress={() => navigation.navigate('FeedDetail')} />
       </View>
+      <BottomSheetModalProvider>
+        <CategoryModal categories={categories} setCategories={setCategories} categoryVisible={categoryVisible} setCategoryVisible={setCategoryVisible} unique />
+      </BottomSheetModalProvider>
+      <Modal visible={musicVisible} transparent>
+        <View style={{backgroundColor: LIGHTBLACK, position: 'absolute', width: '80%', height: 150, top: 330, alignSelf: 'center', borderRadius: 24, paddingVertical: 15}}>
+          <Input
+            label='Youtube' 
+            value={feed.musicUrl} 
+            onChangeText={(musicUrl) => {setFeed({ ...feed, musicUrl: musicUrl})}}
+            placeholder='유튜브 링크를 삽입해주세요.'
+          />
+          <View style={{flexDirection: 'row', paddingHorizontal: 20, justifyContent: 'space-between'}}>
+            <TouchableOpacity 
+              style={{paddingVertical: 15, paddingHorizontal: 52, backgroundColor: MINT, borderRadius: 12}} 
+              onPress={() => {
+                setFeed({ ...feed, musicUrl: ''}); setMusicVisible(false)
+              }}
+            >
+              <B14 style={{color: BLACK}}>취소</B14>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={{paddingVertical: 15, paddingHorizontal: 52, backgroundColor: MINT, borderRadius: 12}}
+              onPress={() => setMusicVisible(false)}
+            >
+              <B14 style={{color: BLACK}}>완료</B14>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }

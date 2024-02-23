@@ -20,7 +20,7 @@ const InputBox = ({label, labelStyle, isRequired, value, onChangeText, placehold
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={'#BBBBBB'}
-        style={{borderBottomColor: WHITE, borderBottomWidth: 1, paddingVertical: 5, fontSize: 14}}
+        style={{borderBottomColor: WHITE, borderBottomWidth: 1, paddingVertical: 5, fontSize: 14, color: WHITE}}
         {...rest}
       />
       <R14 style={{marginTop: 5, color: MINT}}>{alert && alert}{description && description}</R14>
