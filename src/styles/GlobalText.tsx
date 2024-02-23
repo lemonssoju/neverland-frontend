@@ -1,6 +1,19 @@
 import { Text } from 'react-native';
 import { WHITE } from './GlobalColor';
 
+export const B24 = ({ children, style }: any) => {
+  return (
+    <Text style={{
+      fontSize: 24,
+      fontWeight: '700',
+      color: WHITE,
+      ...style
+    }}>
+      {children}
+    </Text>
+  )
+}
+
 export const B20 = ({ children, style }: any) => {
   return (
     <Text style={{

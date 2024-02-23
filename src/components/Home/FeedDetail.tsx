@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
 import { HomeStackParams } from '../../pages/Home';
 import { StackScreenProps } from '@react-navigation/stack';
+import { FeedProps } from '../Write/FeedUpload';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import BackButton from '../common/BackButton';
 import HeartButton from '../common/HeartButton';
@@ -15,15 +16,9 @@ import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
 import DotsIcon from '../../assets/common/Dots.svg';
 import MusicIcon from '../../assets/common/Music.svg';
 
-interface FeedDetailProps {
-  title: string;
-  subtitle: string;
-  content: string;
+interface FeedDetailProps extends FeedProps {
   date: string;
   writer: string;
-  rep_pic: string;
-  music?: string;
-  musicUrl?: string;
   like: boolean;
 }
 
@@ -141,6 +136,7 @@ const FeedDetail = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedDetai
     title: '8월의 크리스마스',
     subtitle: '1998년... 당신은 누구와 사랑을 했나요?',
     content: '"좋아하는 남자 친구 없어요?"변두리 사진관에서 아버지를 모시고 사는 노총각 ‘정원’. 시한부 인생을 받아들이고 가족, 친구들과 담담한 이별을 준비하던 어느 날, 주차단속요원 \'다림\'을 만나게 되고 차츰 평온했던 일상이 흔들리기 시작한다."아저씨, 왜 나만 보면 웃어요?"',
+    category: '',
     date: '2023.11.23',
     writer: '피터팬',
     rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
