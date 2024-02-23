@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { Text, TextInput, SafeAreaView, View, TouchableOpacity, Dimensions, Image, Alert, Modal } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParams } from '../../pages/Home';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import styled from 'styled-components/native';
 import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
+import { CategoryModal } from '../common/BottomModal';
 import { BLACK, WHITE } from '../../styles/GlobalColor';
 import { B14 } from '../../styles/GlobalText';
 import ArrowIcon from '../../assets/common/Arrow.svg';
@@ -32,6 +34,9 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
     music: '',
     musicUrl: '',
   });
+  const [categories, setCategories] = useState<string[]>([]);
+  const [categoryVisible, setCategoryVisible] = useState<boolean>(false);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: BLACK}}>
       <CustomHeader label='작성하기' onClose={() => {navigation.goBack()}} />
@@ -51,8 +56,8 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
       />
       <View style={{paddingHorizontal: 20, marginTop: 5, marginBottom: 15, flexDirection: 'row'}}>
         <B14>콘텐츠 선택 *</B14>
-        <DropDownButton>
-          <B14>{feed.category}영화</B14>
+        <DropDownButton onPress={() => setCategoryVisible(true)}>
+          <B14>{categories.length > 0 ? categories[0] : `카테고리`}</B14>
           <ArrowIcon color={WHITE} strokeWidth={2} />
         </DropDownButton>
       </View>
@@ -81,6 +86,9 @@ const FeedUpload = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedUploa
         />
         <BottomButton label='등록' onPress={() => navigation.navigate('FeedDetail')} />
       </View>
+      <BottomSheetModalProvider>
+        <CategoryModal categories={categories} setCategories={setCategories} categoryVisible={categoryVisible} setCategoryVisible={setCategoryVisible} unique />
+      </BottomSheetModalProvider>
     </SafeAreaView>
   )
 }
