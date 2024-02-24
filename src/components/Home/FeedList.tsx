@@ -15,37 +15,61 @@ import ArrowIcon from '../../assets/common/Arrow.svg';
 const UserData = [
   {
     category: '영화',
-    title: '8월의 크리스마스',
+    title: '8월의 크리스마스 우다다닫닫다다다다',
     rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
-    hashtag: ['로맨스', '멜로', '90년대']
+    hashtags: ['로맨스', '멜로', '90년대']
   },
   {
     category: '영화',
     title: '8월의 크리스마스',
     rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
-    hashtag: ['로맨스', '멜로', '90년대']
+    hashtags: ['로맨스', '멜로', '90년대']
   },
   {
     category: '영화',
     title: '8월의 크리스마스',
     rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
-    hashtag: ['로맨스', '멜로', '90년대']
+    hashtags: ['로맨스', '멜로', '90년대']
   },
+  {
+    category: '영화',
+    title: '8월의 크리스마스',
+    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    hashtags: ['로맨스', '멜로', '90년대']
+  },
+  {
+    category: '영화',
+    title: '8월의 크리스마스',
+    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    hashtags: ['로맨스', '멜로', '90년대']
+  },
+  {
+    category: '영화',
+    title: '8월의 크리스마스',
+    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    hashtags: ['로맨스', '멜로', '90년대']
+  }
 ]
 
 const AppData = [
   {
+    category: '밈',
     title: '이렇게 말하면 기분이 조크등요',
-    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169'
+    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    hashtags: ['사투리', '서울']
   },
   {
+    category: '밈',
     title: '이렇게 말하면 기분이 조크등요',
-    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169'
+    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    hashtags: ['사투리', '서울']
   },
   {
-    title: '이렇게 말하면 기분이 조크등요',
-    rep_pic: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169'
-  },
+    category: '밈',
+    title: '이렇게 말하면 기분이 조크등요요요요요 까만 선글라스',
+    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    hashtags: ['사투리', '서울']
+  }
 ]
 
 const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>) => {
@@ -104,34 +128,40 @@ const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>)
           )
         }}
         renderItem={({item}) => {
-          const { category, title, rep_pic, hashtag } = item;
+          const { category, title, rep_pic, hashtags } = item;
           return (
+            // 6개씩
             <UserItem
               category={category}
               title={title}
               rep_pic={rep_pic}
-              hashtag={hashtag}
+              hashtags={hashtags}
             />
           )
         }}
         ListFooterComponent={() => {
           return (
             <>
-              <B16 style={{padding: 10, marginTop: 5}}>{era}에 이런 일이!</B16>
+              <View style={{height: 1.5, backgroundColor: LIGHTBLACK, marginHorizontal: 10, marginTop: 15, marginBottom: 10}} />
+              <B16 style={{paddingHorizontal: 10, paddingBottom: 10}}>{era}에 이런 일이!</B16>
               <FlatList
                 data={AppData}
                 horizontal
                 showsHorizontalScrollIndicator={false}
+                style={{backgroundColor: LIGHTBLACK, paddingHorizontal: 10, paddingVertical: 15}}
                 renderItem={({item}) => {
-                  const { title, rep_pic } = item;
+                  const { category, title, rep_pic, hashtags } = item;
                   return (
                     <AppItem
+                      category={category}
                       title={title}
                       rep_pic={rep_pic}
+                      hashtags={hashtags}
                     />
                   )
                 }}
               />
+              <View style={{height: 1.5, backgroundColor: LIGHTBLACK, marginHorizontal: 10, marginTop: 15, marginBottom: 10}} />
             </>
           )
         }}
