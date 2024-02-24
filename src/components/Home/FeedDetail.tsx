@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
+import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, FlatList, ImageBackground, Dimensions } from 'react-native';
 import { HomeStackParams } from '../../pages/Home';
 import { StackScreenProps } from '@react-navigation/stack';
 import { FeedProps } from '../Write/FeedUpload';
@@ -54,6 +54,12 @@ const DetailSection = ({ feed, navigation, user }: { feed: FeedDetailProps, navi
     return match ? match[1] : '';
   }
   const videoId = extractVideoId(feed.musicUrl ? feed.musicUrl : '');
+
+  // 자동재생
+  useEffect(() => {
+    setPlaying(true);
+  }, [])
+
   return (
     <>
       <ImageBackground source={{uri: feed.rep_pic}} style={{width: '100%', height: 300}} imageStyle={{width: '100%', height: 300}}>

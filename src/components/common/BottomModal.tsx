@@ -25,6 +25,7 @@ import BottomButton from './BottomButton';
 import { B16 } from '../../styles/GlobalText';
 import { BLACK, MINT, WHITE, LIGHTBLACK } from '../../styles/GlobalColor';
 import CheckIcon from '../../assets/common/Check.svg';
+import ResetIcon from '../../assets/common/Reset.svg';
 
 interface CategoryModalProps {
   categoryVisible: boolean;
@@ -41,19 +42,14 @@ export const CategoryModal = ({
   setCategories,
   unique
 }: CategoryModalProps) => {
-  const [prevCategories, setPrevCategories] = useState<string[]>([]);
   const categoryRef = useRef<BottomSheetModal>(null);
-  const categorySnapPoints = useMemo(() => [350], []);
+  const categorySnapPoints = useMemo(() => [unique ? 300 : 280], []);
 
   const openCategory = () => {
-    setPrevCategories([...categories]);
     categoryRef.current?.present();
   };
 
-  const closeCategory = (apply: boolean) => {
-    if (!apply && categories.length > 0) {
-      setCategories([...prevCategories]);
-    }
+  const closeCategory = () => {
     categoryRef.current?.close();
     setCategoryVisible(false);
   };
@@ -63,7 +59,7 @@ export const CategoryModal = ({
       <BottomSheetBackdrop
         style={{ flex: 1 }}
         {...props}
-        onPress={() => closeCategory(false)}
+        onPress={closeCategory}
         pressBehavior="close"
         appearsOnIndex={0}
         disappearsOnIndex={-1}
@@ -76,6 +72,7 @@ export const CategoryModal = ({
     if (arr.length > 1) {
       arr.shift();
       arr.splice(1);
+      closeCategory();
     }
   }
 
@@ -100,7 +97,14 @@ export const CategoryModal = ({
       handleIndicatorStyle={{ backgroundColor: '#3F3F3F', width: 60 }}
       backgroundStyle={{ backgroundColor: LIGHTBLACK }}>
       <View style={{ paddingHorizontal: 20, paddingVertical: 5 }}>
-        <B16 style={{ color: MINT, marginBottom: 10 }}>카테고리</B16>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 30 }}>
+          <B16 style={{ color: MINT }}>카테고리</B16>
+          { !unique && 
+            <TouchableOpacity onPress={() => setCategories([])} style={{ width: 30, height: 30, justifyContent: 'center', alignItems: 'center'}}>
+              <ResetIcon width={16} height={16} />
+            </TouchableOpacity>
+          }
+        </View>
         <FlatList
           data={['영화', '드라마', '애니메이션', '패션', '음악', '예능']}
           numColumns={2}
@@ -126,7 +130,6 @@ export const CategoryModal = ({
             );
           }}
         />
-        <BottomButton label={'적용하기'} onPress={() => closeCategory(true)} />
       </View>
     </BottomSheetModal>
   );

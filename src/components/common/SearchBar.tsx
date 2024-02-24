@@ -34,3 +34,5 @@ const SearchBar = ({search, setSearch, placeholder, style, ...rest}: SearchBarPr
     </View>
   );
 }
+
+export default SearchBar;
