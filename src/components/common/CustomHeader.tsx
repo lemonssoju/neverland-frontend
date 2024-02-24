@@ -11,7 +11,7 @@ interface CustomHeaderProps {
 
 const CustomHeader = ({ label, onBack, onClose }: CustomHeaderProps) => {
   return (
-    <View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between'}}>
+    <View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10}}>
       {onBack && 
         <View style={{position: 'absolute'}}>
           <BackButton onPress={onBack} />
