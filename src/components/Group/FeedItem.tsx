@@ -16,7 +16,7 @@ export interface FeedItemProps {
 const FeedItem = ({ writer, title, subtitle, rep_pic }: FeedItemProps) => {
   const navigation = useNavigation<StackNavigationProp<GroupStackParams>>();
   return (
-    <TouchableOpacity onPress={() => {}} style={{marginLeft: 10, marginTop: 10, width: width/2 - 15}}>
+    <TouchableOpacity onPress={() => {navigation.navigate('FeedDetail')}} style={{marginLeft: 10, marginTop: 10, width: width/2 - 15}}>
       <ImageBackground source={{uri: rep_pic}} style={{width: '100%', height: 250}} imageStyle={{borderRadius: 8}}>
         <View style={{position: 'absolute', backgroundColor: 'black', width: '100%', height: '100%', opacity: 0.2, borderRadius: 8}} />
         <View style={{paddingHorizontal: 10, paddingVertical: 15}}>
