@@ -2,6 +2,8 @@ import { FlatList, SafeAreaView, View } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import GroupItem from './GroupItem';
 import PlusButton from '../common/PlusButton';
+import { StackScreenProps } from '@react-navigation/stack';
+import { GroupStackParams } from '../../pages/Group';
 
 const groupData = [
   {
@@ -21,7 +23,7 @@ const groupData = [
   }
 ]
 
-const GroupList = () => {
+const GroupList = ({ navigation }: StackScreenProps<GroupStackParams, 'GroupList'>) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <CustomHeader label='그룹 모아보기' />
@@ -32,7 +34,7 @@ const GroupList = () => {
         renderItem={({item}: any) => {
           const { name, introduction, rep_pic } = item;
           return (
-            <GroupItem name={name} introduction={introduction} rep_pic={rep_pic} onPress={() => {}} />
+            <GroupItem name={name} introduction={introduction} rep_pic={rep_pic} onPress={() => {navigation.navigate('FeedList')}} />
           )
         }}
       />
