@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { HomeStackParams } from '../../pages/Home';
 import { StackScreenProps } from '@react-navigation/stack';
-import { FeedProps } from '../Write/FeedUpload';
+import { FeedProps } from '../Home/FeedUpload';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import BackButton from '../common/BackButton';
 import HeartButton from '../common/HeartButton';
@@ -182,8 +182,7 @@ const FeedDetail = ({
     category: '',
     date: '2023.11.23',
     writer: '피터팬',
-    rep_pic:
-    'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
     music: '미쓰에이 - Bad girl Good girl',
     musicUrl: 'https://youtu.be/8TeeJvcBdLA?si=yffEamC12OAFs7HQ',
     like: true,

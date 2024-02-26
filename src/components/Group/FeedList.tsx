@@ -1,8 +1,11 @@
-import { FlatList, SafeAreaView } from 'react-native';
+import { FlatList, SafeAreaView, Modal } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { GroupStackParams } from '../../pages/Group';
 import CustomHeader from '../common/CustomHeader';
 import FeedItem from './FeedItem';
+import PlusButton from '../common/PlusButton';
+import FeedUpload from './FeedUpload';
+import { useState } from 'react';
 
 const data = [
   {
@@ -32,25 +35,30 @@ const data = [
 ]
 
 const FeedList = ({ navigation }: StackScreenProps<GroupStackParams, 'FeedList'>) => {
+  const [formVisible, setFormVisible] = useState<boolean>(false);
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       <CustomHeader label='망미동 여걸 사총사' onBack={() => navigation.goBack()} />
       <FlatList
-          data={data}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => {
-            const { writer, title, subtitle, rep_pic } = item;
-            return (
-              <FeedItem
-                writer={writer}
-                title={title}
-                subtitle={subtitle}
-                rep_pic={rep_pic}
-              />
-            )
-          }}
-        />
+        data={data}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item}) => {
+          const { writer, title, subtitle, rep_pic } = item;
+          return (
+            <FeedItem
+              writer={writer}
+              title={title}
+              subtitle={subtitle}
+              rep_pic={rep_pic}
+            />
+          )
+        }}
+      />
+      <PlusButton onPress={() => {setFormVisible(true)}} />
+      <Modal visible={formVisible} animationType='slide'>
+        <FeedUpload setFormVisible={setFormVisible} />
+      </Modal>
     </SafeAreaView>
   )
 }
