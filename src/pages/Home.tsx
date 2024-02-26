@@ -5,7 +5,7 @@ import {
 import FeedList from '../components/Home/FeedList';
 import FeedSearch from '../components/Home/FeedSearch';
 import FeedDetail from '../components/Home/FeedDetail';
-import FeedUpload from '../components/Write/FeedUpload';
+import FeedUpload from '../components/Home/FeedUpload';
 
 export type HomeStackParams = {
   FeedList: undefined;
@@ -25,7 +25,11 @@ const Home = () => {
       <Stack.Screen name="FeedList" component={FeedList} />
       <Stack.Screen name="FeedSearch" component={FeedSearch} />
       <Stack.Screen name="FeedDetail" component={FeedDetail} />
-      <Stack.Screen name='FeedUpload' component={FeedUpload} options={{ presentation: 'transparentModal'}} />
+      <Stack.Screen
+        name="FeedUpload"
+        component={FeedUpload}
+        options={{ presentation: 'transparentModal' }}
+      />
     </Stack.Navigator>
   );
 };

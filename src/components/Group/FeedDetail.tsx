@@ -11,12 +11,11 @@ import {
 } from 'react-native';
 import { HomeStackParams } from '../../pages/Home';
 import { StackScreenProps } from '@react-navigation/stack';
-import { FeedProps } from './FeedUpload';
+import { FeedProps } from '../Home/FeedUpload';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import BackButton from '../common/BackButton';
 import HeartButton from '../common/HeartButton';
 import EditButton from '../common/EditButton';
-import RecommendItem from './RecommendItem';
 import CommentInput from '../common/CommentInput';
 import CommentItem from '../common/CommentItem';
 import { B12, B16, B14, B20 } from '../../styles/GlobalText';
@@ -30,27 +29,6 @@ interface FeedDetailProps extends FeedProps {
   writer: string;
   like: boolean;
 }
-
-const RecommendData = [
-  {
-    title: '1998년 서울 여성 길거리 패션',
-    hashtag: ['패션', '나팔바지'],
-    rep_pic:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
-  },
-  {
-    title: '1998년 서울 여성 길거리 패션',
-    hashtag: ['패션', '나팔바지'],
-    rep_pic:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
-  },
-  {
-    title: '1998년 서울 여성 길거리 패션',
-    hashtag: ['패션', '나팔바지'],
-    rep_pic:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
-  },
-];
 
 const DetailSection = ({
   feed,
@@ -158,24 +136,6 @@ const DetailSection = ({
         />
         <B16 style={{ marginTop: 5 }}>{feed.subtitle}</B16>
         <B14 style={{ marginTop: 20, lineHeight: 24 }}>{feed.content}</B14>
-        <B12 style={{ color: MINT, marginTop: 30, marginBottom: 10 }}>
-          {user}님을 위한 추천 글
-        </B12>
-        <FlatList
-          data={RecommendData}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }: any) => {
-            const { title, hashtag, rep_pic } = item;
-            return (
-              <RecommendItem
-                title={title}
-                hashtag={hashtag}
-                rep_pic={rep_pic}
-              />
-            );
-          }}
-        />
       </View>
       <YoutubePlayer
         height={0}
@@ -215,17 +175,16 @@ const FeedDetail = ({
   navigation,
 }: StackScreenProps<HomeStackParams, 'FeedDetail'>) => {
   const [feed, setFeed] = useState<FeedDetailProps>({
-    title: '8월의 크리스마스',
-    subtitle: '1998년... 당신은 누구와 사랑을 했나요?',
+    title: '망민중 축제 기억 ㄴrㄴㅣ',
+    subtitle: '아니 우리 의상 보라고;;',
     content:
-      '"좋아하는 남자 친구 없어요?"변두리 사진관에서 아버지를 모시고 사는 노총각 ‘정원’. 시한부 인생을 받아들이고 가족, 친구들과 담담한 이별을 준비하던 어느 날, 주차단속요원 \'다림\'을 만나게 되고 차츰 평온했던 일상이 흔들리기 시작한다."아저씨, 왜 나만 보면 웃어요?"',
+      '앞에선 한 마디도 못하더니\n뒤에선 내 얘길 안 좋게 해\n참 어이가 없어\nHello hello hello 나 같은 여잔 처음\n(으로 으로 으로) 본 것 같은데\n왜 나를 판단하니\n내가 혹시 두려운 거니\n겉으론 bad girl 속으론 good girl\n나를 잘 알지도 못하면서\n내 겉모습만 보면서\n한심한 여자로 보는\n너의 시선이 난 너무나 웃겨',
     category: '',
     date: '2023.11.23',
     writer: '피터팬',
-    rep_pic:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
-    music: '델리스파이스 - 고백',
-    musicUrl: 'https://youtu.be/BYyVDi8BpZw?si=uBQTU4JpzLrIU84f',
+    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    music: '미쓰에이 - Bad girl Good girl',
+    musicUrl: 'https://youtu.be/8TeeJvcBdLA?si=yffEamC12OAFs7HQ',
     like: true,
   });
   const [comment, setComment] = useState<string>('');
