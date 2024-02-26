@@ -51,8 +51,13 @@ const data = [
 
 const FeedSearch = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedSearch'>) => {
   const [search, setSearch] = useState<string>('');
+  const [isSearching, setIsSearching] = useState<boolean>(true);
   const recommendData = ['나팔바지', '지브리', '크리스마스', '디즈니', '핑클', '소녀시대', '상속자들', '동방신기'];
   const [recentSearches, setRecentSearches] = useState<string[]>(['로맨스', '서울 사투리', '응답하라', '서태지와 아이들']);
+
+  const onSearch = () => {
+    if(search.length > 0) setIsSearching(false);
+  }
 
   return (
     <SafeAreaView>
@@ -61,28 +66,14 @@ const FeedSearch = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedSearc
         <SearchBar 
           search={search}
           setSearch={setSearch}
+          isSearching={isSearching}
+          setIsSearching={setIsSearching}
           placeholder='글 제목, 내용, 해시태그'
           style={{width: 330, marginLeft: 5}}
+          onSubmitEditing={onSearch}
         />
       </View>
-      { search.length > 0 ? (
-        <FlatList
-          data={data}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => {
-            const { category, title, rep_pic, hashtags } = item;
-            return (
-              <UserItem
-                category={category}
-                title={title}
-                rep_pic={rep_pic}
-                hashtags={hashtags}
-              />
-            )
-          }}
-        />
-      ) : (
+      { isSearching && search.length === 0 ? (        
         <View style={{padding: 15}}>
           <View>
             <B16 style={{color: MINT}}>추천 검색어</B16>
@@ -120,6 +111,23 @@ const FeedSearch = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedSearc
             />
           </View>
         </View>
+      ) : (
+        <FlatList
+          data={data}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item}) => {
+            const { category, title, rep_pic, hashtags } = item;
+            return (
+              <UserItem
+                category={category}
+                title={title}
+                rep_pic={rep_pic}
+                hashtags={hashtags}
+              />
+            )
+          }}
+        />
       )}
     </SafeAreaView>
   )

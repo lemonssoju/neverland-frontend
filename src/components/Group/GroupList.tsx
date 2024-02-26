@@ -1,9 +1,11 @@
-import { FlatList, SafeAreaView, View } from 'react-native';
+import { useState } from 'react';
+import { FlatList, Modal, SafeAreaView, View } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import GroupItem from './GroupItem';
 import PlusButton from '../common/PlusButton';
 import { StackScreenProps } from '@react-navigation/stack';
 import { GroupStackParams } from '../../pages/Group';
+import CreateGroup from './CreateGroup';
 
 const groupData = [
   {
@@ -24,6 +26,7 @@ const groupData = [
 ]
 
 const GroupList = ({ navigation }: StackScreenProps<GroupStackParams, 'GroupList'>) => {
+  const [formVisible, setFormVisible] = useState<boolean>(false);
   return (
     <SafeAreaView style={{flex: 1}}>
       <CustomHeader label='그룹 모아보기' />
@@ -38,7 +41,10 @@ const GroupList = ({ navigation }: StackScreenProps<GroupStackParams, 'GroupList
           )
         }}
       />
-      <PlusButton onPress={() => {}} />
+      <PlusButton onPress={() => { setFormVisible(true) }} />
+      <Modal visible={formVisible} animationType='slide'>
+        <CreateGroup setFormVisible={setFormVisible} />
+      </Modal>
     </SafeAreaView>
   )
 }
