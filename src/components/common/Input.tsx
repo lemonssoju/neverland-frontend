@@ -11,9 +11,9 @@ interface InputProps extends TextInputProps {
   alert?: string;
 }
 
-const InputBox = ({label, labelStyle, isRequired, value, onChangeText, placeholder, description, alert, ...rest}: InputProps) => {
+const Input = ({label, labelStyle, isRequired, value, onChangeText, placeholder, description, alert, ...rest}: InputProps) => {
   return (
-    <View style={{paddingHorizontal: 20, marginTop: 5}}>
+    <View style={{paddingHorizontal: 20, marginTop: 5, marginBottom: (description || alert) ? 10 : 0}}>
       <B14 style={{marginBottom: 5, ...labelStyle}}>{label} {isRequired && `*`}</B14>
       <TextInput
         value={value}
@@ -28,4 +28,4 @@ const InputBox = ({label, labelStyle, isRequired, value, onChangeText, placehold
   )
 }
 
-export default InputBox;
+export default Input;
