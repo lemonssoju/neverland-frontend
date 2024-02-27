@@ -9,7 +9,7 @@ interface BottomButtonProps {
 
 const BottomButton = ({ label, onPress }: BottomButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{backgroundColor: MINT, width: 350, height: 60, justifyContent: 'center', alignItems: 'center', borderRadius: 12 }}>
+    <TouchableOpacity onPress={onPress} style={{backgroundColor: MINT, width: 350, height: 60, justifyContent: 'center', alignItems: 'center', borderRadius: 12, alignSelf: 'center' }}>
       <B20 style={{color: BLACK}}>{label}</B20>
     </TouchableOpacity>
   )

@@ -1,5 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
+
 import Start from '../components/Auth/Start';
+import SignUp from '../components/Auth/SignUp';
 
 export type AuthStackParams = {
   Start: undefined;
@@ -9,7 +11,7 @@ export type AuthStackParams = {
   Preferences: undefined;
 }
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<AuthStackParams>();
 
 const Auth = () => {
   return (
@@ -18,6 +20,7 @@ const Auth = () => {
         headerShown: false
       }}>
       <Stack.Screen name="Start" component={Start} />
+      <Stack.Screen name="SignUp" component={SignUp} />
     </Stack.Navigator>
   )
 }
