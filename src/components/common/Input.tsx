@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { View, TextInput, TextStyle, TextInputProps } from 'react-native';
 import { B14, R14 } from '../../styles/GlobalText';
-import { MINT, WHITE } from '../../styles/GlobalColor';
+import { GRAY, MINT, WHITE } from '../../styles/GlobalColor';
 
 interface InputProps extends TextInputProps {
   label: string;
@@ -19,7 +19,7 @@ const Input = ({label, labelStyle, isRequired, value, onChangeText, placeholder,
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={'#BBBBBB'}
+        placeholderTextColor={GRAY}
         style={{borderBottomColor: WHITE, borderBottomWidth: 1, paddingVertical: 5, fontSize: 14, color: WHITE}}
         {...rest}
       />
