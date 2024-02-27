@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { BLACK, MINT, WHITE } from './src/styles/GlobalColor';
 
+import AuthScreen from './src/pages/Auth';
 import HomeScreen from './src/pages/Home';
 import GroupScreen from './src/pages/Group';
 import WriteScreen from './src/pages/Write';
@@ -48,8 +49,8 @@ function App(): JSX.Element {
           screenOptions={() => ({
             headerShown: false,
           })}>
+          <Stack.Screen name="Auth" component={AuthScreen} />
           <Stack.Screen name="HomeTab" component={HomeTab} />
-          {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
