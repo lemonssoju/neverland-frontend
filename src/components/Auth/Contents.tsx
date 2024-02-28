@@ -25,6 +25,7 @@ const Contents = ({ navigation }: StackScreenProps<AuthStackParams, 'Contents'>)
         data={['영화', '드라마', '애니메이션', '패션', '음악', '예능']}
         numColumns={2}
         style={{marginTop: 30}}
+        showsVerticalScrollIndicator={false}
         renderItem={({item, index}: {item: any, index: number}) => {
           return (
             <View style={{width: '50%', alignItems: 'center'}}>
@@ -53,7 +54,7 @@ const Contents = ({ navigation }: StackScreenProps<AuthStackParams, 'Contents'>)
           )
         }}
       />
-      <BottomButton label='다음' onPress={() => navigation.navigate('Preferences')} />
+      <BottomButton label='다음' onPress={() => navigation.navigate('Preferences', { categories: categories })} />
     </SafeAreaView>
   )
 }

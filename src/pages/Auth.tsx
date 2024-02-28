@@ -10,7 +10,7 @@ export type AuthStackParams = {
   Login: undefined;
   SignUp: undefined;
   Contents: undefined;
-  Preferences: undefined;
+  Preferences: { categories: string[] }
 }
 
 const Stack = createStackNavigator<AuthStackParams>();
