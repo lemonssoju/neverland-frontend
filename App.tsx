@@ -33,13 +33,10 @@ const GlobalTheme = {
   },
 };
 
-export type TabProps = {
-  Home: undefined;
-  Group: undefined;
-  Write: undefined;
-  Profile: undefined;
-  Settings: undefined;
-};
+export type RootStackParams = {
+  Auth: undefined;
+  HomeTab: TabProps;
+}
 
 function App(): JSX.Element {
   return (
@@ -56,6 +53,14 @@ function App(): JSX.Element {
     </GestureHandlerRootView>
   );
 }
+
+export type TabProps = {
+  Home: undefined;
+  Group: undefined;
+  Write: undefined;
+  Profile: undefined;
+  Settings: undefined;
+};
 
 const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (

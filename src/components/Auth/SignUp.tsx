@@ -61,7 +61,7 @@ const SignUp = ({ navigation }: StackScreenProps<AuthStackParams, 'SignUp'>) => 
           alert='비밀번호가 일치하지 않습니다.'
         />
       </View>
-      <BottomButton label='다음' onPress={() => {}} />
+      <BottomButton label='다음' onPress={() => {navigation.navigate('Contents')}} />
     </SafeAreaView>
   )
 }

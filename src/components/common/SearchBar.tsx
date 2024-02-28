@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { View, TextInputProps, TextStyle, TextInput, TouchableOpacity } from 'react-native';
-import { LIGHTBLACK, WHITE } from "../../styles/GlobalColor";
+import { GRAY, LIGHTBLACK, WHITE } from "../../styles/GlobalColor";
 import SearchIcon from '../../assets/common/Search.svg';
 import CloseIcon from '../../assets/common/Close.svg';
 
@@ -22,8 +22,8 @@ const SearchBar = ({search, setSearch, isSearching, setIsSearching, placeholder,
           setSearch(text);
         }}
         placeholder={placeholder}
-        placeholderTextColor={'#BBBBBB'}
-        style={{padding: 10, backgroundColor: LIGHTBLACK, borderRadius: 10, color: '#BBBBBB', fontWeight: '700'}}
+        placeholderTextColor={GRAY}
+        style={{padding: 10, backgroundColor: LIGHTBLACK, borderRadius: 10, color: GRAY, fontWeight: '700'}}
         returnKeyType='search'
         {...rest}
       />

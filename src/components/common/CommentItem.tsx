@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import EditButton from './EditButton';
-import { LIGHTBLACK } from '../../styles/GlobalColor';
+import { GRAY, LIGHTBLACK } from '../../styles/GlobalColor';
 import DotsIcon from '../../assets/common/Dots.svg';
 import { B12, R12 } from '../../styles/GlobalText';
 
@@ -35,7 +35,7 @@ const CommentItem = ({ writer, date, content, profile, onEdit, onDelete }: Comme
         <View style={{marginLeft: 10}}>
           <View style={{flexDirection: 'row', marginVertical: 5}}>
             <B12>{writer}</B12>
-            <R12 style={{color: '#BBBBBB', fontSize: 10, marginLeft: 5}}>{date}</R12>
+            <R12 style={{color: GRAY, fontSize: 10, marginLeft: 5}}>{date}</R12>
           </View>
           <B12 style={{lineHeight: 24}}>{content}</B12>
         </View>
