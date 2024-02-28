@@ -9,7 +9,7 @@ const Start = ({ navigation }: StackScreenProps<AuthStackParams, 'Start'>) => {
   return (
     <SafeAreaView style={{flex: 1, alignItems: 'center'}}>
       <B24 style={{fontSize: 40, marginTop: 200, marginBottom: 250}}>neverland</B24>
-      <AuthButton>
+      <AuthButton onPress={() => navigation.navigate('Login')}>
         <B24 style={{fontSize: 32, color: BLACK}}>로그인</B24>
       </AuthButton>
       <AuthButton onPress={() => navigation.navigate('SignUp')}>

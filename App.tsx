@@ -34,8 +34,8 @@ const GlobalTheme = {
 };
 
 export type RootStackParams = {
-  Auth: undefined;
-  HomeTab: TabProps;
+  Auth: any;
+  HomeTab: any;
 }
 
 function App(): JSX.Element {
