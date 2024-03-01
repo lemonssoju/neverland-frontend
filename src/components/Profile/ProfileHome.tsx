@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -8,20 +8,23 @@ import {
   FlatList,
   ImageBackground,
   Pressable,
+  TextInput,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ProfileStackParams } from '../../pages/Profile';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import styled from 'styled-components/native';
-import { LIGHTBLACK, WHITE } from '../../styles/GlobalColor';
+import { BLACK, LIGHTBLACK, WHITE } from '../../styles/GlobalColor';
 import { Asset } from 'react-native-image-picker';
 import PhotoButton from '../common/PhotoButton';
 import { B16, B14, B12 } from '../../styles/GlobalText';
+import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 
 import MusicIcon from '../../assets/common/Music.svg';
 import MenuIcon from '../../assets/common/Menu.svg';
 import CloseIcon from '../../assets/common/Close.svg';
 import BottomButton from '../common/BottomButton';
+import { BottomSheetProvider } from '@gorhom/bottom-sheet/lib/typescript/contexts';
 
 interface ProfileProps {
   nickname: string;
@@ -181,6 +184,98 @@ const AlbumSection = ({ onPress }: { onPress: () => void }) => {
   );
 };
 
+const data = [
+  {
+    nickname: '피터팬1',
+    profile: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    content: '널 찾아간다 추억이 보낸 피터팬 따라나섰던 네버랜드',
+    date: '2023.12.19',
+  },
+  {
+    nickname: '피터팬2',
+    profile: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    content: '널 찾아간다 추억이 보낸 피터팬 따라나섰던 네버랜드',
+    date: '2023.12.19',
+  },
+  {
+    nickname: '피터팬',
+    profile: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    content: '널 찾아간다 추억이 보낸 피터팬 따라나섰던 네버랜드',
+    date: '2023.12.19',
+  },
+  {
+    nickname: '피터팬',
+    profile: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    content: '널 찾아간다 추억이 보낸 피터팬 따라나섰던 네버랜드',
+    date: '2023.12.19',
+  },
+  {
+    nickname: '피터팬',
+    profile: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    content: '널 찾아간다 추억이 보낸 피터팬 따라나섰던 네버랜드',
+    date: '2023.12.19',
+  },
+];
+
+const GuestSection = () => {
+  const guestRef = useRef<BottomSheet>(null);
+  const guestSnapPoints = useMemo(() => [60, 600], []);
+  const [guestComment, setGuestComment] = useState<string>('');
+
+  return (
+    <BottomSheet
+      ref={guestRef}
+      snapPoints={guestSnapPoints}
+      backgroundStyle={{
+        backgroundColor: LIGHTBLACK
+      }}
+      handleStyle={{
+        backgroundColor: LIGHTBLACK,
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
+      }}
+      handleIndicatorStyle={{ backgroundColor: '#3F3F3F', width: 60 }}>
+      <B16 style={{ marginLeft: 20, marginBottom: 10 }}>방명록</B16>
+      <BottomSheetFlatList
+        data={data}
+        numColumns={2}
+        renderItem={({ item, index }) => {
+          const { nickname, profile, content, date } = item;
+          return (
+            <View style={{ borderRadius: 18, backgroundColor: BLACK, width: '45%', margin: 10, height: 150 }}>
+              <View style={{ flexDirection: 'row', padding: 10, alignItems: 'center' }}>
+                <Image
+                  source={{ uri: profile }}
+                  style={{ width: 20, height: 20, borderRadius: 180, marginRight: 5 }}
+                />
+                <B14>{nickname}</B14>
+              </View>
+              { index === 0 ?
+                <View>
+                  <TextInput
+                    value={guestComment}
+                    onChangeText={setGuestComment}
+                    multiline
+                    style={{height: 70, padding: 10, color: WHITE}}
+                  />
+                  <TouchableOpacity style={{borderTopWidth: 1, borderTopColor: WHITE, alignItems: 'center', paddingVertical: 10}}>
+                    <B16>방명록 등록</B16>
+                  </TouchableOpacity>
+                </View>
+                :
+                <View style={{paddingHorizontal: 10, paddingBottom: 10, flex: 1}}>
+                  <B12 style={{lineHeight: 24, flex: 1, textAlign: 'center'}}>{content}</B12>
+                  <B12 style={{alignSelf: 'flex-end'}}>{date}</B12>
+                </View>
+              }
+            </View>
+          );
+        }}
+      />
+    </BottomSheet>
+  );
+};
+
 const ProfileHome = ({
   navigation,
 }: StackScreenProps<ProfileStackParams, 'ProfileHome'>) => {
@@ -219,6 +314,7 @@ const ProfileHome = ({
       </TouchableOpacity>
       <ProfileSection profile={profile} navigation={navigation} />
       <AlbumSection onPress={() => setAlbumVisible(true)} />
+      <GuestSection />
       <Modal visible={albumVisible} transparent>
         <Pressable
           style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
