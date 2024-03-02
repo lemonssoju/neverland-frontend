@@ -17,7 +17,7 @@ const data = [
 ]
 
 const FollowList = ({ navigation, route }: StackScreenProps<ProfileStackParams, 'FollowList'>) => {
-  const [showFollowing, setShowFollowing] = useState<boolean>(true);
+  const [showFollowing, setShowFollowing] = useState<boolean>(route.params.follow === 'following' ? true : false);
   const [search, setSearch] = useState<string>('');
   const [isSearching, setIsSearching] = useState<boolean>(true);
   return (

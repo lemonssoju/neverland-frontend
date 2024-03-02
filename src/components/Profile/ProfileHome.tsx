@@ -78,13 +78,14 @@ const ProfileSection = ({
           <B16>{profile.nickname}</B16>
           <B14>{profile.introduction}</B14>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity onPress={() => navigation.navigate('FollowList')}>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('FollowList', { follow: 'following'})}>
               <B12>팔로잉 {profile.following}</B12>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ marginLeft: 10 }}
-              onPress={() => navigation.navigate('FollowList')}>
-              <B12>팔로우 {profile.follower}</B12>
+              onPress={() => navigation.navigate('FollowList', { follow: 'follower'})}>
+              <B12>팔로워 {profile.follower}</B12>
             </TouchableOpacity>
           </View>
         </View>

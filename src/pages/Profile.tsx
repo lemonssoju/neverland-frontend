@@ -4,7 +4,9 @@ import FollowList from '../components/Profile/FollowList';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
-  FollowList: undefined;
+  FollowList: {
+    follow: string;
+  }
 }
 
 const Stack = createStackNavigator<ProfileStackParams>();
