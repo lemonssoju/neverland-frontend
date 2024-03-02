@@ -10,7 +10,7 @@ interface SearchBarProps extends TextInputProps {
   isSearching: boolean;
   setIsSearching: Dispatch<SetStateAction<boolean>>;
   placeholder: string;
-  style: TextStyle;
+  style?: TextStyle;
 }
 
 const SearchBar = ({search, setSearch, isSearching, setIsSearching, placeholder, style, ...rest}: SearchBarProps) => {

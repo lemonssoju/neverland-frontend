@@ -57,10 +57,10 @@ const ProfileSection = ({
   };
   const videoId = extractVideoId(profile.musicUrl ? profile.musicUrl : '');
 
-  // // 자동재생
-  // useEffect(() => {
-  //   setPlaying(true);
-  // }, []);
+  // 자동재생
+  useEffect(() => {
+    setPlaying(true);
+  }, []);
 
   return (
     <>
