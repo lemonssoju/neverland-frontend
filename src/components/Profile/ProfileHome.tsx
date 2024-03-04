@@ -19,19 +19,14 @@ import { Asset } from 'react-native-image-picker';
 import PhotoButton from '../common/PhotoButton';
 import { B16, B14, B12 } from '../../styles/GlobalText';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
+import { ProfileProps } from './ProfileEdit';
 
 import MusicIcon from '../../assets/common/Music.svg';
 import MenuIcon from '../../assets/common/Menu.svg';
 import CloseIcon from '../../assets/common/Close.svg';
 import BottomButton from '../common/BottomButton';
-import { BottomSheetProvider } from '@gorhom/bottom-sheet/lib/typescript/contexts';
 
-interface ProfileProps {
-  nickname: string;
-  introduction?: string;
-  rep_pic?: string;
-  music?: string;
-  musicUrl?: string;
+interface ProfileHomeProps extends ProfileProps {
   following: number;
   follower: number;
   albums?: string[];
@@ -41,7 +36,7 @@ const ProfileSection = ({
   profile,
   navigation,
 }: {
-  profile: ProfileProps;
+  profile: ProfileHomeProps;
   navigation: any;
 }) => {
   const [follow, setFollow] = useState<boolean>(false);
@@ -78,13 +73,14 @@ const ProfileSection = ({
           <B16>{profile.nickname}</B16>
           <B14>{profile.introduction}</B14>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity onPress={() => navigation.navigate('FollowList')}>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('FollowList', { follow: 'following'})}>
               <B12>팔로잉 {profile.following}</B12>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ marginLeft: 10 }}
-              onPress={() => navigation.navigate('FollowList')}>
-              <B12>팔로우 {profile.follower}</B12>
+              onPress={() => navigation.navigate('FollowList', { follow: 'follower'})}>
+              <B12>팔로워 {profile.follower}</B12>
             </TouchableOpacity>
           </View>
         </View>
@@ -106,7 +102,7 @@ const ProfileSection = ({
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => setFollow(!follow)}
+        onPress={() => {setFollow(!follow); navigation.navigate('ProfileEdit')}}
         style={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -279,7 +275,7 @@ const GuestSection = () => {
 const ProfileHome = ({
   navigation,
 }: StackScreenProps<ProfileStackParams, 'ProfileHome'>) => {
-  const [profile, setProfile] = useState<ProfileProps>({
+  const [profile, setProfile] = useState<ProfileHomeProps>({
     nickname: '황은정',
     introduction: '너 ㄸĦ문øłl ㅁı쳐',
     rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
