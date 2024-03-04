@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 
-const Settings = () => {
+const ChangePassword = () => {
   return (
     <SafeAreaView>
 
@@ -9,4 +9,4 @@ const Settings = () => {
   )
 }
 
-export default Settings;
+export default ChangePassword;

@@ -298,6 +298,7 @@ const ProfileHome = ({
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity
+        onPress={() => navigation.navigate('SettingsHome')}
         style={{
           alignSelf: 'flex-end',
           width: 40,
