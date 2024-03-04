@@ -33,8 +33,8 @@ const SettingsHome = ({ navigation }: StackScreenProps<ProfileStackParams, 'Sett
       <CustomHeader label='설정' />
       <View style={{paddingHorizontal: 20}}>
         <B14 style={{color: MINT, marginVertical: 10}}>사용자 정보</B14>
-        <Option label='내가 쓴 글' onPress={() => navigation.navigate('MyFeed')} />
-        <Option label='내가 좋아요한 글' onPress={() => navigation.navigate('MyFeed')} />
+        <Option label='내가 쓴 글' onPress={() => navigation.navigate('MyFeed', { title: '내가 쓴 글'})} />
+        <Option label='내가 좋아요한 글' onPress={() => navigation.navigate('MyFeed', { title: '내가 좋아요한 글'})} />
         <Option label='개인정보 변경' onPress={() => navigation.navigate('ChangePassword')} />
         <View style={{height: 1, backgroundColor: LIGHTBLACK, marginVertical: 10}} />
         <B14 style={{color: MINT, marginVertical: 10}}>사용자 문의</B14>

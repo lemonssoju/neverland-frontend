@@ -14,7 +14,9 @@ export type ProfileStackParams = {
   }
   ProfileEdit: undefined;
   SettingsHome: undefined;
-  MyFeed: undefined;
+  MyFeed: {
+    title: string;
+  }
   ChangePassword: undefined;
   Withdraw: undefined;
 }
