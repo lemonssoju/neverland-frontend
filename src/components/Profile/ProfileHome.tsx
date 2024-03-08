@@ -58,8 +58,8 @@ const ProfileSection = ({
   }, []);
 
   return (
-    <>
-      <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+    <View style={{paddingVertical: 10}}>
+      <View style={{ flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10 }}>
         <Image
           source={{ uri: profile.rep_pic }}
           style={{ width: 80, height: 80, borderRadius: 180, marginRight: 10 }}
@@ -114,7 +114,7 @@ const ProfileSection = ({
         }}>
         <B16>{follow ? '팔로잉' : '팔로우'}</B16>
       </TouchableOpacity>
-    </>
+    </View>
   );
 };
 
@@ -297,7 +297,7 @@ const ProfileHome = ({
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => navigation.navigate('SettingsHome')}
         style={{
           alignSelf: 'flex-end',
@@ -308,7 +308,7 @@ const ProfileHome = ({
           marginRight: 8,
         }}>
         <MenuIcon width={24} height={24} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <ProfileSection profile={profile} navigation={navigation} />
       <AlbumSection onPress={() => setAlbumVisible(true)} />
       <GuestSection />
