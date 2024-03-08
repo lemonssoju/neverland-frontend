@@ -30,6 +30,7 @@ interface ProfileHomeProps extends ProfileProps {
   following: number;
   follower: number;
   albums?: string[];
+  isMyProfile: boolean;
 }
 
 const ProfileSection = ({
@@ -58,8 +59,13 @@ const ProfileSection = ({
   }, []);
 
   return (
-    <>
-      <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+    <View style={{ paddingVertical: 10 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+        }}>
         <Image
           source={{ uri: profile.rep_pic }}
           style={{ width: 80, height: 80, borderRadius: 180, marginRight: 10 }}
@@ -73,13 +79,19 @@ const ProfileSection = ({
           <B16>{profile.nickname}</B16>
           <B14>{profile.introduction}</B14>
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity 
-              onPress={() => navigation.navigate('FollowList', { follow: 'following'})}>
+            <TouchableOpacity
+              disabled={!profile.isMyProfile}
+              onPress={() =>
+                navigation.navigate('FollowList', { follow: 'following' })
+              }>
               <B12>팔로잉 {profile.following}</B12>
             </TouchableOpacity>
             <TouchableOpacity
+              disabled={!profile.isMyProfile}
               style={{ marginLeft: 10 }}
-              onPress={() => navigation.navigate('FollowList', { follow: 'follower'})}>
+              onPress={() =>
+                navigation.navigate('FollowList', { follow: 'follower' })
+              }>
               <B12>팔로워 {profile.follower}</B12>
             </TouchableOpacity>
           </View>
@@ -102,23 +114,28 @@ const ProfileSection = ({
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => {setFollow(!follow); navigation.navigate('ProfileEdit')}}
+        onPress={() => {
+          profile.isMyProfile ? 
+            navigation.navigate('ProfileEdit')
+          :
+            setFollow(!follow)
+        }}
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          paddingVertical: 5,
+          height: 25,
           backgroundColor: LIGHTBLACK,
           marginHorizontal: 20,
           marginVertical: 10,
           borderRadius: 12,
         }}>
-        <B16>{follow ? '팔로잉' : '팔로우'}</B16>
+        <B16>{profile.isMyProfile ? '프로필 편집': (follow ? '팔로잉' : '팔로우')}</B16>
       </TouchableOpacity>
-    </>
+    </View>
   );
 };
 
-const AlbumSection = ({ onPress }: { onPress: () => void }) => {
+const AlbumSection = ({ onPress, isMyProfile }: { onPress: () => void; isMyProfile: boolean; }) => {
   return (
     <ImageBackground
       source={require('../../assets/Album.png')}
@@ -126,6 +143,7 @@ const AlbumSection = ({ onPress }: { onPress: () => void }) => {
       imageStyle={{ width: 390, height: 460 }}>
       <TouchableOpacity
         onPress={onPress}
+        disabled={!isMyProfile}
         style={{
           position: 'absolute',
           top: 5,
@@ -139,6 +157,7 @@ const AlbumSection = ({ onPress }: { onPress: () => void }) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={onPress}
+        disabled={!isMyProfile}
         style={{
           position: 'absolute',
           top: 5,
@@ -152,6 +171,7 @@ const AlbumSection = ({ onPress }: { onPress: () => void }) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={onPress}
+        disabled={!isMyProfile}
         style={{
           position: 'absolute',
           top: 210,
@@ -165,6 +185,7 @@ const AlbumSection = ({ onPress }: { onPress: () => void }) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={onPress}
+        disabled={!isMyProfile}
         style={{
           position: 'absolute',
           top: 210,
@@ -181,6 +202,7 @@ const AlbumSection = ({ onPress }: { onPress: () => void }) => {
 };
 
 const data = [
+  {},
   {
     nickname: '피터팬1',
     profile: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
@@ -213,7 +235,7 @@ const data = [
   },
 ];
 
-const GuestSection = () => {
+const GuestSection = ({ isMyProfile }: { isMyProfile: boolean; }) => {
   const guestRef = useRef<BottomSheet>(null);
   const guestSnapPoints = useMemo(() => [60, 600], []);
   const [guestComment, setGuestComment] = useState<string>('');
@@ -223,7 +245,7 @@ const GuestSection = () => {
       ref={guestRef}
       snapPoints={guestSnapPoints}
       backgroundStyle={{
-        backgroundColor: LIGHTBLACK
+        backgroundColor: LIGHTBLACK,
       }}
       handleStyle={{
         backgroundColor: LIGHTBLACK,
@@ -233,37 +255,63 @@ const GuestSection = () => {
       handleIndicatorStyle={{ backgroundColor: '#3F3F3F', width: 60 }}>
       <B16 style={{ marginLeft: 20, marginBottom: 10 }}>방명록</B16>
       <BottomSheetFlatList
-        data={data}
+        data={isMyProfile ? data.slice(1) : data}
         numColumns={2}
         renderItem={({ item, index }) => {
           const { nickname, profile, content, date } = item;
           return (
-            <View style={{ borderRadius: 18, backgroundColor: BLACK, width: '45%', margin: 10, height: 150 }}>
-              <View style={{ flexDirection: 'row', padding: 10, alignItems: 'center' }}>
+            <View
+              style={{
+                borderRadius: 18,
+                backgroundColor: BLACK,
+                width: '45%',
+                margin: 10,
+                height: 150,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  padding: 10,
+                  alignItems: 'center',
+                }}>
                 <Image
                   source={{ uri: profile }}
-                  style={{ width: 20, height: 20, borderRadius: 180, marginRight: 5 }}
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 180,
+                    marginRight: 5,
+                  }}
                 />
                 <B14>{nickname}</B14>
               </View>
-              { index === 0 ?
+              {!isMyProfile && index === 0 ? (
                 <View>
                   <TextInput
                     value={guestComment}
                     onChangeText={setGuestComment}
                     multiline
-                    style={{height: 70, padding: 10, color: WHITE}}
+                    style={{ height: 70, padding: 10, color: WHITE }}
                   />
-                  <TouchableOpacity style={{borderTopWidth: 1, borderTopColor: WHITE, alignItems: 'center', paddingVertical: 10}}>
+                  <TouchableOpacity
+                    style={{
+                      borderTopWidth: 1,
+                      borderTopColor: WHITE,
+                      alignItems: 'center',
+                      paddingVertical: 10,
+                    }}>
                     <B16>방명록 등록</B16>
                   </TouchableOpacity>
                 </View>
-                :
-                <View style={{paddingHorizontal: 10, paddingBottom: 10, flex: 1}}>
-                  <B12 style={{lineHeight: 24, flex: 1, textAlign: 'center'}}>{content}</B12>
-                  <B12 style={{alignSelf: 'flex-end'}}>{date}</B12>
+              ) : (
+                <View
+                  style={{ paddingHorizontal: 10, paddingBottom: 10, flex: 1 }}>
+                  <B12 style={{ lineHeight: 24, flex: 1, textAlign: 'center' }}>
+                    {content}
+                  </B12>
+                  <B12 style={{ alignSelf: 'flex-end' }}>{date}</B12>
                 </View>
-              }
+              )}
             </View>
           );
         }}
@@ -284,6 +332,7 @@ const ProfileHome = ({
     following: 14,
     follower: 16,
     albums: [],
+    isMyProfile: false,
   });
   const [albumVisible, setAlbumVisible] = useState<boolean>(false);
   const [photo, setPhoto] = useState<Asset[]>([
@@ -297,7 +346,7 @@ const ProfileHome = ({
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => navigation.navigate('SettingsHome')}
         style={{
           alignSelf: 'flex-end',
@@ -308,10 +357,10 @@ const ProfileHome = ({
           marginRight: 8,
         }}>
         <MenuIcon width={24} height={24} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <ProfileSection profile={profile} navigation={navigation} />
-      <AlbumSection onPress={() => setAlbumVisible(true)} />
-      <GuestSection />
+      <AlbumSection onPress={() => setAlbumVisible(true)} isMyProfile={profile.isMyProfile} />
+      <GuestSection isMyProfile={profile.isMyProfile} />
       <Modal visible={albumVisible} transparent>
         <Pressable
           style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
