@@ -9,6 +9,7 @@ import { Alert, TouchableOpacity, View, Image } from 'react-native';
 import { launchCamera, launchImageLibrary, CameraOptions, ImageLibraryOptions, Asset } from 'react-native-image-picker';
 import styled from 'styled-components/native';
 import PhotoIcon from '../../assets/common/Photo.svg';
+import { B14 } from '../../styles/GlobalText';
 
 interface Action {
   title: string;
@@ -21,7 +22,11 @@ interface PhotoProps {
   setPhoto: Dispatch<SetStateAction<Asset[]>>;
 }
 
-const PhotoButton = ({ photo, setPhoto }: PhotoProps) => {
+interface PhotoButtonProps extends PhotoProps {
+  label?: string;
+}
+
+const PhotoButton = ({ photo, setPhoto, label }: PhotoButtonProps) => {
   const CameraActions: Action[] = [
     {
       title: '카메라',
@@ -91,23 +96,26 @@ const PhotoButton = ({ photo, setPhoto }: PhotoProps) => {
           <Image source={{ uri: photo[0].uri }} style={{ height: '100%', borderRadius: 8 }} resizeMode='cover' />
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity
-          onPress={() => {
-            Alert.alert('사진 선택', '', [
-              {
-                text: '카메라',
-                onPress: () => onButtonPress(CameraActions[0].type, CameraActions[0].options)
-              },
-              {
-                text: '앨범',
-                onPress: () => onButtonPress(CameraActions[1].type, CameraActions[1].options)
-              },
-              { text: '취소', style: 'destructive' },
-            ]);
-          }}
-        >
-          <PhotoIcon />
+        <>
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert('사진 선택', '', [
+                {
+                  text: '카메라',
+                  onPress: () => onButtonPress(CameraActions[0].type, CameraActions[0].options)
+                },
+                {
+                  text: '앨범',
+                  onPress: () => onButtonPress(CameraActions[1].type, CameraActions[1].options)
+                },
+                { text: '취소', style: 'destructive' },
+              ]);
+            }}
+          >
+            <PhotoIcon />
         </TouchableOpacity>
+        { label && <B14 style={{marginTop: 10}}>{label}</B14>}
+        </>
       )}
     </View>
   );
