@@ -97,7 +97,6 @@ const PhotoButton = ({ photo, setPhoto, label }: PhotoButtonProps) => {
         </TouchableOpacity>
       ) : (
         <>
-          { label && <B14 style={{marginBottom: 10}}>{label}</B14>}
           <TouchableOpacity
             onPress={() => {
               Alert.alert('사진 선택', '', [
@@ -115,6 +114,7 @@ const PhotoButton = ({ photo, setPhoto, label }: PhotoButtonProps) => {
           >
             <PhotoIcon />
         </TouchableOpacity>
+        { label && <B14 style={{marginTop: 10}}>{label}</B14>}
         </>
       )}
     </View>

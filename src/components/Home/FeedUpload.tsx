@@ -74,39 +74,39 @@ const FeedUpload = ({
       <ScrollView showsVerticalScrollIndicator={false}>
         <OptionContainer>
           <OptionButton
-            style={{ borderColor: option === '화가' ? WHITE : 'transparent' }}
+            style={{
+              backgroundColor: option === '화가' ? MINT : 'transparent',
+            }}
             onPress={() => setOption('화가')}>
-            <B14 style={{ marginVertical: 10 }}>👩‍🎨 AI 화가</B14>
-            <View
+            <B14
               style={{
-                width: '101.5%',
-                height: option === '화가' ? 0 : 1,
-                backgroundColor: WHITE,
-              }}
-            />
+                marginVertical: 8,
+                color: option === '화가' ? BLACK : WHITE,
+              }}>
+              👩‍🎨 AI 화가
+            </B14>
           </OptionButton>
           <OptionButton
-            style={{ borderColor: option === '사진' ? WHITE : 'transparent' }}
+            style={{
+              backgroundColor: option === '사진' ? MINT : 'transparent',
+            }}
             onPress={() => setOption('사진')}>
-            <B14 style={{ marginVertical: 10 }}>📷 직접 선택</B14>
-            <View
+            <B14
               style={{
-                width: '101.5%',
-                height: option === '사진' ? 0 : 1,
-                backgroundColor: WHITE,
-              }}
-            />
+                marginVertical: 8,
+                color: option === '사진' ? BLACK : WHITE,
+              }}>
+              📷 직접 선택
+            </B14>
           </OptionButton>
         </OptionContainer>
         <PhotoBox>
           {option === '화가' ? (
             <>
-              <B14 style={{ marginBottom: 10 }}>
-                AI 화가가 그림을 그려드려요!
-              </B14>
               <TouchableOpacity onPress={() => setDrawVisible(true)}>
                 <DrawIcon color={WHITE} />
               </TouchableOpacity>
+              <B14 style={{ marginTop: 15 }}>AI 화가가 그림을 그려드려요!</B14>
             </>
           ) : (
             <PhotoButton
@@ -158,7 +158,7 @@ const FeedUpload = ({
             description="우측 아이콘을 클릭해 유튜브 링크를 삽입해주세요."
           />
           <TouchableOpacity
-            style={{ position: 'absolute', right: 20, top: 465 }}
+            style={{ position: 'absolute', right: 20, top: 210 }}
             onPress={() => setMusicVisible(true)}>
             <LinkIcon />
           </TouchableOpacity>
@@ -345,31 +345,28 @@ const DropDownButton = styled.TouchableOpacity`
 
 const OptionContainer = styled.View`
   width: 80%;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   align-self: center;
   flex-direction: row;
   margin-top: 10px;
+  margin-bottom: 2px;
+  background: ${LIGHTBLACK};
+  border-radius: 8px;
+  padding-vertical: 5px;
 `;
 
 const OptionButton = styled.TouchableOpacity`
-  width: 50%;
+  width: 48%;
   align-items: center;
-  border-radius: 8px 8px 0px 0px;
-  border-top-width: 1px;
-  border-right-width: 1px;
-  border-left-width: 1px;
-  border-color: ${WHITE};
+  border-radius: 8px;
 `;
 
 const PhotoBox = styled.View`
   margin-horizontal: 20px;
   margin-bottom: 15px;
-  border-radius: 0px 0px 8px 8px;
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-bottom-width: 1px;
-  border-color: ${WHITE};
+  border-radius: 8px;
+  background: ${LIGHTBLACK};
   width: 80%;
   height: 220px;
   justify-content: center;
