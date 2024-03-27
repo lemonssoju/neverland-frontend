@@ -13,6 +13,8 @@ const createInstance = async (): Promise<AxiosInstance> => {
     withCredentials: true,
   });
 
+  console.log(API_URL)
+
   const accessToken = await getAccessToken();
   const refreshToken = await getRefreshToken();
 
@@ -22,28 +24,26 @@ const createInstance = async (): Promise<AxiosInstance> => {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
       return config;
     },
-    (error: unknown) => {
-      console.log(error);
-      Promise.reject(error);
+    (err: unknown) => {
+      Promise.reject(err);
     },
   );
 
   instance.defaults.headers['Set-Cookie'] = `refresh_token=${refreshToken}`;
 
   instance.interceptors.response.use(
-    async response => {
+    response => {
       const { accessToken, refreshToken, ...others } = response.data;
       if (accessToken) {
-        await setAccessToken(accessToken);
+        setAccessToken(accessToken);
       }
       if (refreshToken) {
-        await setRefreshToken(refreshToken);
+        setRefreshToken(refreshToken);
       }
       return others;
     },
-    (error: unknown) => {
-      console.log(error);
-      Promise.reject(error);
+    (err: unknown) => {
+      Promise.reject(err);
     }
   );
 
