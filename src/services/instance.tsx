@@ -4,6 +4,8 @@ import {
   setRefreshToken,
   getAccessToken,
   getRefreshToken,
+  removeAccessToken,
+  getLoginId,
 } from './storage';
 import { API_URL } from 'react-native-dotenv';
 
@@ -11,12 +13,12 @@ const createInstance = async (): Promise<AxiosInstance> => {
   const instance = axios.create({
     baseURL: API_URL,
     withCredentials: true,
+    timeout: 2000,
   });
-
-  console.log(API_URL)
 
   const accessToken = await getAccessToken();
   const refreshToken = await getRefreshToken();
+  const loginId = await getLoginId();
 
   instance.interceptors.request.use(
     async config => {
@@ -32,19 +34,28 @@ const createInstance = async (): Promise<AxiosInstance> => {
   instance.defaults.headers['Set-Cookie'] = `refresh_token=${refreshToken}`;
 
   instance.interceptors.response.use(
-    response => {
-      const { accessToken, refreshToken, ...others } = response.data;
-      if (accessToken) {
-        setAccessToken(accessToken);
+    async response => {
+      const { config } = response;
+      const originalRequest = config;
+      if (!response.data.isSuccess) {
+        removeAccessToken();
+        return await instance
+          .post('/users/reissue-token', {
+            loginId: loginId,
+            refreshToken: refreshToken,
+          })
+          .then(async res => {
+            setAccessToken(res.data.result.accessToken);
+            setRefreshToken(res.data.result.refreshToken);
+            originalRequest.headers.Authorization = `${res.data.result.accessToken}`;
+            return axios(originalRequest);
+          });
       }
-      if (refreshToken) {
-        setRefreshToken(refreshToken);
-      }
-      return others;
+      return response.data;
     },
     (err: unknown) => {
       Promise.reject(err);
-    }
+    },
   );
 
   return instance;
