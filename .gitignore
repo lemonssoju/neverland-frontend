@@ -69,3 +69,6 @@ yarn-error.log
 Info.plist
 ios/neverland.xcodeproj/project.xcworkspace/
 ios/neverland.xcodeproj/xcshareddata
+
+.env
+env.d.ts
