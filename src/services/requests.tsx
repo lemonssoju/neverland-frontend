@@ -2,9 +2,9 @@ import createInstance from './instance';
 
 const Request = () => {
   const instance = createInstance();
-  const defaultRequest = async (path: string, body: (url: string) => void) => {
+  const defaultRequest = async (path: string, body: (url: string) => any) => {
     try {
-      const response = await body(path);
+      const response = body(path);
       return response;
     } catch (err) {
       console.error(err);
