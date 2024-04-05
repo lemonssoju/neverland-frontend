@@ -2,16 +2,42 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+
 import FeedList from '../components/Home/FeedList';
-import FeedSearch from '../components/Home/FeedSearch';
-import FeedDetail from '../components/Home/FeedDetail';
-import FeedUpload from '../components/Home/FeedUpload';
+
+import SettingsHome from '../components/Home/Settings/SettingsHome';
+import MyFeed from '../components/Home/Settings/MyFeed';
+import ChangePassword from '../components/Home/Settings/ChangePassword';
+import Withdraw from '../components/Home/Settings/Withdraw';
+
+export type SettingsStackParams = {
+  SettingsHome: undefined;
+  MyFeed: {
+    title: string;
+  };
+  ChangePassword: undefined;
+  Withdraw: undefined;
+};
+
+const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
+
+const Settings = () => {
+  return (
+    <SettingsStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <SettingsStack.Screen name="SettingsHome" component={SettingsHome} />
+      <SettingsStack.Screen name="MyFeed" component={MyFeed} />
+      <SettingsStack.Screen name="ChangePassword" component={ChangePassword} />
+      <SettingsStack.Screen name="Withdraw" component={Withdraw} />
+    </SettingsStack.Navigator>
+  );
+};
 
 export type HomeStackParams = {
   FeedList: undefined;
-  FeedSearch: undefined;
-  FeedDetail: undefined;
-  FeedUpload: undefined;
+  Settings: undefined;
 };
 
 const Stack = createNativeStackNavigator<HomeStackParams>();
@@ -23,13 +49,7 @@ const Home = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="FeedList" component={FeedList} />
-      <Stack.Screen name="FeedSearch" component={FeedSearch} />
-      <Stack.Screen name="FeedDetail" component={FeedDetail} />
-      <Stack.Screen
-        name="FeedUpload"
-        component={FeedUpload}
-        options={{ presentation: 'transparentModal' }}
-      />
+      <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
 };

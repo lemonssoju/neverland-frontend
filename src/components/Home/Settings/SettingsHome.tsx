@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { SafeAreaView, TouchableOpacity, View } from 'react-native';
-import CustomHeader from '../common/CustomHeader';
+import CustomHeader from '../../common/CustomHeader';
 import { StackScreenProps } from '@react-navigation/stack';
-import { SettingsStackParams } from '../../pages/Settings';
-import { B14, B20 } from '../../styles/GlobalText';
-import { LIGHTBLACK, MINT } from '../../styles/GlobalColor';
+import { SettingsStackParams } from '../../../pages/Settings';
+import { B14, B20 } from '../../../styles/GlobalText';
+import { LIGHTBLACK, MINT } from '../../../styles/GlobalColor';
 
 interface OptionProps {
   label: string;

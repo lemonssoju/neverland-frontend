@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { HomeStackParams } from '../../pages/Home';
 import { StackScreenProps } from '@react-navigation/stack';
-import { FeedProps } from './FeedUpload';
+import { FeedProps } from '../Group/FeedUpload';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import BackButton from '../common/BackButton';
 import HeartButton from '../common/HeartButton';

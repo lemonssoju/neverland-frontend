@@ -11,7 +11,7 @@ import {
   TextInput,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { ProfileStackParams } from '../../pages/Profile';
+import { ProfileStackParams } from '../../pages/Group/Puzzle';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import styled from 'styled-components/native';
 import { BLACK, LIGHTBLACK, WHITE } from '../../styles/GlobalColor';
@@ -115,10 +115,9 @@ const ProfileSection = ({
       </View>
       <TouchableOpacity
         onPress={() => {
-          profile.isMyProfile ? 
-            navigation.navigate('ProfileEdit')
-          :
-            setFollow(!follow)
+          profile.isMyProfile
+            ? navigation.navigate('ProfileEdit')
+            : setFollow(!follow);
         }}
         style={{
           alignItems: 'center',
@@ -129,13 +128,21 @@ const ProfileSection = ({
           marginVertical: 10,
           borderRadius: 12,
         }}>
-        <B16>{profile.isMyProfile ? '프로필 편집': (follow ? '팔로잉' : '팔로우')}</B16>
+        <B16>
+          {profile.isMyProfile ? '프로필 편집' : follow ? '팔로잉' : '팔로우'}
+        </B16>
       </TouchableOpacity>
     </View>
   );
 };
 
-const AlbumSection = ({ onPress, isMyProfile }: { onPress: () => void; isMyProfile: boolean; }) => {
+const AlbumSection = ({
+  onPress,
+  isMyProfile,
+}: {
+  onPress: () => void;
+  isMyProfile: boolean;
+}) => {
   return (
     <ImageBackground
       source={require('../../assets/Album.png')}
@@ -235,7 +242,7 @@ const data = [
   },
 ];
 
-const GuestSection = ({ isMyProfile }: { isMyProfile: boolean; }) => {
+const GuestSection = ({ isMyProfile }: { isMyProfile: boolean }) => {
   const guestRef = useRef<BottomSheet>(null);
   const guestSnapPoints = useMemo(() => [60, 600], []);
   const [guestComment, setGuestComment] = useState<string>('');
@@ -359,7 +366,10 @@ const ProfileHome = ({
         <MenuIcon width={24} height={24} />
       </TouchableOpacity> */}
       <ProfileSection profile={profile} navigation={navigation} />
-      <AlbumSection onPress={() => setAlbumVisible(true)} isMyProfile={profile.isMyProfile} />
+      <AlbumSection
+        onPress={() => setAlbumVisible(true)}
+        isMyProfile={profile.isMyProfile}
+      />
       <GuestSection isMyProfile={profile.isMyProfile} />
       <Modal visible={albumVisible} transparent>
         <Pressable

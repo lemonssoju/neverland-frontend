@@ -1,5 +1,9 @@
 export const BLACK = '#0D0C0C';
-export const MINT = '#10F1AD';
+export const PURPLE = '#6200DF';
+export const MIDPURPLE = '#E9D5FF';
+export const LIGHTPURPLE = '#FAF5FF';
 export const GRAY = '#BBBBBB';
-export const LIGHTBLACK = '#171717';
+export const LIGHTGRAY = '#E6E6E6';
 export const WHITE = '#FFFFFF';
+
+export const MINT = '#10F1AD';

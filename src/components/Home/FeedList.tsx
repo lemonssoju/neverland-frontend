@@ -1,9 +1,9 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { View, Text, FlatList, SafeAreaView, TouchableOpacity, useWindowDimensions } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParams } from '../../pages/Home';
 import styled from 'styled-components/native';
-import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
+import { BLACK, MINT, WHITE } from '../../styles/GlobalColor';
 import { B14, B16, R14 } from '../../styles/GlobalText';
 import {  BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { AppItem, UserItem } from './FeedItem';
@@ -11,6 +11,8 @@ import { CategoryModal, OrderModal } from '../common/BottomModal';
 
 import SearchIcon from '../../assets/common/Search.svg';
 import ArrowIcon from '../../assets/common/Arrow.svg';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParams } from '../../../App';
 
 const UserData = [
   {
@@ -73,6 +75,7 @@ const AppData = [
 ]
 
 const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>) => {
+  const navigationToTab = useNavigation<StackNavigationProp<RootStackParams>>();
   const [era, setEra] = useState<string>('세상');
   const tabs = [
     { title: '전체', label: '세상' },
@@ -89,7 +92,7 @@ const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>)
     <SafeAreaView style={{flex: 1}}>
       <Header>
         <Text style={{color: WHITE, fontSize: 24, fontWeight: '700'}}>neverland</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('FeedSearch')}>
+        <TouchableOpacity onPress={() => {}}>
           <SearchIcon />
         </TouchableOpacity>
       </Header>
@@ -102,6 +105,9 @@ const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>)
           )
         })}
       </TopMenuBar>
+      <TouchableOpacity onPress={() => navigationToTab.navigate('GroupTab')}>
+        <Text>그룹홈으로 이동!!</Text>
+      </TouchableOpacity>
       <View style={{height: 1, backgroundColor: WHITE, width: '100%', position: 'absolute', top: 133}} />
       <FlatList
         data={UserData}
@@ -142,13 +148,13 @@ const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>)
         ListFooterComponent={() => {
           return (
             <>
-              <View style={{height: 1.5, backgroundColor: LIGHTBLACK, marginHorizontal: 10, marginTop: 15, marginBottom: 10}} />
+              <View style={{height: 1.5, backgroundColor: BLACK, marginHorizontal: 10, marginTop: 15, marginBottom: 10}} />
               <B16 style={{paddingHorizontal: 10, paddingBottom: 10}}>{era}에 이런 일이!</B16>
               <FlatList
                 data={AppData}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                style={{backgroundColor: LIGHTBLACK, paddingHorizontal: 10, paddingVertical: 15}}
+                style={{backgroundColor: BLACK, paddingHorizontal: 10, paddingVertical: 15}}
                 renderItem={({item}) => {
                   const { category, title, rep_pic, hashtags } = item;
                   return (
@@ -161,7 +167,7 @@ const FeedList = ({ navigation }: StackScreenProps<HomeStackParams, 'FeedList'>)
                   )
                 }}
               />
-              <View style={{height: 1.5, backgroundColor: LIGHTBLACK, marginHorizontal: 10, marginTop: 15, marginBottom: 10}} />
+              <View style={{height: 1.5, backgroundColor: BLACK, marginHorizontal: 10, marginTop: 15, marginBottom: 10}} />
             </>
           )
         }}

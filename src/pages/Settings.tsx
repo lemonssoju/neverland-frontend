@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import SettingsHome from '../components/Settings/SettingsHome';
-import MyFeed from '../components/Settings/MyFeed';
-import ChangePassword from '../components/Settings/ChangePassword';
-import Withdraw from '../components/Settings/Withdraw';
+import SettingsHome from '../components/Home/Settings/SettingsHome';
+import MyFeed from '../components/Home/Settings/MyFeed';
+import ChangePassword from '../components/Home/Settings/ChangePassword';
+import Withdraw from '../components/Home/Settings/Withdraw';
 
 export type SettingsStackParams = {
   SettingsHome: undefined;
@@ -11,7 +11,7 @@ export type SettingsStackParams = {
   };
   ChangePassword: undefined;
   Withdraw: undefined;
-}
+};
 
 const Stack = createStackNavigator<SettingsStackParams>();
 

@@ -7,12 +7,12 @@ import {
   Image,
   View,
 } from 'react-native';
-import { SettingsStackParams } from '../../pages/Settings';
-import CustomHeader from '../common/CustomHeader';
+import { SettingsStackParams } from '../../../pages/Settings';
+import CustomHeader from '../../common/CustomHeader';
 import { useNavigation } from '@react-navigation/native';
-import { HomeStackParams } from '../../pages/Home';
-import { BLACK, GRAY, LIGHTBLACK, MINT } from '../../styles/GlobalColor';
-import { B14, B16 } from '../../styles/GlobalText';
+import { HomeStackParams } from '../../../pages/Home';
+import { BLACK, GRAY, LIGHTBLACK, MINT } from '../../../styles/GlobalColor';
+import { B14, B16 } from '../../../styles/GlobalText';
 
 interface FeedItemProps {
   category: string;

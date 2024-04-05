@@ -8,20 +8,19 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { BLACK, MINT, WHITE } from './src/styles/GlobalColor';
+import { PURPLE, WHITE, BLACK } from './src/styles/GlobalColor';
 
+// Main
 import AuthScreen from './src/pages/Auth';
 import HomeScreen from './src/pages/Home';
-import GroupScreen from './src/pages/Group';
-import WriteScreen from './src/pages/Write';
-import ProfileScreen from './src/pages/Profile';
-import SettingsScreen from './src/pages/Settings';
+// Tab
+import GroupScreen from './src/pages/Group/Feed';
+import WriteScreen from './src/pages/Group/Write';
+import ProfileScreen from './src/pages/Group/Puzzle';
 
-import HomeIcon from './src/assets/navbar/Home.svg';
-import GroupIcon from './src/assets/navbar/Group.svg';
+import FeedIcon from './src/assets/navbar/Feed.svg';
 import WriteIcon from './src/assets/navbar/Write.svg';
-import ProfileIcon from './src/assets/navbar/Profile.svg';
-import SettingsIcon from './src/assets/navbar/Settings.svg';
+import PuzzleIcon from './src/assets/navbar/Puzzle.svg';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,14 +28,15 @@ const GlobalTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: BLACK,
+    background: WHITE,
   },
 };
 
 export type RootStackParams = {
   Auth: any;
-  HomeTab: any;
-}
+  Home: any;
+  GroupTab: any;
+};
 
 function App(): JSX.Element {
   return (
@@ -47,7 +47,8 @@ function App(): JSX.Element {
             headerShown: false,
           })}>
           <Stack.Screen name="Auth" component={AuthScreen} />
-          <Stack.Screen name="HomeTab" component={HomeTab} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="GroupTab" component={GroupTab} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
@@ -55,11 +56,9 @@ function App(): JSX.Element {
 }
 
 export type TabProps = {
-  Home: undefined;
-  Group: undefined;
-  Write: undefined;
-  Profile: undefined;
-  Settings: undefined;
+  Feed: any;
+  Write: any;
+  Puzzle: any;
 };
 
 const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
@@ -70,38 +69,21 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: BLACK,
+        backgroundColor: WHITE,
         paddingHorizontal: 10,
       }}>
       {state.routes.map((route, index) => {
-        const isFocused = state.index == index;
+        const isFocused = state.index === index;
         const onPress = () => {
-          if (route.name == 'Home') {
+          if (route.name === 'Feed') {
             if (isFocused)
               navigation.reset({
                 routes: [{ name: route.name, params: { id: undefined } }],
               });
             else navigation.navigate(route.name, { id: undefined });
-          } else if (route.name == 'Group') {
-            if (isFocused)
-              navigation.reset({
-                routes: [{ name: route.name, params: { id: undefined } }],
-              });
-            else navigation.navigate(route.name, { id: undefined });
-          } else if (route.name == 'Write') {
-            // if (isFocused)
-            //   navigation.reset({
-            //     routes: [{ name: route.name, params: { id: undefined } }],
-            //   });
-            // else navigation.navigate(route.name, { id: undefined });
-            navigation.navigate('Home', { screen: 'FeedUpload' });
-          } else if (route.name == 'Profile') {
-            if (isFocused)
-              navigation.reset({
-                routes: [{ name: route.name, params: { id: undefined } }],
-              });
-            else navigation.navigate(route.name, { id: undefined });
-          } else if (route.name == 'Settings') {
+          } else if (route.name === 'Write') {
+            navigation.navigate('Feed', { screen: 'FeedUpload' });
+          } else if (route.name === 'Puzzle') {
             if (isFocused)
               navigation.reset({
                 routes: [{ name: route.name, params: { id: undefined } }],
@@ -121,22 +103,11 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
             }}>
             {
               {
-                0: <HomeIcon color={isFocused ? MINT : WHITE} />,
-                1: <GroupIcon color={isFocused ? MINT : WHITE} />,
-                2: <WriteIcon color={isFocused ? MINT : WHITE} />,
-                3: <ProfileIcon color={isFocused ? MINT : WHITE} />,
-                4: <SettingsIcon color={isFocused ? MINT : WHITE} />,
+                0: <FeedIcon color={isFocused ? PURPLE : BLACK} />,
+                1: <WriteIcon color={isFocused ? PURPLE : BLACK} />,
+                2: <PuzzleIcon color={isFocused ? PURPLE : BLACK} />,
               }[index]
             }
-
-            <Text
-              style={{
-                color: isFocused ? MINT : WHITE,
-                marginVertical: 5,
-                fontSize: 12,
-              }}>
-              {route.name}
-            </Text>
           </TouchableOpacity>
         );
       })}
@@ -145,19 +116,25 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 };
 
 const Tab = createBottomTabNavigator<TabProps>();
-const HomeTab = (): JSX.Element => {
+const GroupTab = (): JSX.Element => {
   return (
     <Tab.Navigator
       tabBar={props => <CustomTab {...props} />}
-      initialRouteName="Home"
+      initialRouteName="Feed"
       screenOptions={() => ({
         headerShown: false,
       })}>
-      <Tab.Screen name={'Home'} component={HomeScreen} />
-      <Tab.Screen name={'Group'} component={GroupScreen} />
-      <Tab.Screen name={'Write'} component={WriteScreen} listeners={() => ({ tabPress: (e: any) => { e.preventDefault() }})} />
-      <Tab.Screen name={'Profile'} component={ProfileScreen} />
-      <Tab.Screen name={'Settings'} component={SettingsScreen} />
+      <Tab.Screen name={'Feed'} component={GroupScreen} />
+      <Tab.Screen
+        name={'Write'}
+        component={WriteScreen}
+        listeners={() => ({
+          tabPress: (e: any) => {
+            e.preventDefault();
+          },
+        })}
+      />
+      <Tab.Screen name={'Puzzle'} component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

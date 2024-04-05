@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert, SafeAreaView, View } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { AuthStackParams } from '../../pages/Auth';
 import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
@@ -9,6 +9,8 @@ import styled from 'styled-components/native';
 import { BLACK, MINT } from '../../styles/GlobalColor';
 import { B16 } from '../../styles/GlobalText';
 import Request from '../../services/requests';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParams } from '../../../App';
 
 interface FormTypes {
   loginId: string;
@@ -26,6 +28,7 @@ interface CheckTypes {
 const SignUp = ({
   navigation,
 }: StackScreenProps<AuthStackParams, 'SignUp'>) => {
+  const navigationToTab = useNavigation<StackNavigationProp<RootStackParams>>();
   const [form, setForm] = useState<FormTypes>({
     loginId: '',
     nickname: '',
@@ -88,7 +91,7 @@ const SignUp = ({
       Alert.alert('입력한 비밀번호가 일치하지 않습니다!');
     } else {
       // 다음으로 이동 ? 회원가입 완료 ?
-      navigation.replace('Contents');
+      navigationToTab.replace('Home');
     }
   };
 
