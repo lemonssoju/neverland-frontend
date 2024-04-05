@@ -1,6 +1,6 @@
 import { FlatList, SafeAreaView, Modal } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { GroupStackParams } from '../../pages/Group/Feed';
+import { GroupStackParams } from '../../pages/Group/FeedStack';
 import CustomHeader from '../common/CustomHeader';
 import FeedItem from './FeedItem';
 import PlusButton from '../common/PlusButton';

@@ -14,7 +14,7 @@ export type GroupStackParams = {
 
 const Stack = createNativeStackNavigator<GroupStackParams>();
 
-const Group = () => {
+const FeedStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -32,4 +32,4 @@ const Group = () => {
   );
 };
 
-export default Group;
+export default FeedStack;

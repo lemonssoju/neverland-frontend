@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import CustomHeader from '../../common/CustomHeader';
 import { StackScreenProps } from '@react-navigation/stack';
-import { SettingsStackParams } from '../../../pages/Settings';
+import { SettingsStackParams } from '../../../pages/HomeStack';
 import { B14, B20 } from '../../../styles/GlobalText';
-import { LIGHTBLACK, MINT } from '../../../styles/GlobalColor';
+import { BLACK, MINT } from '../../../styles/GlobalColor';
 
 interface OptionProps {
   label: string;
@@ -17,7 +17,7 @@ const Option = ({ label, onPress }: OptionProps) => {
       onPress={onPress}
       style={{
         padding: 20,
-        backgroundColor: LIGHTBLACK,
+        backgroundColor: BLACK,
         borderRadius: 12,
         marginVertical: 10,
       }}>
@@ -49,7 +49,7 @@ const SettingsHome = ({
           onPress={() => navigation.navigate('ChangePassword')}
         />
         <View
-          style={{ height: 1, backgroundColor: LIGHTBLACK, marginVertical: 10 }}
+          style={{ height: 1, backgroundColor: BLACK, marginVertical: 10 }}
         />
         <B14 style={{ color: MINT, marginVertical: 10 }}>사용자 문의</B14>
         <Option label="이용약관" onPress={() => {}} />

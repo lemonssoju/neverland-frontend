@@ -10,7 +10,7 @@ import {
 import { SettingsStackParams } from '../../../pages/Settings';
 import CustomHeader from '../../common/CustomHeader';
 import { useNavigation } from '@react-navigation/native';
-import { HomeStackParams } from '../../../pages/Home';
+import { HomeStackParams } from '../../../pages/HomeStack';
 import { BLACK, GRAY, LIGHTBLACK, MINT } from '../../../styles/GlobalColor';
 import { B14, B16 } from '../../../styles/GlobalText';
 

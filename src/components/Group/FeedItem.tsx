@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { GroupStackParams } from '../../pages/Group/Feed';
+import { GroupStackParams } from '../../pages/Group/FeedStack';
 import { useNavigation } from '@react-navigation/native';
 import { B14, B12 } from '../../styles/GlobalText';
 

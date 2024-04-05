@@ -4,7 +4,7 @@ import CustomHeader from '../common/CustomHeader';
 import GroupItem from './GroupItem';
 import PlusButton from '../common/PlusButton';
 import { StackScreenProps } from '@react-navigation/stack';
-import { GroupStackParams } from '../../pages/Group/Feed';
+import { GroupStackParams } from '../../pages/Group/FeedStack';
 import CreateGroup from './CreateGroup';
 
 const groupData = [

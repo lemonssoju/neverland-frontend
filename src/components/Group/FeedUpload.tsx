@@ -23,7 +23,7 @@ import { B14 } from '../../styles/GlobalText';
 import ArrowIcon from '../../assets/common/Arrow.svg';
 import LinkIcon from '../../assets/common/Link.svg';
 import DrawIcon from '../../assets/common/Draw.svg';
-import { GroupStackParams } from '../../pages/Group/Feed';
+import { GroupStackParams } from '../../pages/Group/FeedStack';
 
 export interface FeedProps {
   title: string;

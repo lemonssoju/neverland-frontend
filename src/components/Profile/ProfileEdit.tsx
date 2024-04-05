@@ -8,7 +8,7 @@ import {
   View,
   Pressable,
 } from 'react-native';
-import { ProfileStackParams } from '../../pages/Group/Puzzle';
+import { ProfileStackParams } from '../../pages/Group/PuzzleStack';
 import CustomHeader from '../common/CustomHeader';
 import styled from 'styled-components/native';
 import { BLACK, LIGHTBLACK, MINT } from '../../styles/GlobalColor';

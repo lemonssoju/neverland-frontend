@@ -7,7 +7,7 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import { ProfileStackParams } from '../../pages/Group/Puzzle';
+import { ProfileStackParams } from '../../pages/Group/PuzzleStack';
 import CustomHeader from '../common/CustomHeader';
 
 import { B16, B14 } from '../../styles/GlobalText';

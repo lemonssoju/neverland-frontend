@@ -11,7 +11,7 @@ import {
   TextInput,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { ProfileStackParams } from '../../pages/Group/Puzzle';
+import { ProfileStackParams } from '../../pages/Group/PuzzleStack';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import styled from 'styled-components/native';
 import { BLACK, LIGHTBLACK, WHITE } from '../../styles/GlobalColor';

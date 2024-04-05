@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Alert, SafeAreaView, View } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import { AuthStackParams } from '../../pages/Auth';
+import { AuthStackParams } from '../../pages/AuthStack';
 import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';

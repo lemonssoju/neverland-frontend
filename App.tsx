@@ -11,12 +11,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PURPLE, WHITE, BLACK } from './src/styles/GlobalColor';
 
 // Main
-import AuthScreen from './src/pages/Auth';
-import HomeScreen from './src/pages/Home';
+import AuthStack from './src/pages/AuthStack';
+import HomeStack from './src/pages/HomeStack';
 // Tab
-import GroupScreen from './src/pages/Group/Feed';
-import WriteScreen from './src/pages/Group/Write';
-import ProfileScreen from './src/pages/Group/Puzzle';
+import FeedStack from './src/pages/Group/FeedStack';
+import WriteStack from './src/pages/Group/WriteStack';
+import PuzzleStack from './src/pages/Group/PuzzleStack';
 
 import FeedIcon from './src/assets/navbar/Feed.svg';
 import WriteIcon from './src/assets/navbar/Write.svg';
@@ -46,8 +46,8 @@ function App(): JSX.Element {
           screenOptions={() => ({
             headerShown: false,
           })}>
-          <Stack.Screen name="Auth" component={AuthScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Auth" component={AuthStack} />
+          <Stack.Screen name="Home" component={HomeStack} />
           <Stack.Screen name="GroupTab" component={GroupTab} />
         </Stack.Navigator>
       </NavigationContainer>
@@ -124,17 +124,17 @@ const GroupTab = (): JSX.Element => {
       screenOptions={() => ({
         headerShown: false,
       })}>
-      <Tab.Screen name={'Feed'} component={GroupScreen} />
+      <Tab.Screen name={'Feed'} component={FeedStack} />
       <Tab.Screen
         name={'Write'}
-        component={WriteScreen}
+        component={WriteStack}
         listeners={() => ({
           tabPress: (e: any) => {
             e.preventDefault();
           },
         })}
       />
-      <Tab.Screen name={'Puzzle'} component={ProfileScreen} />
+      <Tab.Screen name={'Puzzle'} component={PuzzleStack} />
     </Tab.Navigator>
   );
 };

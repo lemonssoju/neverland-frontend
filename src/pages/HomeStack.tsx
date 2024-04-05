@@ -2,9 +2,9 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-
+// Main
 import FeedList from '../components/Home/FeedList';
-
+// Settings
 import SettingsHome from '../components/Home/Settings/SettingsHome';
 import MyFeed from '../components/Home/Settings/MyFeed';
 import ChangePassword from '../components/Home/Settings/ChangePassword';

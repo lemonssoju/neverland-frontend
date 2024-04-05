@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { Alert, SafeAreaView, View } from 'react-native';
 import CustomHeader from '../../common/CustomHeader';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import { SettingsStackParams } from '../../../pages/Settings';
+import { SettingsStackParams } from '../../../pages/HomeStack';
 import styled from 'styled-components/native';
 import Input from '../../common/Input';
 import BottomButton from '../../common/BottomButton';
 import { BLACK, MINT } from '../../../styles/GlobalColor';
 import { B16, B24 } from '../../../styles/GlobalText';
 import { useNavigation } from '@react-navigation/native';
-import { HomeStackParams } from '../../../pages/Home';
+import { HomeStackParams } from '../../../pages/HomeStack';
 
 const Withdraw = ({
   navigation,
