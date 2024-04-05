@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { SafeAreaView, View, TouchableOpacity } from 'react-native';
-import CustomHeader from '../common/CustomHeader';
+import CustomHeader from '../../common/CustomHeader';
 import { StackScreenProps } from '@react-navigation/stack';
-import { SettingsStackParams } from '../../pages/Settings';
+import { SettingsStackParams } from '../../../pages/Home';
 import styled from 'styled-components/native';
-import Input from '../common/Input';
-import BottomButton from '../common/BottomButton';
-import { BLACK, MINT } from '../../styles/GlobalColor';
-import { B16 } from '../../styles/GlobalText';
+import Input from '../../common/Input';
+import BottomButton from '../../common/BottomButton';
+import { BLACK, MINT } from '../../../styles/GlobalColor';
+import { B16 } from '../../../styles/GlobalText';
 
 const ChangePassword = ({
   navigation,

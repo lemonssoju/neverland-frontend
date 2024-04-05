@@ -10,8 +10,8 @@ export type AuthStackParams = {
   Start: undefined;
   Login: undefined;
   SignUp: undefined;
-  Contents: undefined;
-  Preferences: { categories: string[] }
+  // Contents: undefined;
+  // Preferences: { categories: string[] }
 }
 
 const Stack = createStackNavigator<AuthStackParams>();
@@ -25,8 +25,8 @@ const Auth = () => {
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="Contents" component={Contents} />
-      <Stack.Screen name="Preferences" component={Preferences} />
+      {/* <Stack.Screen name="Contents" component={Contents} /> */}
+      {/* <Stack.Screen name="Preferences" component={Preferences} /> */}
     </Stack.Navigator>
   )
 }

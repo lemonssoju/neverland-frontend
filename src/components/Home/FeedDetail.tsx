@@ -9,9 +9,9 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
-import { HomeStackParams } from '../../pages/Home';
+import { HomeStackParams } from '../../pages/HomeStack';
 import { StackScreenProps } from '@react-navigation/stack';
-import { FeedProps } from './FeedUpload';
+import { FeedProps } from '../Group/FeedUpload';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import BackButton from '../common/BackButton';
 import HeartButton from '../common/HeartButton';

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { FlatList, SafeAreaView, View, TouchableOpacity } from 'react-native';
-import { AuthStackParams } from '../../pages/Auth';
+import { AuthStackParams } from '../../pages/AuthStack';
 import CustomHeader from '../common/CustomHeader';
 import { R16, R12, B20 } from '../../styles/GlobalText';
 import { BLACK, GRAY, LIGHTBLACK, MINT } from '../../styles/GlobalColor';
 import BottomButton from '../common/BottomButton';
 import { useNavigation } from '@react-navigation/native';
-import { HomeStackParams } from '../../pages/Home';
+import { HomeStackParams } from '../../pages/HomeStack';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParams, TabProps } from '../../../App';
 
@@ -16,7 +16,7 @@ interface TagProps {
   tags: string[];
 }
 
-const preferences : TagProps[] = [
+const preferences: TagProps[] = [
   {
     category: '영화',
     tags: [
@@ -141,7 +141,7 @@ const preferences : TagProps[] = [
 
 const Preferences = ({
   navigation,
-  route
+  route,
 }: StackScreenProps<AuthStackParams, 'Preferences'>) => {
   const navigationToTab = useNavigation<StackNavigationProp<RootStackParams>>();
 
@@ -149,9 +149,11 @@ const Preferences = ({
     <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
       <CustomHeader label="취향 선택" onBack={() => navigation.goBack()} />
       <FlatList
-        data={preferences.filter(preference => route.params.categories.includes(preference.category))}
+        data={preferences.filter(preference =>
+          route.params.categories.includes(preference.category),
+        )}
         showsVerticalScrollIndicator={false}
-        style={{paddingHorizontal: 20}}
+        style={{ paddingHorizontal: 20 }}
         ListHeaderComponent={() => (
           <View style={{ alignItems: 'center' }}>
             <R16 style={{ marginTop: 25 }}>
@@ -169,9 +171,11 @@ const Preferences = ({
                 backgroundColor: LIGHTBLACK,
                 borderRadius: 12,
                 padding: 15,
-                marginVertical: 10
+                marginVertical: 10,
               }}>
-              <B20 style={{ color: MINT, marginBottom: 10 }}>{item.category}</B20>
+              <B20 style={{ color: MINT, marginBottom: 10 }}>
+                {item.category}
+              </B20>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                 {item.tags.map((tag: string, index: number) => {
                   return (
@@ -181,7 +185,7 @@ const Preferences = ({
                         backgroundColor: BLACK,
                         padding: 10,
                         borderRadius: 12,
-                        margin: 5
+                        margin: 5,
                       }}>
                       <R12>{tag}</R12>
                     </TouchableOpacity>
@@ -192,9 +196,14 @@ const Preferences = ({
           );
         }}
         ListFooterComponent={() => (
-          <BottomButton label="완료" onPress={() => {navigationToTab.replace('HomeTab', {screen: 'Home'})}} />
+          <BottomButton
+            label="완료"
+            onPress={() => {
+              navigationToTab.replace('HomeTab', { screen: 'Home' });
+            }}
+          />
         )}
-        ListFooterComponentStyle={{marginTop: 10}}
+        ListFooterComponentStyle={{ marginTop: 10 }}
       />
     </SafeAreaView>
   );

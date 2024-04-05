@@ -1,4 +1,4 @@
-import { useState, useEffect, SetStateAction, Dispatch } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Text,
   ScrollView,
@@ -9,39 +9,47 @@ import {
   Pressable,
   Modal,
 } from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import styled from 'styled-components/native';
 import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import PhotoButton from '../common/PhotoButton';
 import { Asset } from 'react-native-image-picker';
-import { BLACK, GRAY, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
+import { CategoryModal } from '../common/BottomModal';
+import { BLACK, GRAY, MINT, WHITE } from '../../styles/GlobalColor';
 import { B14 } from '../../styles/GlobalText';
+import ArrowIcon from '../../assets/common/Arrow.svg';
 import LinkIcon from '../../assets/common/Link.svg';
 import DrawIcon from '../../assets/common/Draw.svg';
+import { GroupStackParams } from '../../pages/Group/FeedStack';
 
 export interface FeedProps {
   title: string;
   subtitle: string;
   content: string;
+  category: string;
   rep_pic: string;
   music?: string;
   musicUrl?: string;
 }
 
-interface FeedUploadProps {
-  setFormVisible: Dispatch<SetStateAction<boolean>>;
-}
-
-const FeedUpload = ({ setFormVisible }: FeedUploadProps) => {
+const FeedUpload = ({
+  navigation,
+  route,
+}: StackScreenProps<GroupStackParams, 'FeedUpload'>) => {
   const [feed, setFeed] = useState<FeedProps>({
     title: '',
     subtitle: '',
     content: '',
+    category: '',
     rep_pic: '',
     music: '',
     musicUrl: '',
   });
+  const [categories, setCategories] = useState<string[]>(['영화']);
+  const [categoryVisible, setCategoryVisible] = useState<boolean>(false);
   const [musicVisible, setMusicVisible] = useState<boolean>(false);
   const [photo, setPhoto] = useState<Asset[]>([
     {
@@ -60,7 +68,7 @@ const FeedUpload = ({ setFormVisible }: FeedUploadProps) => {
       <CustomHeader
         label="작성하기"
         onClose={() => {
-          setFormVisible(false);
+          navigation.goBack();
         }}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -127,6 +135,19 @@ const FeedUpload = ({ setFormVisible }: FeedUploadProps) => {
             isRequired
             placeholder="한 줄 소개를 작성해주세요"
           />
+          <View
+            style={{
+              paddingHorizontal: 20,
+              marginTop: 5,
+              marginBottom: 15,
+              flexDirection: 'row',
+            }}>
+            <B14>콘텐츠 선택 *</B14>
+            <DropDownButton onPress={() => setCategoryVisible(true)}>
+              <B14>{categories[0]}</B14>
+              <ArrowIcon color={WHITE} strokeWidth={2} />
+            </DropDownButton>
+          </View>
           <Input
             label="같이 들으면 좋은 음악"
             value={feed.music}
@@ -137,7 +158,7 @@ const FeedUpload = ({ setFormVisible }: FeedUploadProps) => {
             description="우측 아이콘을 클릭해 유튜브 링크를 삽입해주세요."
           />
           <TouchableOpacity
-            style={{ position: 'absolute', right: 20, top: 170 }}
+            style={{ position: 'absolute', right: 20, top: 210 }}
             onPress={() => setMusicVisible(true)}>
             <LinkIcon />
           </TouchableOpacity>
@@ -162,12 +183,22 @@ const FeedUpload = ({ setFormVisible }: FeedUploadProps) => {
             <BottomButton
               label="등록"
               onPress={() => {
-                setFormVisible(false);
+                navigation.goBack();
+                navigation.navigate('FeedDetail');
               }}
             />
           </View>
         </View>
       </ScrollView>
+      <BottomSheetModalProvider>
+        <CategoryModal
+          categories={categories}
+          setCategories={setCategories}
+          categoryVisible={categoryVisible}
+          setCategoryVisible={setCategoryVisible}
+          unique
+        />
+      </BottomSheetModalProvider>
       <Modal visible={drawVisible} transparent>
         <Pressable
           style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
@@ -175,7 +206,7 @@ const FeedUpload = ({ setFormVisible }: FeedUploadProps) => {
         />
         <View
           style={{
-            backgroundColor: LIGHTBLACK,
+            backgroundColor: BLACK,
             position: 'absolute',
             width: '80%',
             height: 250,
@@ -248,7 +279,7 @@ const FeedUpload = ({ setFormVisible }: FeedUploadProps) => {
         />
         <View
           style={{
-            backgroundColor: LIGHTBLACK,
+            backgroundColor: BLACK,
             position: 'absolute',
             width: '80%',
             height: 150,
@@ -301,6 +332,17 @@ const FeedUpload = ({ setFormVisible }: FeedUploadProps) => {
   );
 };
 
+const DropDownButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 130px;
+  border-bottom-width: 1px;
+  border-bottom-color: ${WHITE};
+  padding-bottom: 3px;
+  margin-left: 20px;
+`;
+
 const OptionContainer = styled.View`
   width: 80%;
   justify-content: center;
@@ -309,7 +351,7 @@ const OptionContainer = styled.View`
   flex-direction: row;
   margin-top: 10px;
   margin-bottom: 2px;
-  background: ${LIGHTBLACK};
+  background: ${BLACK};
   border-radius: 8px;
   padding-vertical: 5px;
 `;
@@ -324,7 +366,7 @@ const PhotoBox = styled.View`
   margin-horizontal: 20px;
   margin-bottom: 15px;
   border-radius: 8px;
-  background: ${LIGHTBLACK};
+  background: ${BLACK};
   width: 80%;
   height: 220px;
   justify-content: center;

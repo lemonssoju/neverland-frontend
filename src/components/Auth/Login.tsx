@@ -36,7 +36,7 @@ const Login = () => {
           placeholder='비밀번호를 입력해주세요.'
         />
       </View>
-      <BottomButton label='로그인' onPress={() => {navigationToTab.replace('HomeTab', {screen: 'Home'})}} />
+      <BottomButton label='로그인' onPress={() => {navigationToTab.replace('Home')}} />
     </SafeAreaView>
   )
 }
