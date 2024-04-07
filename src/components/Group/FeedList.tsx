@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Text,
+  Alert,
 } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
@@ -23,6 +23,8 @@ import IconButton from '../common/IconButton';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
 import { BLACK, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
+import EditButton from '../common/EditButton';
+import GroupCreate from '../Home/GroupCreate';
 
 const data = [
   {
@@ -30,32 +32,40 @@ const data = [
     title: '제주도 여행 기억ㄴrㄴㅣ',
     date: '2020.03.13',
     location: '제주 한림읍',
-    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+    rep_pic:
+      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
   },
   {
     writer: '김토끼',
     title: '제주도 여행 기억ㄴrㄴㅣ',
     date: '2020.03.13',
     location: '제주 한림읍',
-    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
-  },{
+    rep_pic:
+      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+  },
+  {
     writer: '김토끼',
     title: '제주도 여행 기억ㄴrㄴㅣ',
     date: '2020.03.13',
     location: '제주 한림읍',
-    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
-  },{
+    rep_pic:
+      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+  },
+  {
     writer: '김토끼',
     title: '제주도 여행 기억ㄴrㄴㅣ',
     date: '2020.03.13',
     location: '제주 한림읍',
-    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
-  },{
+    rep_pic:
+      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+  },
+  {
     writer: '김토끼',
     title: '제주도 여행 기억ㄴrㄴㅣ',
     date: '2020.03.13',
     location: '제주 한림읍',
-    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+    rep_pic:
+      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
   },
 ];
 
@@ -76,6 +86,50 @@ const FeedList = ({
     puzzles: 17,
     during: 10,
   });
+  const isManager: boolean = false;
+  const [formVisible, setFormVisible] = useState<boolean>(false);
+  const [dotPressed, setDotPressed] = useState<boolean>(false);
+  const onDelete = () => {
+    Alert.alert(
+      '알림',
+      '정말로 그룹을 삭제하시겠습니까?',
+      [
+        {
+          text: '예',
+          onPress: () => {
+            navigationToHome.navigate('Home');
+          },
+          style: 'destructive',
+        },
+        {
+          text: '아니오',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+  const onQuit = () => {
+    Alert.alert(
+      '알림',
+      '정말로 그룹을 나가시겠습니까?',
+      [
+        {
+          text: '예',
+          onPress: () => {
+            navigationToHome.navigate('Home');
+          },
+          style: 'destructive',
+        },
+        {
+          text: '아니오',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <HeaderSection>
@@ -83,10 +137,29 @@ const FeedList = ({
           <HomeIcon />
         </IconButton>
         <Title>{group.name}</Title>
-        <IconButton onPress={() => {}}>
+        <IconButton
+          onPress={() => {
+            setDotPressed(!dotPressed);
+          }}>
           <DotsIcon />
         </IconButton>
       </HeaderSection>
+      {dotPressed &&
+        (isManager ? (
+          <EditButton
+            editLabel="그룹 수정"
+            deleteLabel="그룹 삭제"
+            onEdit={() => setFormVisible(true)}
+            onDelete={onDelete}
+            style={{ top: 90, right: 15 }}
+          />
+        ) : (
+          <EditButton
+            editLabel="나가기"
+            onEdit={onQuit}
+            style={{ top: 90, right: 15 }}
+          />
+        ))}
       <BannerSection>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <HorizontalText>
@@ -192,6 +265,9 @@ const FeedList = ({
           );
         }}
       />
+      <Modal visible={formVisible} animationType="slide">
+        <GroupCreate setFormVisible={setFormVisible} />
+      </Modal>
     </SafeAreaView>
   );
 };
