@@ -1,5 +1,3 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import GroupList from '../../components/Group/GroupList';
 import FeedList from '../../components/Group/FeedList';
 import FeedDetail from '../../components/Group/FeedDetail';
 import FeedUpload from '../../components/Group/FeedUpload';
@@ -20,7 +18,6 @@ const FeedStack = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="GroupList" component={GroupList} />
       <Stack.Screen name="FeedList" component={FeedList} />
       <Stack.Screen name="FeedDetail" component={FeedDetail} />
       <Stack.Screen
