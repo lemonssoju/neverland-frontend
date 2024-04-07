@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { SafeAreaView, View, TouchableOpacity } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import { GRAY, WHITE } from '../../styles/GlobalColor';
@@ -9,6 +9,8 @@ import { Asset } from 'react-native-image-picker';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import CalendarIcon from '../../assets/common/Calendar.svg';
+import MonthPicker from 'react-native-month-year-picker';
+import moment from 'moment';
 
 interface GroupCreateProps {
   setFormVisible: Dispatch<SetStateAction<boolean>>;
@@ -25,8 +27,21 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
   ]);
   const [group, setGroup] = useState({
     name: '',
-    date: '',
+    date: new Date(),
   });
+
+  const [show, setShow] = useState<boolean>(false);
+
+  const showPicker = useCallback((value: boolean) => setShow(value), []);
+
+  const onValueChange = useCallback(
+    (event: any, newDate: any) => {
+      const selectedDate = newDate || group.date;
+      showPicker(false);
+      setGroup({ ...group, date: selectedDate });
+    },
+    [group.date, showPicker],
+  );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
@@ -38,21 +53,43 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
         <Body style={{ color: GRAY, marginTop: 5 }}>
           추억 퍼즐을 함께~어쩌구
         </Body>
-        <View style={{ height: 120 }} />
+        <View style={{ height: 180 }} />
         <PhotoBox>
           <PhotoButton photo={photo} setPhoto={setPhoto} />
         </PhotoBox>
         <Caption style={{ color: GRAY }}>
           그룹의 대표 이미지를 첨부해주세요.
         </Caption>
-        <Input label="그룹명" isRequired placeholder="그룹명을 입력해주세요." />
-        <Input label="처음 만난 날" isRequired />
+        <Input
+          label="그룹명"
+          value={group.name}
+          onChangeText={name => {
+            setGroup({ ...group, name: name });
+          }}
+          isRequired
+          placeholder="그룹명을 입력해주세요."
+        />
+        <Input
+          value={moment(group.date).format('YYYY년 MM월').toString()}
+          label="처음 만난 날"
+          isRequired
+        />
         <TouchableOpacity
-          style={{ position: 'absolute', bottom: 180, right: 30, zIndex: 1 }}>
+          onPress={() => showPicker(true)}
+          style={{ position: 'absolute', bottom: 205, right: 30, zIndex: 1 }}>
           <CalendarIcon />
         </TouchableOpacity>
-        <View style={{marginTop: 100}}>
-        <BottomButton label="등록" onPress={() => setFormVisible(false)} />
+        {show && (
+          <MonthPicker
+            onChange={onValueChange}
+            value={group.date}
+            minimumDate={new Date(1970, 1)}
+            maximumDate={new Date()}
+            locale="ko"
+          />
+        )}
+        <View style={{ marginTop: 40 }}>
+          <BottomButton label="등록" onPress={() => setFormVisible(false)} />
         </View>
       </View>
     </SafeAreaView>
