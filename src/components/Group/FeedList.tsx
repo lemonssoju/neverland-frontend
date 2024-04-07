@@ -6,7 +6,11 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  Pressable,
+  Dimensions,
+  Share,
 } from 'react-native';
+import { CustomText as Text } from '../../styles/CustomText';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
 import CustomHeader from '../common/CustomHeader';
@@ -25,6 +29,7 @@ import { RootStackParams } from '../../../App';
 import { BLACK, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
 import EditButton from '../common/EditButton';
 import GroupCreate from '../Home/GroupCreate';
+import BottomButton from '../common/BottomButton';
 
 const data = [
   {
@@ -74,6 +79,7 @@ const FeedList = ({
 }: StackScreenProps<FeedStackParams, 'FeedList'>) => {
   const navigationToHome =
     useNavigation<StackNavigationProp<RootStackParams>>();
+  const { width, height } = Dimensions.get('window');
   const [group, setGroup] = useState({
     name: '악당 꼬부기',
     since: 2008,
@@ -85,9 +91,11 @@ const FeedList = ({
     ],
     puzzles: 17,
     during: 10,
+    code: 123456,
   });
   const isManager: boolean = false;
   const [formVisible, setFormVisible] = useState<boolean>(false);
+  const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
   const onDelete = () => {
     Alert.alert(
@@ -129,6 +137,15 @@ const FeedList = ({
       { cancelable: false },
     );
   };
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: group.code.toString(),
+      });
+    } catch (err: unknown) {
+      console.error(err);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -166,7 +183,7 @@ const FeedList = ({
             <Body>Since </Body>
             <Body style={{ color: PURPLE }}>{group.since}</Body>
           </HorizontalText>
-          <RoundButton>
+          <RoundButton onPress={() => setInviteVisible(true)}>
             <Caption style={{ fontWeight: '700', color: WHITE }}>
               초대하기
             </Caption>
@@ -267,6 +284,31 @@ const FeedList = ({
       />
       <Modal visible={formVisible} animationType="slide">
         <GroupCreate setFormVisible={setFormVisible} />
+      </Modal>
+      <Modal visible={inviteVisible} transparent>
+        <Pressable
+          style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
+          onPress={() => setInviteVisible(false)}
+        />
+        <View
+          style={{
+            backgroundColor: WHITE,
+            position: 'absolute',
+            width: '80%',
+            height: 200,
+            top: height * 0.4,
+            alignSelf: 'center',
+            borderRadius: 12,
+            padding: 15,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <Title>그룹 코드</Title>
+          <Text style={{ fontWeight: '700', color: BLACK, fontSize: 48 }}>
+            {group.code}
+          </Text>
+          <BottomButton label="공유하기" onPress={onShare} />
+        </View>
       </Modal>
     </SafeAreaView>
   );
