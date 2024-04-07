@@ -3,6 +3,7 @@ import { Title } from '../../styles/GlobalText';
 import ArrowIcon from '../../assets/common/Arrow.svg';
 import CloseIcon from '../../assets/common/Close.svg';
 import { BLACK } from '../../styles/GlobalColor';
+import IconButton from './IconButton';
 
 interface CustomHeaderProps {
   label: string;
@@ -12,20 +13,28 @@ interface CustomHeaderProps {
 
 const CustomHeader = ({ label, onBack, onClose }: CustomHeaderProps) => {
   return (
-    <View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 10, borderBottomColor: '#E6E6E6', borderBottomWidth: 1}}>
-      {onBack && 
-        <TouchableOpacity onPress={onBack} style={{position: 'absolute', zIndex: 1, bottom: 0, width: 40, height: 40, justifyContent: 'center', alignItems: 'center'}}>
+    <View
+      style={{
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 10,
+        borderBottomColor: '#E6E6E6',
+        borderBottomWidth: 1,
+      }}>
+      {onBack && (
+        <IconButton style={{position: 'absolute', bottom: 0}} onPress={onBack}>
           <ArrowIcon color={BLACK} />
-        </TouchableOpacity>
-      }
-      <Title style={{flex: 1, textAlign: 'center'}}>{label}</Title>
-      {onClose && 
-        <TouchableOpacity onPress={onClose} style={{position: 'absolute', zIndex: 1, right: 5, bottom: 0, width: 40, height: 40, justifyContent: 'center', alignItems: 'center'}}>
+        </IconButton>
+      )}
+      <Title style={{ flex: 1, textAlign: 'center' }}>{label}</Title>
+      {onClose && (
+        <IconButton style={{position: 'absolute', bottom: 0, right: 5}} onPress={onClose}>
           <CloseIcon />
-        </TouchableOpacity>
-      }
+        </IconButton>
+      )}
     </View>
-  )
-}
+  );
+};
 
 export default CustomHeader;
