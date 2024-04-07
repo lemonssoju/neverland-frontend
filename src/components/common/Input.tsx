@@ -25,7 +25,6 @@ const Input = ({
   return (
     <View
       style={{
-        paddingHorizontal: 20,
         marginTop: 5,
         marginBottom: description || alert ? 10 : 0,
       }}>
