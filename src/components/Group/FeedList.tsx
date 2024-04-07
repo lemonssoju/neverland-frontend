@@ -1,6 +1,6 @@
 import { FlatList, SafeAreaView, Modal } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { GroupStackParams } from '../../pages/Group/FeedStack';
+import { FeedStackParams } from '../../pages/Group/FeedStack';
 import CustomHeader from '../common/CustomHeader';
 import FeedItem from './FeedItem';
 import PlusButton from '../common/PlusButton';
@@ -36,8 +36,7 @@ const data = [
 
 const FeedList = ({
   navigation,
-}: StackScreenProps<GroupStackParams, 'FeedList'>) => {
-  const [formVisible, setFormVisible] = useState<boolean>(false);
+}: StackScreenProps<FeedStackParams, 'FeedList'>) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader
@@ -60,14 +59,6 @@ const FeedList = ({
           );
         }}
       />
-      <PlusButton
-        onPress={() => {
-          setFormVisible(true);
-        }}
-      />
-      <Modal visible={formVisible} animationType="slide">
-        <FeedUpload setFormVisible={setFormVisible} />
-      </Modal>
     </SafeAreaView>
   );
 };
