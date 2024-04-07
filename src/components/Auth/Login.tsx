@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
+import { AuthStackParams } from '../../pages/AuthStack';
 
-const Login = () => {
+const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
   const navigationToTab = useNavigation<StackNavigationProp<RootStackParams>>();
   const [form, setForm] = useState<{ id: string; password: string; }>({
     id: '',
@@ -16,11 +17,10 @@ const Login = () => {
 
   return (
     <SafeAreaView style={{flex: 1, justifyContent: 'space-between'}}>
-      <CustomHeader label='로그인' />
+      <CustomHeader label='로그인' onBack={() => navigation.goBack()} />
       <View>
         <Input
           label='아이디'
-          labelStyle={{marginBottom: 10}}
           value={form.id} 
           onChangeText={(id) => setForm({...form, id: id})} 
           isRequired 
@@ -29,7 +29,6 @@ const Login = () => {
         <View style={{height: 30}} />
         <Input
           label='비밀번호' 
-          labelStyle={{marginBottom: 10}}
           value={form.password} 
           onChangeText={(password) => setForm({...form, password: password})} 
           isRequired 

@@ -1,6 +1,6 @@
 import { TouchableOpacity } from 'react-native';
-import { B20 } from '../../styles/GlobalText';
-import { BLACK, MINT } from '../../styles/GlobalColor';
+import { Title } from '../../styles/GlobalText';
+import { PURPLE, WHITE } from '../../styles/GlobalColor';
 
 interface BottomButtonProps {
   label: string;
@@ -9,10 +9,21 @@ interface BottomButtonProps {
 
 const BottomButton = ({ label, onPress }: BottomButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{backgroundColor: MINT, width: 350, height: 60, justifyContent: 'center', alignItems: 'center', borderRadius: 12, alignSelf: 'center' }}>
-      <B20 style={{color: BLACK}}>{label}</B20>
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        backgroundColor: PURPLE,
+        width: 350,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+        alignSelf: 'center',
+        marginBottom: 5,
+      }}>
+      <Title style={{ color: WHITE }}>{label}</Title>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 export default BottomButton;

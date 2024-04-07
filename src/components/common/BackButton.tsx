@@ -9,7 +9,7 @@ interface BackButtonProps {
 const BackButton = ({ onPress }: BackButtonProps) => {
   return (
     <TouchableOpacity onPress={onPress} style={{width: 40, height: 40, justifyContent: 'center', alignItems: 'center'}}>
-      <ArrowIcon width={24} height={24} color={WHITE} strokeWidth={1.5} transform={[{ rotate: '90deg' }]} />
+      <ArrowIcon width={24} height={24} color={WHITE} />
     </TouchableOpacity>
   )
 }

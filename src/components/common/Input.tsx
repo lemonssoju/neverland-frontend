@@ -1,11 +1,10 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { View, TextInput, TextStyle, TextInputProps } from 'react-native';
-import { B14, R14 } from '../../styles/GlobalText';
-import { GRAY, MINT, WHITE } from '../../styles/GlobalColor';
+import { B14, Caption, Label, R14 } from '../../styles/GlobalText';
+import { BLACK, GRAY, MINT, PURPLE, WHITE } from '../../styles/GlobalColor';
 
 interface InputProps extends TextInputProps {
   label: string;
-  labelStyle?: TextStyle;
   isRequired?: boolean;
   description?: string;
   isAlert?: boolean;
@@ -14,7 +13,6 @@ interface InputProps extends TextInputProps {
 
 const Input = ({
   label,
-  labelStyle,
   isRequired,
   value,
   onChangeText,
@@ -31,27 +29,29 @@ const Input = ({
         marginTop: 5,
         marginBottom: description || alert ? 10 : 0,
       }}>
-      <B14 style={{ marginBottom: 5, ...labelStyle }}>
+      <Label>
         {label} {isRequired && `*`}
-      </B14>
+      </Label>
       <TextInput
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={GRAY}
         style={{
-          borderBottomColor: WHITE,
-          borderBottomWidth: 1,
-          paddingVertical: 5,
+          borderColor: GRAY,
+          borderWidth: 1,
+          paddingVertical: 10,
+          paddingHorizontal: 5,
+          borderRadius: 2,
           fontSize: 14,
-          color: WHITE,
+          color: BLACK,
         }}
         {...rest}
       />
-      <R14 style={{ marginTop: 5, color: MINT }}>
+      <Caption style={{ marginTop: 3, color: PURPLE }}>
         {isAlert && alert}
-        {description && description}{' '}
-      </R14>
+        {description && description}{''}
+      </Caption>
     </View>
   );
 };
