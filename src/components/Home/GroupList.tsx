@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { FlatList, Modal, SafeAreaView, View } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
-import GroupItem from '../Group/GroupItem';
 import PlusButton from '../common/PlusButton';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParams } from '../../pages/HomeStack';
@@ -11,28 +10,42 @@ import { Body, Title } from '../../styles/GlobalText';
 import PuzzleButton from '../common/PuzzleButton';
 import UserIcon from '../../assets/common/User.svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Carousel from '../common/Carousel';
+import GroupItem, { GroupProps } from './GroupItem';
 
-const groupData = [
+const groupData: GroupProps[] = [
   {
-    name: '망미동 여걸사총사',
-    introduction: '춤출 땐 Bad girl, 사랑은 Good girl',
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    name: '악당 꼬부기',
+    members: 9,
+    leader: '김꼬북',
+    since: '2008',
+    recent: 3,
+    rep_pic:
+      'https://mblogthumb-phinf.pstatic.net/MjAxNzAyMjFfMjcy/MDAxNDg3NjY0Njg3NzYx.6r5I3IC2ylmlmI-HaE08964MDcj-N_fUyYv7X5z1iXUg.tyZXU56CLkgR0TFC1ObNCyvSaEDutcfg5G2kVxxaLW8g.PNG.ioea65ztem/08.20170221_153307.png?type=w800',
   },
   {
-    name: '망미동 여걸사총사',
-    introduction: '춤출 땐 Bad girl, 사랑은 Good girl',
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    name: '악당 꼬부기',
+    members: 9,
+    leader: '김꼬북',
+    since: '2008',
+    recent: 3,
+    rep_pic:
+      'https://mblogthumb-phinf.pstatic.net/MjAxNzAyMjFfMjcy/MDAxNDg3NjY0Njg3NzYx.6r5I3IC2ylmlmI-HaE08964MDcj-N_fUyYv7X5z1iXUg.tyZXU56CLkgR0TFC1ObNCyvSaEDutcfg5G2kVxxaLW8g.PNG.ioea65ztem/08.20170221_153307.png?type=w800',
   },
   {
-    name: '망미동 여걸사총사',
-    introduction: '춤출 땐 Bad girl, 사랑은 Good girl',
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    name: '악당 꼬부기',
+    members: 9,
+    leader: '김꼬북',
+    since: '2008',
+    recent: 3,
+    rep_pic:
+      'https://mblogthumb-phinf.pstatic.net/MjAxNzAyMjFfMjcy/MDAxNDg3NjY0Njg3NzYx.6r5I3IC2ylmlmI-HaE08964MDcj-N_fUyYv7X5z1iXUg.tyZXU56CLkgR0TFC1ObNCyvSaEDutcfg5G2kVxxaLW8g.PNG.ioea65ztem/08.20170221_153307.png?type=w800',
   },
 ];
 
 const HeaderSection = ({
   setFormVisible,
-  navigation
+  navigation,
 }: {
   setFormVisible: Dispatch<SetStateAction<boolean>>;
   navigation: any;
@@ -43,7 +56,7 @@ const HeaderSection = ({
         backgroundColor: LIGHTPURPLE,
         paddingTop: 70,
         paddingHorizontal: 20,
-        paddingBottom: 10
+        paddingBottom: 10,
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View>
@@ -62,7 +75,7 @@ const HeaderSection = ({
         </TouchableOpacity>
       </View>
       <Body style={{ color: GRAY, marginTop: 5 }}>추억을 어쩌구저쩌구</Body>
-      <View style={{height: 120}} />
+      <View style={{ height: 120 }} />
       <PuzzleButton
         label="그룹 만들러가기"
         onPress={() => setFormVisible(true)}
@@ -78,29 +91,33 @@ const GroupList = ({
   return (
     <View style={{ flex: 1 }}>
       <HeaderSection setFormVisible={setFormVisible} navigation={navigation} />
-      {/* <FlatList
-        data={groupData}
-        style={{ paddingHorizontal: 20, paddingTop: 10 }}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }: any) => {
-          const { name, introduction, rep_pic } = item;
-          return (
-            <GroupItem
-              name={name}
-              introduction={introduction}
-              rep_pic={rep_pic}
-              onPress={() => {
-                // navigation.navigate('FeedList');
-              }}
-            />
-          );
-        }}
-      /> */}
-      <PlusButton
-        onPress={() => {
-          setFormVisible(true);
-        }}
-      />
+      <View>
+        <Body style={{ marginLeft: 35, marginVertical: 10 }}>그룹 목록</Body>
+        <Carousel
+          data={groupData}
+          renderItem={({ item }: any) => {
+            const {
+              name,
+              members,
+              leader,
+              since,
+              recent,
+              rep_pic,
+            }: GroupProps = item;
+            return (
+              <GroupItem
+                onPress={() => {}}
+                name={name}
+                members={members}
+                leader={leader}
+                since={since}
+                recent={recent}
+                rep_pic={rep_pic}
+              />
+            );
+          }}
+        />
+      </View>
       <Modal visible={formVisible} animationType="slide">
         {/* <CreateGroup setFormVisible={setFormVisible} /> */}
       </Modal>

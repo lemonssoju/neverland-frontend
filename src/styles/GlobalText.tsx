@@ -132,6 +132,22 @@ export const R12 = ({ children, style, ...rest }: any) => {
   );
 };
 
+export const Emphasis = ({ children, style, ...rest }: any) => {
+  return (
+    <Text
+      {...rest}
+      style={{
+        fontSize: 24,
+        color: BLACK,
+        fontWeight: 700,
+        lineHeight: 28,
+        ...style,
+      }}>
+      {children}
+    </Text>
+  );
+};
+
 export const Title = ({ children, style, ...rest }: any) => {
   return (
     <Text
