@@ -12,6 +12,7 @@ import UserIcon from '../../assets/common/User.svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Carousel from '../common/Carousel';
 import GroupItem, { GroupProps } from './GroupItem';
+import GroupCreate from './GroupCreate';
 
 const groupData: GroupProps[] = [
   {
@@ -119,7 +120,7 @@ const GroupList = ({
         />
       </View>
       <Modal visible={formVisible} animationType="slide">
-        {/* <CreateGroup setFormVisible={setFormVisible} /> */}
+        <GroupCreate setFormVisible={setFormVisible} />
       </Modal>
     </View>
   );

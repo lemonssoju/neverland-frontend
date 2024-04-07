@@ -13,7 +13,7 @@ const BottomButton = ({ label, onPress }: BottomButtonProps) => {
       onPress={onPress}
       style={{
         backgroundColor: PURPLE,
-        width: 350,
+        width: '100%',
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
