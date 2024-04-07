@@ -14,7 +14,6 @@ const IconButton = ({
       onPress={onPress}
       style={{
         zIndex: 1,
-        bottom: 0,
         width: 40,
         height: 40,
         justifyContent: 'center',
