@@ -20,7 +20,6 @@ const Login = () => {
       <View>
         <Input
           label='아이디'
-          labelStyle={{marginBottom: 10}}
           value={form.id} 
           onChangeText={(id) => setForm({...form, id: id})} 
           isRequired 
@@ -29,7 +28,6 @@ const Login = () => {
         <View style={{height: 30}} />
         <Input
           label='비밀번호' 
-          labelStyle={{marginBottom: 10}}
           value={form.password} 
           onChangeText={(password) => setForm({...form, password: password})} 
           isRequired 

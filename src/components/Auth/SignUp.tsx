@@ -6,7 +6,7 @@ import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import styled from 'styled-components/native';
-import { BLACK, MINT } from '../../styles/GlobalColor';
+import { BLACK, PURPLE } from '../../styles/GlobalColor';
 import { B16 } from '../../styles/GlobalText';
 import Request from '../../services/requests';
 import { useNavigation } from '@react-navigation/native';
@@ -169,7 +169,7 @@ const SignUp = ({
 };
 
 const DuplicateButton = styled.TouchableOpacity`
-  background: ${MINT};
+  background: ${PURPLE};
   padding: 10px 15px;
   position: absolute;
   border-radius: 12px;
