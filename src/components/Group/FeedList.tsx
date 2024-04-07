@@ -26,28 +26,36 @@ import { BLACK, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
 
 const data = [
   {
-    writer: '황은정',
-    title: '망민중 축제 기억ㄴrㄴㅣ',
-    subtitle: '아니 우리 의상 보라고;;',
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    writer: '김토끼',
+    title: '제주도 여행 기억ㄴrㄴㅣ',
+    date: '2020.03.13',
+    location: '제주 한림읍',
+    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
   },
   {
-    writer: '황은정',
-    title: '망민중 축제 기억ㄴrㄴㅣ',
-    subtitle: '아니 우리 의상 보라고;;',
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-  },
-  {
-    writer: '황은정',
-    title: '망민중 축제 기억ㄴrㄴㅣ',
-    subtitle: '아니 우리 의상 보라고;;',
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-  },
-  {
-    writer: '황은정',
-    title: '망민중 축제 기억ㄴrㄴㅣ',
-    subtitle: '아니 우리 의상 보라고;;',
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    writer: '김토끼',
+    title: '제주도 여행 기억ㄴrㄴㅣ',
+    date: '2020.03.13',
+    location: '제주 한림읍',
+    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+  },{
+    writer: '김토끼',
+    title: '제주도 여행 기억ㄴrㄴㅣ',
+    date: '2020.03.13',
+    location: '제주 한림읍',
+    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+  },{
+    writer: '김토끼',
+    title: '제주도 여행 기억ㄴrㄴㅣ',
+    date: '2020.03.13',
+    location: '제주 한림읍',
+    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+  },{
+    writer: '김토끼',
+    title: '제주도 여행 기억ㄴrㄴㅣ',
+    date: '2020.03.13',
+    location: '제주 한림읍',
+    rep_pic: 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
   },
 ];
 
@@ -172,12 +180,13 @@ const FeedList = ({
         numColumns={2}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
-          const { writer, title, subtitle, rep_pic } = item;
+          const { writer, title, location, date, rep_pic } = item;
           return (
             <FeedItem
               writer={writer}
               title={title}
-              subtitle={subtitle}
+              date={date}
+              location={location}
               rep_pic={rep_pic}
             />
           );
