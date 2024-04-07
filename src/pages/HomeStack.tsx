@@ -3,7 +3,7 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 // Main
-import FeedList from '../components/Home/FeedList';
+import GroupList from '../components/Home/GroupList';
 // Settings
 import SettingsHome from '../components/Home/Settings/SettingsHome';
 import MyFeed from '../components/Home/Settings/MyFeed';
@@ -36,7 +36,7 @@ const Settings = () => {
 };
 
 export type HomeStackParams = {
-  FeedList: undefined;
+  GroupList: undefined;
   Settings: undefined;
 };
 
@@ -48,7 +48,7 @@ const Home = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="FeedList" component={FeedList} />
+      <Stack.Screen name="GroupList" component={GroupList} />
       <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
