@@ -3,14 +3,13 @@ import FeedDetail from '../../components/Group/FeedDetail';
 import FeedUpload from '../../components/Group/FeedUpload';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export type GroupStackParams = {
-  GroupList: undefined;
+export type FeedStackParams = {
   FeedList: undefined;
   FeedDetail: undefined;
   FeedUpload: undefined;
 };
 
-const Stack = createNativeStackNavigator<GroupStackParams>();
+const Stack = createNativeStackNavigator<FeedStackParams>();
 
 const FeedStack = () => {
   return (

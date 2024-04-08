@@ -107,7 +107,6 @@ const GroupList = ({
             }: GroupProps = item;
             return (
               <GroupItem
-                onPress={() => {}}
                 name={name}
                 members={members}
                 leader={leader}

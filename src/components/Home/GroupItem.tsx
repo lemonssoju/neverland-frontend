@@ -1,16 +1,12 @@
 import { useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  ImageBackground,
-} from 'react-native';
-import {
-  Body,
-  Emphasis,
-  Subtitle,
-} from '../../styles/GlobalText';
+import { View, TouchableOpacity, ImageBackground } from 'react-native';
+import { Body, Emphasis, Subtitle } from '../../styles/GlobalText';
 import { BLACK, WHITE } from '../../styles/GlobalColor';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { FeedStackParams } from '../../pages/Group/FeedStack';
+import { RootStackParams } from '../../../App';
 
 export interface GroupProps {
   name: string;
@@ -21,10 +17,6 @@ export interface GroupProps {
   rep_pic: string;
 }
 
-interface GroupItemProps extends GroupProps {
-  onPress: () => void;
-}
-
 const GroupItem = ({
   name,
   members,
@@ -32,10 +24,11 @@ const GroupItem = ({
   since,
   recent,
   rep_pic,
-  onPress,
-}: GroupItemProps) => {
+}: GroupProps) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   return (
     <TouchableOpacity
+      onPress={() => navigation.navigate('GroupTab')}
       style={{
         width: 320,
         height: 400,
@@ -44,7 +37,7 @@ const GroupItem = ({
         shadowOffset: { width: 0, height: 5 },
         shadowOpacity: 0.2,
         backgroundColor: WHITE,
-        borderRadius: 8
+        borderRadius: 8,
       }}>
       <ImageBackground
         source={{ uri: rep_pic }}

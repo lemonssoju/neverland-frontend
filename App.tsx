@@ -65,9 +65,10 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (
     <View
       style={{
-        height: 90,
+        height: 75,
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-around',
         backgroundColor: WHITE,
         paddingHorizontal: 10,
@@ -97,9 +98,9 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
             onPress={onPress}
             style={{
               width: '20%',
-              display: 'flex',
+              height: '100%',
               alignItems: 'center',
-              justifyContent: 'center',
+              marginTop: 40
             }}>
             {
               {

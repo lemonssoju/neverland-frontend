@@ -52,6 +52,8 @@ const CommentItem = ({
       }
       {dotPressed && (
         <EditButton
+          editLabel='수정'
+          deleteLabel='삭제'
           onEdit={onEdit}
           onDelete={onDelete}
           style={{ top: 20, right: 15 }}
