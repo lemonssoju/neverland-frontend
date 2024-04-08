@@ -196,6 +196,7 @@ const FeedList = ({
             {group.members.slice(0, 3).map((item, index) => {
               return (
                 <Image
+                  key={index}
                   source={{ uri: item }}
                   style={{
                     width: 30,
@@ -259,6 +260,7 @@ const FeedList = ({
       }
       <FlatList
         data={data}
+        keyExtractor={(item, index) => index.toString()}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
