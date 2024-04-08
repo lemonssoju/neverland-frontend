@@ -14,6 +14,8 @@ import Carousel from '../common/Carousel';
 import GroupItem, { GroupProps } from './GroupItem';
 import GroupCreate from './GroupCreate';
 import LogoText from '../../assets/LogoText.svg';
+import MagicIcon from '../../assets/common/Magic.svg';
+import RocketIcon from '../../assets/common/Rocket.svg';
 
 const groupData: GroupProps[] = [
   {
@@ -45,13 +47,7 @@ const groupData: GroupProps[] = [
   },
 ];
 
-const HeaderSection = ({
-  setFormVisible,
-  navigation,
-}: {
-  setFormVisible: Dispatch<SetStateAction<boolean>>;
-  navigation: any;
-}) => {
+const HeaderSection = ({ navigation }: { navigation: any }) => {
   return (
     <View
       style={{
@@ -79,7 +75,7 @@ const HeaderSection = ({
         </TouchableOpacity>
       </View>
       <Body style={{ color: GRAY, marginTop: 5 }}>추억을 어쩌구저쩌구</Body>
-      <View style={{ height: 120 }} />
+      <View style={{ height: 150 }} />
     </View>
   );
 };
@@ -88,11 +84,35 @@ const GroupList = ({
   navigation,
 }: StackScreenProps<HomeStackParams, 'GroupList'>) => {
   const [formVisible, setFormVisible] = useState<boolean>(false);
+  // 초대코드 입력 및 그룹명 입력 모달
+  const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   return (
     <View style={{ flex: 1 }}>
-      <HeaderSection setFormVisible={setFormVisible} navigation={navigation} />
+      <HeaderSection navigation={navigation} />
       <View>
-        <Body style={{ marginLeft: 35, marginVertical: 10 }}>그룹 목록</Body>
+        <Body style={{ marginLeft: 35, marginVertical: 10 }}>
+          추억을 함께할 그룹에 참여해보세요!
+        </Body>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 40,
+          }}>
+          <CardButton onPress={() => setFormVisible(true)}>
+            <MagicIcon />
+            <Body style={{ fontWeight: '600' }}>그룹 만들러 가기</Body>
+          </CardButton>
+          <CardButton onPress={() => {}}>
+            <RocketIcon />
+            <Body style={{ fontWeight: '600' }}>그룹 입장하기</Body>
+          </CardButton>
+        </View>
+      </View>
+      <View style={{ marginTop: 30 }}>
+        <Body style={{ marginLeft: 35, marginVertical: 10 }}>
+          이제 추억 퍼즐을 맞추러 가볼까요?
+        </Body>
         <Carousel
           data={groupData}
           renderItem={({ item }: any) => {
@@ -123,5 +143,17 @@ const GroupList = ({
     </View>
   );
 };
+
+const CardButton = styled.TouchableOpacity`
+  width: 150px;
+  height: 125px;
+  border-radius: 8px;
+  background: ${LIGHTPURPLE};
+  shadow-color: black;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.1;
+  align-items: center;
+  justify-content: center;
+`;
 
 export default GroupList;

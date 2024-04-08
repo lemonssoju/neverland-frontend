@@ -30,6 +30,7 @@ import { BLACK, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
 import EditButton from '../common/EditButton';
 import GroupCreate from '../Home/GroupCreate';
 import BottomButton from '../common/BottomButton';
+import ShareModal from '../common/ShareModal';
 
 const data = [
   {
@@ -136,15 +137,6 @@ const FeedList = ({
       ],
       { cancelable: false },
     );
-  };
-  const onShare = async () => {
-    try {
-      await Share.share({
-        message: group.code.toString(),
-      });
-    } catch (err: unknown) {
-      console.error(err);
-    }
   };
 
   return (
@@ -285,31 +277,11 @@ const FeedList = ({
       <Modal visible={formVisible} animationType="slide">
         <GroupCreate setFormVisible={setFormVisible} />
       </Modal>
-      <Modal visible={inviteVisible} transparent>
-        <Pressable
-          style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
-          onPress={() => setInviteVisible(false)}
-        />
-        <View
-          style={{
-            backgroundColor: WHITE,
-            position: 'absolute',
-            width: '80%',
-            height: 200,
-            top: height * 0.4,
-            alignSelf: 'center',
-            borderRadius: 12,
-            padding: 15,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <Title>그룹 코드</Title>
-          <Text style={{ fontWeight: '700', color: BLACK, fontSize: 48 }}>
-            {group.code}
-          </Text>
-          <BottomButton label="공유하기" onPress={onShare} />
-        </View>
-      </Modal>
+      <ShareModal
+        modalVisible={inviteVisible}
+        setModalVisible={setInviteVisible}
+        code={group.code}
+      />
     </SafeAreaView>
   );
 };
