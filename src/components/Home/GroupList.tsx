@@ -5,8 +5,8 @@ import PlusButton from '../common/PlusButton';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParams } from '../../pages/HomeStack';
 import styled from 'styled-components/native';
-import { GRAY, LIGHTPURPLE, PURPLE } from '../../styles/GlobalColor';
-import { Body, Title } from '../../styles/GlobalText';
+import { GRAY, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
+import { Body, Subtitle, Title } from '../../styles/GlobalText';
 import PuzzleButton from '../common/PuzzleButton';
 import UserIcon from '../../assets/common/User.svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -74,8 +74,10 @@ const HeaderSection = ({ navigation }: { navigation: any }) => {
           <UserIcon />
         </TouchableOpacity>
       </View>
-      <Body style={{ color: GRAY, marginTop: 5 }}>추억을 어쩌구저쩌구</Body>
-      <View style={{ height: 150 }} />
+      <View style={{ height: 120 }} />
+      <Subtitle style={{ color: WHITE, marginBottom: 10 }}>
+        함께 맞춰가는{'\n'}우리의 퍼즐
+      </Subtitle>
     </View>
   );
 };
@@ -89,8 +91,8 @@ const GroupList = ({
   return (
     <View style={{ flex: 1 }}>
       <HeaderSection navigation={navigation} />
-      <View>
-        <Body style={{ marginLeft: 35, marginVertical: 10 }}>
+      <View style={{ marginTop: 10 }}>
+        <Body style={{ marginLeft: 30, marginVertical: 10 }}>
           추억을 함께할 그룹에 참여해보세요!
         </Body>
         <View
@@ -109,8 +111,8 @@ const GroupList = ({
           </CardButton>
         </View>
       </View>
-      <View style={{ marginTop: 30 }}>
-        <Body style={{ marginLeft: 35, marginVertical: 10 }}>
+      <View style={{ marginTop: 20 }}>
+        <Body style={{ marginLeft: 30, marginVertical: 10 }}>
           이제 추억 퍼즐을 맞추러 가볼까요?
         </Body>
         <Carousel
