@@ -1,18 +1,33 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { FlatList, Modal, SafeAreaView, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  Modal,
+  Pressable,
+  SafeAreaView,
+  View,
+} from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import PlusButton from '../common/PlusButton';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParams } from '../../pages/HomeStack';
 import styled from 'styled-components/native';
-import { GRAY, LIGHTPURPLE, PURPLE } from '../../styles/GlobalColor';
-import { Body, Title } from '../../styles/GlobalText';
+import { GRAY, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
+import { Body, Caption, Subtitle, Title } from '../../styles/GlobalText';
 import PuzzleButton from '../common/PuzzleButton';
 import UserIcon from '../../assets/common/User.svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Carousel from '../common/Carousel';
 import GroupItem, { GroupProps } from './GroupItem';
 import GroupCreate from './GroupCreate';
+import LogoText from '../../assets/LogoText.svg';
+import MagicIcon from '../../assets/common/Magic.svg';
+import RocketIcon from '../../assets/common/Rocket.svg';
+import BottomButton from '../common/BottomButton';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParams } from '../../../App';
+import Input from '../common/Input';
 
 const groupData: GroupProps[] = [
   {
@@ -44,26 +59,22 @@ const groupData: GroupProps[] = [
   },
 ];
 
-const HeaderSection = ({
-  setFormVisible,
-  navigation,
-}: {
-  setFormVisible: Dispatch<SetStateAction<boolean>>;
-  navigation: any;
-}) => {
+const HeaderSection = ({ navigation }: { navigation: any }) => {
   return (
     <View
       style={{
-        backgroundColor: LIGHTPURPLE,
-        paddingTop: 70,
+        backgroundColor: PURPLE,
+        paddingTop: 60,
         paddingHorizontal: 20,
         paddingBottom: 10,
       }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <View>
-          <Title style={{ fontWeight: '600' }}>함께 추억을 기록하다,</Title>
-          <Title style={{ fontWeight: '600', color: PURPLE }}>Neverland</Title>
-        </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <LogoText />
         <TouchableOpacity
           onPress={() => navigation.navigate('Settings')}
           style={{
@@ -75,12 +86,10 @@ const HeaderSection = ({
           <UserIcon />
         </TouchableOpacity>
       </View>
-      <Body style={{ color: GRAY, marginTop: 5 }}>추억을 어쩌구저쩌구</Body>
       <View style={{ height: 120 }} />
-      <PuzzleButton
-        label="그룹 만들러가기"
-        onPress={() => setFormVisible(true)}
-      />
+      <Subtitle style={{ color: WHITE, marginBottom: 10 }}>
+        함께 맞춰가는{'\n'}우리의 퍼즐
+      </Subtitle>
     </View>
   );
 };
@@ -88,12 +97,53 @@ const HeaderSection = ({
 const GroupList = ({
   navigation,
 }: StackScreenProps<HomeStackParams, 'GroupList'>) => {
+  const navigationToTab = useNavigation<StackNavigationProp<RootStackParams>>();
   const [formVisible, setFormVisible] = useState<boolean>(false);
+  const { width, height } = Dimensions.get('window');
+  const [inviteVisible, setInviteVisible] = useState<boolean>(false);
+  const [group, setGroup] = useState<{ name: string; code: string }>({
+    name: '',
+    code: '',
+  });
+  const onJoin = () => {
+    if (group.code.length * group.name.length === 0) {
+      Alert.alert('빈칸을 채워주세요!');
+    } else {
+      setInviteVisible(false);
+      setGroup({ name: '', code: '' });
+      navigationToTab.navigate('GroupTab');
+    }
+  };
   return (
     <View style={{ flex: 1 }}>
-      <HeaderSection setFormVisible={setFormVisible} navigation={navigation} />
-      <View>
-        <Body style={{ marginLeft: 35, marginVertical: 10 }}>그룹 목록</Body>
+      <HeaderSection navigation={navigation} />
+      <View style={{ marginTop: 10 }}>
+        <Body style={{ marginLeft: 30, marginVertical: 10 }}>
+          추억을 함께할 그룹에 참여해보세요!
+        </Body>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 40,
+          }}>
+          <CardButton onPress={() => setFormVisible(true)}>
+            <MagicIcon />
+            <Body style={{ fontWeight: '600' }}>그룹 만들러 가기</Body>
+          </CardButton>
+          <CardButton
+            onPress={() => {
+              setInviteVisible(true);
+            }}>
+            <RocketIcon />
+            <Body style={{ fontWeight: '600' }}>그룹 입장하기</Body>
+          </CardButton>
+        </View>
+      </View>
+      <View style={{ marginTop: 20 }}>
+        <Body style={{ marginLeft: 30, marginVertical: 10 }}>
+          이제 추억 퍼즐을 맞추러 가볼까요?
+        </Body>
         <Carousel
           data={groupData}
           renderItem={({ item }: any) => {
@@ -121,8 +171,57 @@ const GroupList = ({
       <Modal visible={formVisible} animationType="slide">
         <GroupCreate setFormVisible={setFormVisible} />
       </Modal>
+      <Modal visible={inviteVisible} transparent>
+        <Pressable
+          style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
+          onPress={() => setInviteVisible(false)}
+        />
+        <View
+          style={{
+            backgroundColor: WHITE,
+            position: 'absolute',
+            width: '80%',
+            top: height * 0.35,
+            alignSelf: 'center',
+            borderRadius: 12,
+            padding: 15,
+            justifyContent: 'space-between',
+          }}>
+          <Title style={{ textAlign: 'center' }}>그룹 입장하기</Title>
+          <Caption style={{ color: GRAY, textAlign: 'center' }}>
+            공유받은 그룹 이름과 코드를 입력하세요.
+          </Caption>
+          <Input
+            label="그룹 이름"
+            isRequired
+            value={group.name}
+            onChangeText={name => setGroup({ ...group, name: name })}
+            placeholder="그룹 이름을 입력하세요"
+          />
+          <Input
+            label="그룹 코드"
+            isRequired
+            value={group.code}
+            onChangeText={code => setGroup({ ...group, code: code })}
+            placeholder="그룹 코드를 입력하세요"
+          />
+          <BottomButton label="입장하기" onPress={onJoin} />
+        </View>
+      </Modal>
     </View>
   );
 };
+
+const CardButton = styled.TouchableOpacity`
+  width: 150px;
+  height: 125px;
+  border-radius: 8px;
+  background: ${LIGHTPURPLE};
+  shadow-color: black;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.1;
+  align-items: center;
+  justify-content: center;
+`;
 
 export default GroupList;

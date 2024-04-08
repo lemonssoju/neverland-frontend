@@ -31,7 +31,7 @@ const GroupItem = ({
       onPress={() => navigation.navigate('GroupTab')}
       style={{
         width: 320,
-        height: 400,
+        height: 250,
         alignSelf: 'center',
         shadowColor: 'black',
         shadowOffset: { width: 0, height: 5 },
@@ -54,10 +54,10 @@ const GroupItem = ({
           }}
         />
         <View style={{ padding: 15 }}>
-          <Body style={{ color: WHITE, textAlign: 'right' }}>
+          <Body style={{ color: WHITE, textAlign: 'right', fontWeight: '600' }}>
             Since {since}
           </Body>
-          <View style={{ height: '95%', justifyContent: 'flex-end' }}>
+          <View style={{ height: '90%', justifyContent: 'flex-end' }}>
             <View style={{ flexDirection: 'row' }}>
               <Emphasis style={{ color: WHITE }}>{name}</Emphasis>
               <Body style={{ color: WHITE }}> | 멤버 {members}명</Body>
@@ -65,7 +65,7 @@ const GroupItem = ({
             <Subtitle style={{ color: WHITE, fontWeight: '500' }}>
               퍼즐 관리자 {leader}
             </Subtitle>
-            <Body style={{ color: WHITE, marginBottom: 5, marginTop: 30 }}>
+            <Body style={{ color: WHITE, marginBottom: 5, marginTop: 20 }}>
               최근 추억 퍼즐 완성 {recent}일 전
             </Body>
           </View>
