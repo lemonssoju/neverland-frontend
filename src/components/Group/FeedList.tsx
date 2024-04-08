@@ -139,7 +139,7 @@ const FeedList = ({
   };
   const onShare = async () => {
     try {
-      const result = await Share.share({
+      await Share.share({
         message: group.code.toString(),
       });
     } catch (err: unknown) {

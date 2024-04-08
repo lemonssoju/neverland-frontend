@@ -13,6 +13,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Carousel from '../common/Carousel';
 import GroupItem, { GroupProps } from './GroupItem';
 import GroupCreate from './GroupCreate';
+import LogoText from '../../assets/LogoText.svg';
 
 const groupData: GroupProps[] = [
   {
@@ -54,16 +55,18 @@ const HeaderSection = ({
   return (
     <View
       style={{
-        backgroundColor: LIGHTPURPLE,
-        paddingTop: 70,
+        backgroundColor: PURPLE,
+        paddingTop: 60,
         paddingHorizontal: 20,
         paddingBottom: 10,
       }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <View>
-          <Title style={{ fontWeight: '600' }}>함께 추억을 기록하다,</Title>
-          <Title style={{ fontWeight: '600', color: PURPLE }}>Neverland</Title>
-        </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <LogoText />
         <TouchableOpacity
           onPress={() => navigation.navigate('Settings')}
           style={{
@@ -77,10 +80,6 @@ const HeaderSection = ({
       </View>
       <Body style={{ color: GRAY, marginTop: 5 }}>추억을 어쩌구저쩌구</Body>
       <View style={{ height: 120 }} />
-      <PuzzleButton
-        label="그룹 만들러가기"
-        onPress={() => setFormVisible(true)}
-      />
     </View>
   );
 };
