@@ -10,6 +10,8 @@ import {
   Modal,
   FlatList,
   Image,
+  Alert,
+  Dimensions,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import styled from 'styled-components/native';
@@ -34,6 +36,7 @@ import CalendarIcon from '../../assets/common/Calendar.svg';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
 import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
+import Postcode from '@actbase/react-daum-postcode';
 
 export interface FeedProps {
   title: string;
@@ -69,6 +72,7 @@ const data = [
   },
 ];
 
+const { width, height } = Dimensions.get('window');
 const FeedUpload = ({
   navigation,
 }: StackScreenProps<FeedStackParams, 'FeedUpload'>) => {
@@ -91,8 +95,7 @@ const FeedUpload = ({
       uri: '',
     },
   ]);
-  const [drawVisible, setDrawVisible] = useState<boolean>(false);
-  const [drawPrompt, setDrawPrompt] = useState<string>('');
+  const [postModal, setPostModal] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
 
   const showPicker = useCallback((value: boolean) => setShow(value), []);
@@ -154,12 +157,17 @@ const FeedUpload = ({
                 }}>
                 <CalendarIcon />
               </TouchableOpacity>
-              <Input
-                label="장소"
-                isRequired
-                value={feed.location}
-                placeholder="장소를 입력해주세요."
-              />
+              <TouchableOpacity
+                style={{ zIndex: 1 }}
+                onPress={() => setPostModal(true)}>
+                <Input
+                  label="장소"
+                  isRequired
+                  value={feed.location}
+                  placeholder="장소를 입력해주세요."
+                  editable={false}
+                />
+              </TouchableOpacity>
               <Input
                 label="같이 들으면 좋은 음악"
                 value={feed.music}
@@ -194,6 +202,7 @@ const FeedUpload = ({
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Label>퍼즐러 * </Label>
                 <InfoIcon />
+                <Caption style={{color: GRAY}}> 함께 추억을 공유할 퍼즐러들을 초대하세요.</Caption>
               </View>
             </View>
           );
@@ -341,6 +350,27 @@ const FeedUpload = ({
             </TouchableOpacity>
           </View>
         </View>
+      </Modal>
+      <Modal visible={postModal}>
+        <SafeAreaView>
+          <CustomHeader
+            label="장소 검색"
+            onClose={() => {
+              setPostModal(false);
+            }}
+          />
+          <Postcode
+            style={{ width: width, height: height - 100, marginTop: 100 }}
+            onError={() => {
+              Alert.alert('주소 검색에 실패하였습니다.');
+            }}
+            jsOptions={{ animation: true, hideMapBtn: true }}
+            onSelected={data => {
+              setFeed({ ...feed, location: data.address });
+              setPostModal(false);
+            }}
+          />
+        </SafeAreaView>
       </Modal>
     </SafeAreaView>
   );
