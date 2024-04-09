@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { PURPLE, WHITE, BLACK } from './src/styles/GlobalColor';
+import { PURPLE, WHITE, BLACK, LIGHTGRAY } from './src/styles/GlobalColor';
 
 // Main
 import AuthStack from './src/pages/AuthStack';
@@ -72,6 +72,8 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         justifyContent: 'space-around',
         backgroundColor: WHITE,
         paddingHorizontal: 10,
+        borderTopWidth: 0.5,
+        borderTopColor: LIGHTGRAY
       }}>
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;

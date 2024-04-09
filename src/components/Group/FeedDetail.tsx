@@ -9,25 +9,30 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
-import { HomeStackParams } from '../../pages/HomeStack';
 import { StackScreenProps } from '@react-navigation/stack';
 import { FeedProps } from './FeedUpload';
-import YoutubePlayer from 'react-native-youtube-iframe';
-import BackButton from '../common/BackButton';
-import HeartButton from '../common/HeartButton';
 import EditButton from '../common/EditButton';
-import CommentInput from '../common/CommentInput';
-import CommentItem from '../common/CommentItem';
-import { B12, B16, B14, B20 } from '../../styles/GlobalText';
-import { BLACK, LIGHTBLACK, MINT, WHITE } from '../../styles/GlobalColor';
+import { Title, Label, Subtitle, Body } from '../../styles/GlobalText';
+import { BLACK, GRAY, LIGHTGRAY, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
+import moment from 'moment';
+import PuzzleIcon from '../../assets/common/Puzzle.svg';
 
 import DotsIcon from '../../assets/common/Dots.svg';
-import MusicIcon from '../../assets/common/Music.svg';
+import IconButton from '../common/IconButton';
+import ArrowIcon from '../../assets/common/Arrow.svg';
+import MarkerIcon from '../../assets/common/Marker.svg';
+import { FeedStackParams } from '../../pages/Group/FeedStack';
+import SubfeedItem from './SubfeedItem';
 
 interface FeedDetailProps extends FeedProps {
-  date: string;
   writer: string;
   like: boolean;
+}
+
+interface SubFeedProps {
+  writer: string;
+  content: string;
+  profile: string;
 }
 
 const DetailSection = ({
@@ -41,6 +46,8 @@ const DetailSection = ({
 }) => {
   const [like, setLike] = useState<boolean>(feed.like);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
+  const isWriter = feed.writer === user;
+
   const [playing, setPlaying] = useState(false);
   const onStateChange = useCallback((state: string) => {
     if (state === 'ended') {
@@ -52,11 +59,21 @@ const DetailSection = ({
     return match ? match[1] : '';
   };
   const videoId = extractVideoId(feed.musicUrl ? feed.musicUrl : '');
+  const subfeed = ['', '', ''];
+  let isPuzzleComplete = feed.members.length === subfeed.length;
+  let isAlreadyPuzzled = false;
+  let puzzleButtonEnabled = isWriter
+    ? isPuzzleComplete
+      ? true
+      : false
+    : isAlreadyPuzzled
+    ? false
+    : true;
 
   // 자동재생
-  useEffect(() => {
-    setPlaying(true);
-  }, []);
+  // useEffect(() => {
+  //   setPlaying(true);
+  // }, []);
 
   return (
     <>
@@ -79,30 +96,38 @@ const DetailSection = ({
             justifyContent: 'space-between',
             marginTop: 60,
           }}>
-          <BackButton onPress={() => navigation.goBack()} />
-          {user === feed.writer && (
-            <TouchableOpacity
-              onPress={() => setDotPressed(!dotPressed)}
-              style={{
-                width: 40,
-                height: 40,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+          <IconButton onPress={() => navigation.goBack()}>
+            <ArrowIcon color={WHITE} />
+          </IconButton>
+          {isWriter && (
+            <IconButton onPress={() => setDotPressed(!dotPressed)}>
               <DotsIcon
                 transform={[{ rotate: dotPressed ? '90deg' : '0deg' }]}
+                color={WHITE}
               />
-            </TouchableOpacity>
+            </IconButton>
           )}
           {dotPressed && (
             <EditButton
+              editLabel="수정"
+              deleteLabel="삭제"
               onEdit={() => {}}
               onDelete={() => {}}
               style={{ top: 40, right: 15 }}
             />
           )}
         </View>
-        <TouchableOpacity
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 165,
+            marginLeft: 10,
+          }}>
+          <MarkerIcon color={WHITE} />
+          <Title style={{ color: WHITE }}> {feed.location}</Title>
+        </View>
+        {/* <TouchableOpacity
           onPress={() => setPlaying(!playing)}
           style={{
             flexDirection: 'row',
@@ -112,60 +137,70 @@ const DetailSection = ({
           }}>
           <MusicIcon />
           <B12 style={{ marginLeft: 5 }}>{feed.music}</B12>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ImageBackground>
-      <View style={{ paddingHorizontal: 30 }}>
-        <View style={{ marginTop: 15, width: '80%' }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: 5,
-            }}>
-            <B12 style={{ fontStyle: 'italic', marginRight: 5 }}>
-              {feed.date}
-            </B12>
-            <B12>{feed.writer}</B12>
-          </View>
-          <B20>{feed.title}</B20>
-        </View>
-        <HeartButton
-          like={like}
-          onPress={() => setLike(!like)}
-          style={{ position: 'absolute', right: 10, top: 10 }}
-        />
-        <B16 style={{ marginTop: 5 }}>{feed.subtitle}</B16>
-        <B14 style={{ marginTop: 20, lineHeight: 24 }}>{feed.content}</B14>
+      <View
+        style={{
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+          backgroundColor: LIGHTPURPLE,
+        }}>
+        <Label style={{ marginBottom: 5 }}>
+          {moment(feed.date).format('YYYY-MM')} | {feed.writer}
+        </Label>
+        <Subtitle style={{ marginBottom: 5 }}>{feed.title}</Subtitle>
+        <Body style={{ marginBottom: 15 }}>{feed.content}</Body>
+        <TouchableOpacity
+          onPress={() => {
+            /* isWriter ? 추억 퍼즐 완성하기 : 추억 퍼즐 맞추기 */
+          }}
+          disabled={!puzzleButtonEnabled}
+          style={{
+            backgroundColor: puzzleButtonEnabled ? PURPLE : GRAY,
+            width: '100%',
+            height: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 8,
+            alignSelf: 'center',
+            marginBottom: 5,
+            flexDirection: 'row',
+          }}>
+          <PuzzleIcon style={{ marginRight: 10 }} />
+          <Body style={{ color: WHITE }}>
+            {isWriter ? '추억 퍼즐 완성하기' : '추억 퍼즐 맞추기'}
+          </Body>
+        </TouchableOpacity>
       </View>
-      <YoutubePlayer
+      {/* <YoutubePlayer
         height={0}
         play={playing}
         videoId={videoId}
         onChangeState={onStateChange}
-      />
+      /> */}
     </>
   );
 };
 
-const commentData = [
+const subfeedData: SubFeedProps[] = [
   {
     writer: '피터팬',
-    date: '2023.11.23',
-    content: '1998년으로 돌아간 거 같아요!',
+    content:
+      '완전 기억남! 토끼가 분명 울고 있었어! 토끼는 무슨 일이 있었던걸까? 주인은 왜 토끼를 버린걸까? 나 너무 궁금해서 미쳐버리는 줄 알았잖아. 내가 제주도에 살았다면 토끼를 데려갔을 거야. 깡총깡총.',
     profile:
       'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
   },
   {
     writer: '피터팬',
-    date: '2023.11.23',
-    content: '1998년으로 돌아간 거 같아요!',
+    content:
+      '완전 기억남! 토끼가 분명 울고 있었어! 토끼는 무슨 일이 있었던걸까? 주인은 왜 토끼를 버린걸까? 나 너무 궁금해서 미쳐버리는 줄 알았잖아. 내가 제주도에 살았다면 토끼를 데려갔을 거야. 깡총깡총.',
     profile:
       'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
   },
   {
     writer: '피터팬',
-    date: '2023.11.23',
-    content: '1998년으로 돌아간 거 같아요!',
+    content:
+      '완전 기억남! 토끼가 분명 울고 있었어! 토끼는 무슨 일이 있었던걸까? 주인은 왜 토끼를 버린걸까? 나 너무 궁금해서 미쳐버리는 줄 알았잖아. 내가 제주도에 살았다면 토끼를 데려갔을 거야. 깡총깡총.',
     profile:
       'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
   },
@@ -173,66 +208,45 @@ const commentData = [
 
 const FeedDetail = ({
   navigation,
-}: StackScreenProps<HomeStackParams, 'FeedDetail'>) => {
+}: StackScreenProps<FeedStackParams, 'FeedDetail'>) => {
   const [feed, setFeed] = useState<FeedDetailProps>({
-    title: '망민중 축제 기억 ㄴrㄴㅣ',
-    subtitle: '아니 우리 의상 보라고;;',
-    content:
-      '앞에선 한 마디도 못하더니\n뒤에선 내 얘길 안 좋게 해\n참 어이가 없어\nHello hello hello 나 같은 여잔 처음\n(으로 으로 으로) 본 것 같은데\n왜 나를 판단하니\n내가 혹시 두려운 거니\n겉으론 bad girl 속으론 good girl\n나를 잘 알지도 못하면서\n내 겉모습만 보면서\n한심한 여자로 보는\n너의 시선이 난 너무나 웃겨',
-    category: '',
-    date: '2023.11.23',
-    writer: '피터팬',
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    title: '제주도 여행 갔던 거 기억 ㄴrㄴㅣ',
+    content: '길 가다가 바닥에 떨어진 토끼 본거 기억나니!',
+    date: new Date(2023, 11, 23),
+    writer: '김토끼',
+    location: '서울 송파구',
+    rep_pic:
+      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
     music: '미쓰에이 - Bad girl Good girl',
     musicUrl: 'https://youtu.be/8TeeJvcBdLA?si=yffEamC12OAFs7HQ',
+    members: ['', '', ''],
     like: true,
   });
-  const [comment, setComment] = useState<string>('');
 
   return (
-    <View>
-      <FlatList
-        data={commentData}
-        ListHeaderComponent={() => (
-          <>
-            <DetailSection
-              feed={feed}
-              navigation={navigation}
-              user={'황은정'}
-            />
-            <View
-              style={{
-                height: 1,
-                backgroundColor: LIGHTBLACK,
-                marginVertical: 20,
-                marginHorizontal: 30,
-              }}
-            />
-            <View style={{ paddingHorizontal: 30 }}>
-              <B12 style={{ color: MINT, marginBottom: 10 }}>댓글</B12>
-              <CommentInput
-                comment={comment}
-                setComment={setComment}
-                onPress={() => {}}
-              />
-            </View>
-          </>
-        )}
-        renderItem={({ item }: any) => {
-          const { writer, date, content, profile } = item;
-          return (
-            <CommentItem
-              writer={writer}
-              date={date}
-              content={content}
-              profile={profile}
-              onEdit={() => {}}
-              onDelete={() => {}}
-            />
-          );
-        }}
-      />
-    </View>
+    <FlatList
+      data={subfeedData}
+      ListHeaderComponent={
+        <DetailSection feed={feed} navigation={navigation} user={'김토끼'} />
+      }
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item, index }: { item: any; index: number }) => {
+        const { writer, content, profile } = item;
+        const randomColors = ['#EEF8FF', '#FFF8F5', '#FFFEEE', '#F5FFF8'];
+        return (
+          <SubfeedItem
+            background={randomColors[index % 4]}
+            isLast={subfeedData.length - 1 === index}
+            user={'피터팬'}
+            writer={writer}
+            content={content}
+            profile={profile}
+            onEdit={() => {}}
+            onDelete={() => {}}
+          />
+        );
+      }}
+    />
   );
 };
 
