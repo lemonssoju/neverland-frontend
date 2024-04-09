@@ -195,7 +195,9 @@ const FeedUpload = ({
                   padding: 10,
                   marginBottom: 20,
                   height: 150,
-                  color: WHITE,
+                  color: BLACK,
+                  fontSize: 14,
+                  fontFamily: 'Pretendard Variable'
                 }}
                 multiline
               />
