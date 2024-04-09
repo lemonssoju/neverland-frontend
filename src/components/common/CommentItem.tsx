@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import EditButton from './EditButton';
-import { GRAY, LIGHTPURPLE } from '../../styles/GlobalColor';
+import { BLACK, GRAY, LIGHTPURPLE } from '../../styles/GlobalColor';
 import DotsIcon from '../../assets/common/Dots.svg';
 import { B12, R12, Label, Content, Caption } from '../../styles/GlobalText';
 
@@ -47,7 +47,7 @@ const CommentItem = ({
             justifyContent: 'center',
             zIndex: 1,
           }}>
-          <DotsIcon width={12} height={23} transform={[{ rotate: '90deg' }]} />
+          <DotsIcon color={BLACK} width={12} height={23} transform={[{ rotate: '90deg' }]} />
         </TouchableOpacity>
       }
       {dotPressed && (

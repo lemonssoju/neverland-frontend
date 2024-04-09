@@ -150,7 +150,7 @@ const FeedList = ({
           onPress={() => {
             setDotPressed(!dotPressed);
           }}>
-          <DotsIcon />
+          <DotsIcon color={BLACK} />
         </IconButton>
       </HeaderSection>
       {dotPressed &&
