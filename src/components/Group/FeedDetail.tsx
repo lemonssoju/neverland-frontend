@@ -9,11 +9,13 @@ import {
   ImageBackground,
   Dimensions,
   Modal,
+  Alert,
+  Pressable,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { FeedProps } from './FeedUpload';
 import EditButton from '../common/EditButton';
-import { Title, Label, Subtitle, Body } from '../../styles/GlobalText';
+import { Title, Label, Subtitle, Body, Caption } from '../../styles/GlobalText';
 import {
   BLACK,
   GRAY,
@@ -32,12 +34,17 @@ import MarkerIcon from '../../assets/common/Marker.svg';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
 import SubfeedItem from './SubfeedItem';
 import SubfeedUpload, { SubfeedProps } from './SubfeedUpload';
+import BottomButton from '../common/BottomButton';
+import DropDownPicker, {
+  ItemType,
+  ValueType,
+} from 'react-native-dropdown-picker';
 
 interface FeedDetailProps extends FeedProps {
   writer: string;
   like: boolean;
 }
-
+const { width, height } = Dimensions.get('window');
 const DetailSection = ({
   feed,
   navigation,
@@ -79,6 +86,41 @@ const DetailSection = ({
   // }, []);
 
   const [subfeedModal, setSubfeedModal] = useState<boolean>(false);
+  const onDelete = () => {
+    Alert.alert(
+      '알림',
+      '추억을 삭제하시겠습니까?',
+      [
+        {
+          text: '예',
+          onPress: () => {
+            navigation.navigate('FeedList');
+          },
+          style: 'destructive',
+        },
+        {
+          text: '아니오',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
+  const [imageStyleModal, setImageStyleModal] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [value, setValue] = useState<ValueType>('');
+  const [items, setItems] = useState<ItemType<ValueType>[]>([
+    { label: 'Analog Film', value: 'analog-film' },
+    { label: 'Cinematic', value: 'cinematic' },
+    { label: 'Fantasy Art', value: 'fantasy-art' },
+    { label: 'Photographic', value: 'photographic' },
+    { label: 'Line Art', value: 'line-art' },
+  ]);
+  const onCreate = () => {
+    setImageStyleModal(false);
+    setValue('');
+  };
 
   return (
     <>
@@ -116,8 +158,10 @@ const DetailSection = ({
             <EditButton
               editLabel="수정"
               deleteLabel="삭제"
-              onEdit={() => {}}
-              onDelete={() => {}}
+              onEdit={() => {
+                setSubfeedModal(true);
+              }}
+              onDelete={onDelete}
               style={{ top: 40, right: 15 }}
             />
           )}
@@ -157,8 +201,7 @@ const DetailSection = ({
         <Body style={{ marginBottom: 15 }}>{feed.content}</Body>
         <TouchableOpacity
           onPress={() => {
-            /* isWriter ? 추억 퍼즐 완성하기 : 추억 퍼즐 맞추기 */
-            setSubfeedModal(true);
+            isWriter ? setImageStyleModal(true) : setSubfeedModal(true);
           }}
           disabled={!puzzleButtonEnabled}
           style={{
@@ -190,6 +233,62 @@ const DetailSection = ({
           writer={user}
           profile="https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169"
         />
+      </Modal>
+      <Modal visible={imageStyleModal} transparent>
+        <Pressable
+          style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
+          onPress={() => {
+            setImageStyleModal(false);
+          }}
+        />
+        <View
+          style={{
+            backgroundColor: WHITE,
+            position: 'absolute',
+            width: '80%',
+            top: height * 0.35,
+            alignSelf: 'center',
+            borderRadius: 12,
+            padding: 15,
+            justifyContent: 'space-between',
+          }}>
+          <Title style={{ textAlign: 'center' }}>이미지 스타일 선택하기</Title>
+          <Caption style={{ color: GRAY, textAlign: 'center' }}>
+            원하는 이미지 스타일이 있다면 선택해주세요.
+          </Caption>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder="이미지 스타일을 선택하세요"
+            placeholderStyle={{
+              fontFamily: 'Pretendard Variable',
+            }}
+            style={{
+              marginTop: 10,
+              marginBottom: 15,
+              backgroundColor: LIGHTPURPLE,
+              borderColor: 'transparent',
+            }}
+            labelStyle={{
+              fontFamily: 'Pretendard Variable',
+            }}
+            listItemLabelStyle={{
+              fontFamily: 'Pretendard Variable',
+            }}
+            selectedItemLabelStyle={{
+              fontFamily: 'Pretendard Variable',
+            }}
+            dropDownContainerStyle={{
+              backgroundColor: LIGHTPURPLE,
+              borderColor: 'transparent'
+            }}
+          />
+          <BottomButton label="생성하기" onPress={onCreate} />
+        </View>
       </Modal>
     </>
   );
