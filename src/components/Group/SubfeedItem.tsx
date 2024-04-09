@@ -11,12 +11,7 @@ import {
   Caption,
   Body,
 } from '../../styles/GlobalText';
-
-export interface SubfeedProps {
-  writer: string;
-  content: string;
-  profile: string;
-}
+import { SubfeedProps } from './SubfeedUpload';
 
 interface SubfeedItemProps extends SubfeedProps {
   onEdit: () => void;

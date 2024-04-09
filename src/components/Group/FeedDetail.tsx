@@ -8,12 +8,20 @@ import {
   FlatList,
   ImageBackground,
   Dimensions,
+  Modal,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { FeedProps } from './FeedUpload';
 import EditButton from '../common/EditButton';
 import { Title, Label, Subtitle, Body } from '../../styles/GlobalText';
-import { BLACK, GRAY, LIGHTGRAY, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
+import {
+  BLACK,
+  GRAY,
+  LIGHTGRAY,
+  LIGHTPURPLE,
+  PURPLE,
+  WHITE,
+} from '../../styles/GlobalColor';
 import moment from 'moment';
 import PuzzleIcon from '../../assets/common/Puzzle.svg';
 
@@ -23,16 +31,11 @@ import ArrowIcon from '../../assets/common/Arrow.svg';
 import MarkerIcon from '../../assets/common/Marker.svg';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
 import SubfeedItem from './SubfeedItem';
+import SubfeedUpload, { SubfeedProps } from './SubfeedUpload';
 
 interface FeedDetailProps extends FeedProps {
   writer: string;
   like: boolean;
-}
-
-interface SubFeedProps {
-  writer: string;
-  content: string;
-  profile: string;
 }
 
 const DetailSection = ({
@@ -74,6 +77,8 @@ const DetailSection = ({
   // useEffect(() => {
   //   setPlaying(true);
   // }, []);
+
+  const [subfeedModal, setSubfeedModal] = useState<boolean>(false);
 
   return (
     <>
@@ -153,6 +158,7 @@ const DetailSection = ({
         <TouchableOpacity
           onPress={() => {
             /* isWriter ? 추억 퍼즐 완성하기 : 추억 퍼즐 맞추기 */
+            setSubfeedModal(true);
           }}
           disabled={!puzzleButtonEnabled}
           style={{
@@ -178,11 +184,18 @@ const DetailSection = ({
         videoId={videoId}
         onChangeState={onStateChange}
       /> */}
+      <Modal visible={subfeedModal} animationType="slide">
+        <SubfeedUpload
+          setSubfeedModal={setSubfeedModal}
+          writer={user}
+          profile="https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169"
+        />
+      </Modal>
     </>
   );
 };
 
-const subfeedData: SubFeedProps[] = [
+const subfeedData: SubfeedProps[] = [
   {
     writer: '피터팬',
     content:
@@ -229,6 +242,7 @@ const FeedDetail = ({
       ListHeaderComponent={
         <DetailSection feed={feed} navigation={navigation} user={'김토끼'} />
       }
+      showsVerticalScrollIndicator={false}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item, index }: { item: any; index: number }) => {
         const { writer, content, profile } = item;
@@ -246,6 +260,7 @@ const FeedDetail = ({
           />
         );
       }}
+      ListFooterComponent={<View style={{ height: 10 }} />}
     />
   );
 };
