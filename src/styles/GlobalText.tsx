@@ -140,7 +140,6 @@ export const Emphasis = ({ children, style, ...rest }: any) => {
         fontSize: 24,
         color: BLACK,
         fontWeight: 700,
-        lineHeight: 28,
         ...style,
       }}>
       {children}

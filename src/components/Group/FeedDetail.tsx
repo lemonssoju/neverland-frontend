@@ -120,6 +120,10 @@ const DetailSection = ({
   const onCreate = () => {
     setImageStyleModal(false);
     setValue('');
+    navigation.navigate('PuzzleCreate', {
+      date: feed.date,
+      location: feed.location,
+    });
   };
 
   return (
@@ -284,7 +288,7 @@ const DetailSection = ({
             }}
             dropDownContainerStyle={{
               backgroundColor: LIGHTPURPLE,
-              borderColor: 'transparent'
+              borderColor: 'transparent',
             }}
           />
           <BottomButton label="생성하기" onPress={onCreate} />

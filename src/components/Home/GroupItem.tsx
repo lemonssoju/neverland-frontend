@@ -58,7 +58,7 @@ const GroupItem = ({
             Since {since}
           </Body>
           <View style={{ height: '90%', justifyContent: 'flex-end' }}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Emphasis style={{ color: WHITE }}>{name}</Emphasis>
               <Body style={{ color: WHITE }}> | 멤버 {members}명</Body>
             </View>
