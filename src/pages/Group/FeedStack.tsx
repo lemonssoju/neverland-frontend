@@ -1,17 +1,12 @@
 import FeedList from '../../components/Group/FeedList';
 import FeedDetail from '../../components/Group/FeedDetail';
 import FeedUpload from '../../components/Group/FeedUpload';
-import PuzzleCreate from '../../components/Group/PuzzleCreate';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 export type FeedStackParams = {
   FeedList: undefined;
   FeedDetail: undefined;
   FeedUpload: undefined;
-  PuzzleCreate: {
-    date: string;
-    location: string;
-  }
 };
 
 const Stack = createNativeStackNavigator<FeedStackParams>();
@@ -19,6 +14,7 @@ const Stack = createNativeStackNavigator<FeedStackParams>();
 const FeedStack = () => {
   return (
     <Stack.Navigator
+      initialRouteName="FeedList"
       screenOptions={{
         headerShown: false,
       }}>
@@ -29,7 +25,6 @@ const FeedStack = () => {
         component={FeedUpload}
         options={{ presentation: 'transparentModal' }}
       />
-      <Stack.Screen name="PuzzleCreate" component={PuzzleCreate} options={{ presentation: 'transparentModal'}} />
     </Stack.Navigator>
   );
 };

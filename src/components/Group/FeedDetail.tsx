@@ -39,6 +39,7 @@ import DropDownPicker, {
   ItemType,
   ValueType,
 } from 'react-native-dropdown-picker';
+import PuzzleCreate from './PuzzleCreate';
 
 interface FeedDetailProps extends FeedProps {
   writer: string;
@@ -117,13 +118,12 @@ const DetailSection = ({
     { label: 'Photographic', value: 'photographic' },
     { label: 'Line Art', value: 'line-art' },
   ]);
+
+  const [createModal, setCreateModal] = useState<boolean>(false);
   const onCreate = () => {
     setImageStyleModal(false);
     setValue('');
-    navigation.navigate('PuzzleCreate', {
-      date: feed.date,
-      location: feed.location,
-    });
+    setCreateModal(true);
   };
 
   return (
@@ -293,6 +293,13 @@ const DetailSection = ({
           />
           <BottomButton label="생성하기" onPress={onCreate} />
         </View>
+      </Modal>
+      <Modal visible={createModal} animationType="fade">
+        <PuzzleCreate
+          date={moment(feed.date).format('YYYY.MM.DD')}
+          location={feed.location}
+          setCreateModal={setCreateModal}
+        />
       </Modal>
     </>
   );

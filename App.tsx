@@ -58,7 +58,7 @@ function App(): JSX.Element {
 export type TabProps = {
   Feed: any;
   Write: any;
-  Puzzle: any;
+  Puzzle: { id: number | undefined };
 };
 
 const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
@@ -73,7 +73,7 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         backgroundColor: WHITE,
         paddingHorizontal: 10,
         borderTopWidth: 0.5,
-        borderTopColor: LIGHTGRAY
+        borderTopColor: LIGHTGRAY,
       }}>
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
@@ -102,7 +102,7 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
               width: '20%',
               height: '100%',
               alignItems: 'center',
-              marginTop: 40
+              marginTop: 40,
             }}>
             {
               {
