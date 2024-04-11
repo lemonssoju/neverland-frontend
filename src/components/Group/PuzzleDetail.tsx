@@ -9,7 +9,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import BackButton from '../common/BackButton';
 import HeartButton from '../common/HeartButton';
@@ -39,6 +39,8 @@ import ArrowIcon from '../../assets/common/ArrowSmall.svg';
 import { PuzzleStackParams } from '../../pages/Group/PuzzleStack';
 import CustomHeader from '../common/CustomHeader';
 import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
+import { TabProps } from '../../../App';
 
 interface PuzzleDetailProps {
   date: Date;
@@ -49,6 +51,7 @@ interface PuzzleDetailProps {
 }
 
 const DetailSection = ({ puzzle }: { puzzle: PuzzleDetailProps }) => {
+  const navigationToFeed = useNavigation<StackNavigationProp<TabProps>>();
   return (
     <>
       <CustomHeader label="퍼즐 앨범" onBack={() => {}} onClose={() => {}} />
@@ -102,7 +105,9 @@ const DetailSection = ({ puzzle }: { puzzle: PuzzleDetailProps }) => {
             }}
           />
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              navigationToFeed.navigate('Feed', { id: 1 });
+            }}
             style={{
               flexDirection: 'row',
               alignItems: 'center',

@@ -56,7 +56,7 @@ function App(): JSX.Element {
 }
 
 export type TabProps = {
-  Feed: any;
+  Feed: { id: number | undefined };
   Write: any;
   Puzzle: { id: number | undefined };
 };
