@@ -58,7 +58,7 @@ function App(): JSX.Element {
 export type TabProps = {
   Feed: { id: number | undefined };
   Write: any;
-  Puzzle: { id: number | undefined };
+  Puzzle: { id: number | undefined; rep_pic: string };
 };
 
 const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
@@ -89,7 +89,16 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           } else if (route.name === 'Puzzle') {
             if (isFocused)
               navigation.reset({
-                routes: [{ name: route.name, params: { id: undefined } }],
+                routes: [
+                  {
+                    name: route.name,
+                    params: {
+                      id: undefined,
+                      rep_pic:
+                        'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+                    },
+                  },
+                ],
               });
             else navigation.navigate(route.name, { id: undefined });
           }

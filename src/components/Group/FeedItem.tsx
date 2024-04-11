@@ -21,7 +21,7 @@ export interface FeedItemProps {
   title: string;
   date: string;
   location: string;
-  rep_pic: string;
+  rep_pic: any;
 }
 
 const FeedItem = ({
@@ -35,11 +35,11 @@ const FeedItem = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('FeedDetail');
+        navigation.navigate('FeedDetail', { id: 1});
       }}
       style={{ marginLeft: 10, marginBottom: 10, width: width / 2 - 15 }}>
       <ImageBackground
-        source={{ uri: rep_pic }}
+        source={rep_pic}
         style={{ width: '100%', height: 250 }}
         imageStyle={{ borderRadius: 8 }}>
         <View

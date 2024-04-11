@@ -36,42 +36,30 @@ const data = [
   {
     writer: '김토끼',
     title: '제주도 여행 기억ㄴrㄴㅣ',
-    date: '2020.03.13',
+    date: '2023.06.23',
     location: '제주 한림읍',
-    rep_pic:
-      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+    rep_pic: require('../../assets/tmp/feed1.jpeg'),
   },
   {
-    writer: '김토끼',
-    title: '제주도 여행 기억ㄴrㄴㅣ',
-    date: '2020.03.13',
-    location: '제주 한림읍',
-    rep_pic:
-      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+    writer: '곽미미',
+    title: '유럽 돌려보내줘',
+    date: '2022.08.30',
+    location: '체코 프라하',
+    rep_pic: require('../../assets/tmp/feed2.jpeg'),
   },
   {
-    writer: '김토끼',
-    title: '제주도 여행 기억ㄴrㄴㅣ',
-    date: '2020.03.13',
-    location: '제주 한림읍',
-    rep_pic:
-      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+    writer: '이왈왈',
+    title: '목포가 여긴가',
+    date: '2017.02.16',
+    location: '전라남도 목포시',
+    rep_pic: require('../../assets/tmp/feed3.jpeg'),
   },
   {
-    writer: '김토끼',
-    title: '제주도 여행 기억ㄴrㄴㅣ',
-    date: '2020.03.13',
-    location: '제주 한림읍',
-    rep_pic:
-      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
-  },
-  {
-    writer: '김토끼',
-    title: '제주도 여행 기억ㄴrㄴㅣ',
-    date: '2020.03.13',
-    location: '제주 한림읍',
-    rep_pic:
-      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+    writer: '최멍멍',
+    title: '우리 벚꽃 사진 찍었잖아',
+    date: '2017.04.02',
+    location: '서울 강동구',
+    rep_pic: require('../../assets/tmp/feed4.jpeg'),
   },
 ];
 
@@ -91,7 +79,7 @@ const FeedList = ({
       'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
     ],
     puzzles: 17,
-    during: 10,
+    during: 16,
     code: 123456,
   });
   const isManager: boolean = false;
