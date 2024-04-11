@@ -312,25 +312,16 @@ const DetailSection = ({
 
 const subfeedData: SubfeedProps[] = [
   {
-    writer: '피터팬',
-    content:
-      '완전 기억남! 토끼가 분명 울고 있었어! 토끼는 무슨 일이 있었던걸까? 주인은 왜 토끼를 버린걸까? 나 너무 궁금해서 미쳐버리는 줄 알았잖아. 내가 제주도에 살았다면 토끼를 데려갔을 거야. 깡총깡총.',
-    profile:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    writer: '박댕댕',
+    content: '완전 행복했었는데! 우리 새벽에 일어나서 노을도 봤었잖아.',
+    profile: 'https://dimg.donga.com/wps/NEWS/IMAGE/2023/06/22/119900215.1.jpg',
   },
   {
-    writer: '피터팬',
+    writer: '최냥냥',
     content:
-      '완전 기억남! 토끼가 분명 울고 있었어! 토끼는 무슨 일이 있었던걸까? 주인은 왜 토끼를 버린걸까? 나 너무 궁금해서 미쳐버리는 줄 알았잖아. 내가 제주도에 살았다면 토끼를 데려갔을 거야. 깡총깡총.',
+      '맞아 기억나! 맛집도 완전 많이 가고 바다에 들어가서 수영도 했었잖아.',
     profile:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
-  },
-  {
-    writer: '피터팬',
-    content:
-      '완전 기억남! 토끼가 분명 울고 있었어! 토끼는 무슨 일이 있었던걸까? 주인은 왜 토끼를 버린걸까? 나 너무 궁금해서 미쳐버리는 줄 알았잖아. 내가 제주도에 살았다면 토끼를 데려갔을 거야. 깡총깡총.',
-    profile:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+      'https://img2.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202208/09/hani/20220809132012529emoo.jpg',
   },
 ];
 
@@ -339,10 +330,11 @@ const FeedDetail = ({
 }: StackScreenProps<FeedStackParams, 'FeedDetail'>) => {
   const [feed, setFeed] = useState<FeedDetailProps>({
     title: '제주도 여행 갔던 거 기억 ㄴrㄴㅣ',
-    content: '길 가다가 바닥에 떨어진 토끼 본거 기억나니!',
-    date: new Date(2023, 11, 23),
+    content:
+      '우리 작년 여름에 제주도 갔던거 기억나? 우리 같이 간 첫 여행이었잖아. 바다도 많이 가고 정말 좋았어.',
+    date: new Date(2023, 6, 23),
     writer: '김토끼',
-    location: '서울 송파구',
+    location: '제주 한림읍',
     rep_pic:
       'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
     music: '미쓰에이 - Bad girl Good girl',
@@ -395,7 +387,7 @@ const FeedDetail = ({
             <SubfeedItem
               background={randomColors[index % 4]}
               isLast={subfeedData.length - 1 === index}
-              user={'피터팬'}
+              user={'이왈왈'}
               writer={writer}
               content={content}
               profile={profile}

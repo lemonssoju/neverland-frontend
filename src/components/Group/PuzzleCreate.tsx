@@ -183,7 +183,7 @@ const PuzzleCreate = ({
             label="구경하러 가기"
             onPress={() => {
               setCreateModal(false);
-              navigationToPuzzle.navigate('Puzzle', { id: 1 });
+              navigationToPuzzle.navigate('Puzzle', { id: 1, rep_pic: generatedImages.base64 });
             }}
           />
         </>

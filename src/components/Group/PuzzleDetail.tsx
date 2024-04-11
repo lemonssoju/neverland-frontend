@@ -124,41 +124,45 @@ const DetailSection = ({ puzzle }: { puzzle: PuzzleDetailProps }) => {
 
 const commentData = [
   {
-    writer: '피터팬',
-    date: '2023.11.23',
-    content: '1998년으로 돌아간 거 같아요!',
+    writer: '이왈왈',
+    date: '2024.03.22',
+    content: '와 제주도 미쳤다 나도 데려가지!!!',
     profile:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+      'https://pbs.twimg.com/profile_images/1656346926063960064/YZpCofx8_400x400.jpg'
   },
   {
-    writer: '피터팬',
-    date: '2023.11.23',
-    content: '1998년으로 돌아간 거 같아요!',
+    writer: '박댕댕',
+    date: '2024.03.23',
+    content: '우리 사진을 이렇게 만들어주니까 너무 이쁘다',
     profile:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    'https://dimg.donga.com/wps/NEWS/IMAGE/2023/06/22/119900215.1.jpg'
   },
   {
-    writer: '피터팬',
-    date: '2023.11.23',
-    content: '1998년으로 돌아간 거 같아요!',
+    writer: '최냥냥',
+    date: '2023.04.01',
+    content: '우리 언제 또 같이 여행갈까? 당장 날짜 잡아',
     profile:
-      'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169',
+    'https://img2.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202208/09/hani/20220809132012529emoo.jpg',
   },
 ];
 
 const PuzzleDetail = ({
   navigation,
+  route,
 }: StackScreenProps<PuzzleStackParams, 'PuzzleDetail'>) => {
   const [puzzle, setPuzzle] = useState<PuzzleDetailProps>({
-    date: new Date(2023, 11, 23),
+    date: new Date(2023, 6, 23),
     location: '제주 한림읍',
-    members: ['김댕댕', '김토깽', '김냐옹'],
-    rep_pic:
-      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
+    members: ['김토끼', '박댕댕', '최냥냥'],
+    rep_pic: route.params?.rep_pic,
     content:
-      '완전 기억남! 토끼가 분명 울고 있었어! 토끼는 무슨 일이 있었던걸까? 주인은 왜 토끼를 버린걸까? 나 너무 궁금해서 미쳐버리는 줄 알았잖아. 내가 제주도에 살았다면 토끼를 데려갔을 거야. 깡총깡총.',
+      '작년 여름에 우리 제주도 간 여행이 생각나. 맛집도 많이 가고 바다에서 수영도 했었어. 특히 새벽에 노을을 보러 일어나서 정말 행복했었지. 함께한 추억이 너무 소중해.',
   });
   const [comment, setComment] = useState<string>('');
+
+  useEffect(() => {
+    setPuzzle({ ...puzzle, rep_pic: route.params?.rep_pic})
+  }, [route.params?.rep_pic])
 
   return (
     <SafeAreaView>

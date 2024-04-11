@@ -37,7 +37,7 @@ const generateImages = async ({ imageUri, text, style }: generateImagesProps) =>
     type: 'image/png',
   });
   formData.append('init_image_mode', 'IMAGE_STRENGTH');
-  formData.append('image_strength', 0.5);
+  formData.append('image_strength', 0.35);
   formData.append('text_prompts[0][text]', text);
   formData.append('cfg_scale', 7);
   formData.append('samples', 1);
