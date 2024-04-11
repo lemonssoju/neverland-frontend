@@ -197,14 +197,17 @@ const FeedUpload = ({
                   height: 150,
                   color: BLACK,
                   fontSize: 14,
-                  fontFamily: 'Pretendard Variable'
+                  fontFamily: 'Pretendard Variable',
                 }}
                 multiline
               />
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Label>퍼즐러 * </Label>
                 <InfoIcon />
-                <Caption style={{color: GRAY}}> 함께 추억을 공유할 퍼즐러들을 초대하세요.</Caption>
+                <Caption style={{ color: GRAY }}>
+                  {' '}
+                  함께 추억을 공유할 퍼즐러들을 초대하세요.
+                </Caption>
               </View>
             </View>
           );
@@ -283,7 +286,7 @@ const FeedUpload = ({
               label="등록"
               onPress={() => {
                 navigation.goBack();
-                navigation.navigate('FeedDetail');
+                navigation.navigate('FeedDetail', { id: 1 });
               }}
             />
           );
