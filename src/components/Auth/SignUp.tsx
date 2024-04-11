@@ -6,8 +6,8 @@ import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import styled from 'styled-components/native';
-import { BLACK, PURPLE } from '../../styles/GlobalColor';
-import { B16 } from '../../styles/GlobalText';
+import { BLACK, PURPLE, WHITE } from '../../styles/GlobalColor';
+import { B16, Caption } from '../../styles/GlobalText';
 import Request from '../../services/requests';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
@@ -97,8 +97,8 @@ const SignUp = ({
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'space-between' }}>
-      <CustomHeader label="회원정보 입력" />
-      <View>
+      <CustomHeader label="회원정보 입력" onBack={() => navigation.goBack()} />
+      <View style={{ paddingHorizontal: 25 }}>
         <Input
           label="아이디"
           value={form.loginId}
@@ -115,9 +115,11 @@ const SignUp = ({
           }
         />
         <DuplicateButton
-          style={{ top: 10 }}
+          style={{ top: 36 }}
           onPress={() => duplicateCheck('loginId')}>
-          <B16 style={{ color: BLACK }}>중복 확인</B16>
+          <Caption style={{ color: WHITE, fontWeight: '700' }}>
+            중복 확인
+          </Caption>
         </DuplicateButton>
         <Input
           label="닉네임"
@@ -135,9 +137,11 @@ const SignUp = ({
           }
         />
         <DuplicateButton
-          style={{ top: 97 }}
+          style={{ top: 131 }}
           onPress={() => duplicateCheck('nickname')}>
-          <B16 style={{ color: BLACK }}>중복 확인</B16>
+          <Caption style={{ color: WHITE, fontWeight: '700' }}>
+            중복 확인
+          </Caption>
         </DuplicateButton>
         <Input
           label="비밀번호"
@@ -163,17 +167,23 @@ const SignUp = ({
           alert="비밀번호가 일치하지 않습니다."
         />
       </View>
-      <BottomButton label="다음" onPress={signup} />
+      <View style={{ paddingHorizontal: 25 }}>
+        <BottomButton label="가입" onPress={signup} />
+      </View>
     </SafeAreaView>
   );
 };
 
 const DuplicateButton = styled.TouchableOpacity`
-  background: ${PURPLE};
-  padding: 10px 15px;
+  display: flex;
+  width: 80px;
+  height: 25px;
+  justify-content: center;
+  align-items: center;
   position: absolute;
+  right: 35px;
   border-radius: 12px;
-  right: 20px;
+  background: ${PURPLE};
 `;
 
 export default SignUp;
