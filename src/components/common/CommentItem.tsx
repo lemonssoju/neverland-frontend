@@ -31,7 +31,7 @@ const CommentItem = ({
       style={{
         backgroundColor: LIGHTPURPLE,
         borderRadius: 8,
-        marginHorizontal: 30,
+        marginHorizontal: 20,
         marginTop: 10,
       }}>
       {
