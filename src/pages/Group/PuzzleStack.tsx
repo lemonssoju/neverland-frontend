@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 
 export type PuzzleStackParams = {
-  PuzzleDetail: { id: number };
+  PuzzleDetail: { id: number, rep_pic: string; };
 };
 
 const Stack = createStackNavigator<PuzzleStackParams>();
@@ -21,10 +21,10 @@ const PuzzleStack = ({
   const navigationToPuzzle =
     useNavigation<StackNavigationProp<PuzzleStackParams>>();
   useEffect(() => {
-    if (route.params?.id) {
-      navigationToPuzzle.push('PuzzleDetail', { id: route.params.id });
+    if (route.params?.id && route.params?.rep_pic) {
+      navigationToPuzzle.push('PuzzleDetail', { id: route.params.id, rep_pic: route.params.rep_pic });
     }
-  }, [route.params?.id]);
+  }, [route.params?.rep_pic]);
 
   return (
     <Stack.Navigator
