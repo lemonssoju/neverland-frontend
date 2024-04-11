@@ -16,11 +16,14 @@ import BottomButton from '../common/BottomButton';
 
 export interface SubfeedProps {
   writer: string;
-  content?: string;
+  content: string;
   profile: string;
 }
 
-interface SubfeedUploadProps extends SubfeedProps {
+interface SubfeedUploadProps {
+  writer: string;
+  content?: string;
+  profile: string;
   setSubfeedModal: Dispatch<SetStateAction<boolean>>;
 }
 const SubfeedUpload = ({
