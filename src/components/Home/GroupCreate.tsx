@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
-import { SafeAreaView, View, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, TouchableOpacity, Image } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import { GRAY, WHITE } from '../../styles/GlobalColor';
 import { Body, Caption, Title } from '../../styles/GlobalText';
@@ -47,13 +47,18 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
       <CustomHeader label="그룹 만들기" onClose={() => setFormVisible(false)} />
       <View style={{ paddingHorizontal: 25 }}>
-        <Title style={{ marginTop: 20, fontWeight: '600' }}>
-          추억을 함께할 그룹을 만들어보아요!
-        </Title>
-        <Body style={{ color: GRAY, marginTop: 5 }}>
-          추억 퍼즐을 함께~어쩌구
-        </Body>
-        <View style={{ height: 180 }} />
+        <View style={{ alignItems: 'center', marginBottom: 30, marginTop: 5 }}>
+          <Image
+            source={require('../../assets/Puzzle2.png')}
+            style={{ width: 170, height: 180 }}
+          />
+          <Title style={{ marginTop: 15, fontWeight: '600' }}>
+            추억을 함께할 그룹을 만들어보아요!
+          </Title>
+          <Body style={{ color: GRAY }}>
+            추억 퍼즐을 맞추고 모아볼 수 있어요
+          </Body>
+        </View>
         <PhotoBox>
           <PhotoButton photo={photo} setPhoto={setPhoto} />
         </PhotoBox>
@@ -76,7 +81,7 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
         />
         <TouchableOpacity
           onPress={() => showPicker(true)}
-          style={{ position: 'absolute', bottom: 205, right: 30, zIndex: 1 }}>
+          style={{ position: 'absolute', bottom: 185, right: 30, zIndex: 1 }}>
           <CalendarIcon />
         </TouchableOpacity>
         {show && (
@@ -88,7 +93,7 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
             locale="ko"
           />
         )}
-        <View style={{ marginTop: 40 }}>
+        <View style={{ marginTop: 20 }}>
           <BottomButton label="등록" onPress={() => setFormVisible(false)} />
         </View>
       </View>
