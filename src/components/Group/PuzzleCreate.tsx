@@ -4,6 +4,9 @@ import {
   Image,
   Dimensions,
   Alert,
+  Animated,
+  StyleProp,
+  ViewStyle,
 } from 'react-native';
 import { Emphasis } from '../../styles/GlobalText';
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +15,7 @@ import { FeedStackParams } from '../../pages/Group/FeedStack';
 import IconButton from '../common/IconButton';
 import ArrowIcon from '../../assets/common/Arrow.svg';
 import { WHITE } from '../../styles/GlobalColor';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import BottomButton from '../common/BottomButton';
 import { TabProps } from '../../../App';
@@ -55,14 +58,15 @@ const PuzzleCreate = ({
 
   const sendText = async () => {
     const response = await request.post('', {
-      text: content
+      text: content,
     });
     if (response.isSuccess) {
       createImage();
     }
-  }
+  };
   // const image = 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg'
-  const text = 'I remember the trip to Jeju Island with the three of us last summer. We visited many delicious restaurants and even went swimming in the sea. Especially, waking up early in the morning to watch the sunrise was truly blissful. The memories we shared are so precious.'
+  const text =
+    'I remember the trip to Jeju Island with the three of us last summer. We visited many delicious restaurants and even went swimming in the sea. Especially, waking up early in the morning to watch the sunrise was truly blissful. The memories we shared are so precious.';
   const createImage = async () => {
     try {
       const images = await generateImages({ imageUri, text, style });
@@ -79,18 +83,30 @@ const PuzzleCreate = ({
     createImage();
   }, []);
 
-  // useEffect(() => {
-  //   setTimeout(async () => {
-  //     try {
-  //       const images = await generateImages();
-  //       setGeneratedImages(images);
-  //       setComplete(true);
-  //     } catch (error: any) {
-  //       Alert.alert('Error', error.message);
-  //     }
-  //   }, 5000);
-  // }, []);
+  const animation = useRef(new Animated.Value(0)).current;
 
+  useEffect(() => {
+    if (!complete) {
+      Animated.loop(
+        Animated.timing(animation, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ).start();
+    }
+  }, [complete, animation]);
+
+  const animatedStyles: StyleProp<ViewStyle> = {
+    transform: [
+      {
+        rotateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0deg', '360deg'],
+        }),
+      },
+    ],
+  };
   return (
     <View style={{ backgroundColor: '#100125', flex: 1 }}>
       <IconButton
@@ -135,7 +151,12 @@ const PuzzleCreate = ({
             }}
           />
         ) : (
-          <ActivityIndicator style={{ height: 360 }} />
+          <Animated.View style={[{ height: 360 }, animatedStyles]}>
+            <Image
+              source={require('../../assets/Puzzle2.png')}
+              style={{ width: 250, height: 280 }}
+            />
+          </Animated.View>
         )}
         <Emphasis
           style={{ color: WHITE, textAlign: 'center', marginBottom: 90 }}>
@@ -147,7 +168,10 @@ const PuzzleCreate = ({
             label="구경하러 가기"
             onPress={() => {
               setCreateModal(false);
-              navigationToPuzzle.navigate('Puzzle', { id: 1, rep_pic: generatedImages.base64 });
+              navigationToPuzzle.navigate('Puzzle', {
+                id: 1,
+                rep_pic: generatedImages.base64,
+              });
             }}
           />
         )}
