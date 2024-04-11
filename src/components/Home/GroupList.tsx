@@ -3,6 +3,7 @@ import {
   Alert,
   Dimensions,
   FlatList,
+  Image,
   Modal,
   Pressable,
   SafeAreaView,
@@ -86,10 +87,15 @@ const HeaderSection = ({ navigation }: { navigation: any }) => {
           <UserIcon />
         </TouchableOpacity>
       </View>
-      <View style={{ height: 120 }} />
-      <Subtitle style={{ color: WHITE, marginBottom: 10 }}>
-        함께 맞춰가는{'\n'}우리의 퍼즐
-      </Subtitle>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+        <Subtitle style={{ color: WHITE, marginBottom: 10 }}>
+          함께 맞춰가는{'\n'}우리의 추억 퍼즐
+        </Subtitle>
+        <Image
+          source={require('../../assets/Puzzle.png')}
+          style={{ width: 195, height: 180 }}
+        />
+      </View>
     </View>
   );
 };
