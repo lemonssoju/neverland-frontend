@@ -1,4 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  SetStateAction,
+  Dispatch,
+} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -50,10 +56,12 @@ const DetailSection = ({
   feed,
   navigation,
   user,
+  setSubfeedModal,
 }: {
   feed: FeedDetailProps;
   navigation: any;
   user: string;
+  setSubfeedModal: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [like, setLike] = useState<boolean>(feed.like);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
@@ -86,7 +94,6 @@ const DetailSection = ({
   //   setPlaying(true);
   // }, []);
 
-  const [subfeedModal, setSubfeedModal] = useState<boolean>(false);
   const onDelete = () => {
     Alert.alert(
       '알림',
@@ -163,7 +170,7 @@ const DetailSection = ({
               editLabel="수정"
               deleteLabel="삭제"
               onEdit={() => {
-                setSubfeedModal(true);
+                navigation.navigate('FeedUpload');
               }}
               onDelete={onDelete}
               style={{ top: 40, right: 15 }}
@@ -231,13 +238,6 @@ const DetailSection = ({
         videoId={videoId}
         onChangeState={onStateChange}
       /> */}
-      <Modal visible={subfeedModal} animationType="slide">
-        <SubfeedUpload
-          setSubfeedModal={setSubfeedModal}
-          writer={user}
-          profile="https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169"
-        />
-      </Modal>
       <Modal visible={imageStyleModal} transparent>
         <Pressable
           style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
@@ -345,33 +345,69 @@ const FeedDetail = ({
     members: ['', '', ''],
     like: true,
   });
-
+  const [subfeedModal, setSubfeedModal] = useState<boolean>(false);
+  const onDelete = () => {
+    Alert.alert(
+      '알림',
+      '추억 퍼즐을 삭제하시겠습니까?',
+      [
+        {
+          text: '예',
+          onPress: () => {
+            navigation.replace('FeedDetail', { id: 1 });
+          },
+          style: 'destructive',
+        },
+        {
+          text: '아니오',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false },
+    );
+  };
   return (
-    <FlatList
-      data={subfeedData}
-      ListHeaderComponent={
-        <DetailSection feed={feed} navigation={navigation} user={'김토끼'} />
-      }
-      showsVerticalScrollIndicator={false}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item, index }: { item: any; index: number }) => {
-        const { writer, content, profile } = item;
-        const randomColors = ['#EEF8FF', '#FFF8F5', '#FFFEEE', '#F5FFF8'];
-        return (
-          <SubfeedItem
-            background={randomColors[index % 4]}
-            isLast={subfeedData.length - 1 === index}
-            user={'피터팬'}
-            writer={writer}
-            content={content}
-            profile={profile}
-            onEdit={() => {}}
-            onDelete={() => {}}
+    <>
+      <FlatList
+        data={subfeedData}
+        ListHeaderComponent={
+          <DetailSection
+            feed={feed}
+            navigation={navigation}
+            user={'김토끼'}
+            setSubfeedModal={setSubfeedModal}
           />
-        );
-      }}
-      ListFooterComponent={<View style={{ height: 10 }} />}
-    />
+        }
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }: { item: any; index: number }) => {
+          const { writer, content, profile } = item;
+          const randomColors = ['#EEF8FF', '#FFF8F5', '#FFFEEE', '#F5FFF8'];
+          return (
+            <SubfeedItem
+              background={randomColors[index % 4]}
+              isLast={subfeedData.length - 1 === index}
+              user={'피터팬'}
+              writer={writer}
+              content={content}
+              profile={profile}
+              onEdit={() => {
+                setSubfeedModal(true);
+              }}
+              onDelete={onDelete}
+            />
+          );
+        }}
+        ListFooterComponent={<View style={{ height: 10 }} />}
+      />
+      <Modal visible={subfeedModal} animationType="slide">
+        <SubfeedUpload
+          setSubfeedModal={setSubfeedModal}
+          writer={'김토끼'}
+          profile="https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169"
+        />
+      </Modal>
+    </>
   );
 };
 
