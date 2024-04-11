@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, Image } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import CustomHeader from '../common/CustomHeader';
 import Input from '../common/Input';
@@ -18,7 +18,8 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
   return (
     <SafeAreaView style={{flex: 1, justifyContent: 'space-between'}}>
       <CustomHeader label='로그인' onBack={() => navigation.goBack()} />
-      <View>
+      <Image source={require('../../assets/Puzzle2.png')} style={{width: 240, height: 270, alignSelf: 'center'}} />
+      <View style={{paddingHorizontal: 25}}>
         <Input
           label='아이디'
           value={form.id} 
@@ -26,7 +27,7 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
           isRequired 
           placeholder='아이디를 입력해주세요.'
         />
-        <View style={{height: 30}} />
+        <View style={{height: 20}} />
         <Input
           label='비밀번호' 
           value={form.password} 
@@ -35,7 +36,7 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
           placeholder='비밀번호를 입력해주세요.'
         />
       </View>
-      <BottomButton label='로그인' onPress={() => {navigationToTab.replace('Home')}} />
+      <View style={{paddingHorizontal: 25}}><BottomButton label='로그인' onPress={() => {navigationToTab.replace('Home')}} /></View>
     </SafeAreaView>
   )
 }
