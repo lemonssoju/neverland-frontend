@@ -4,7 +4,7 @@ import CustomHeader from '../../common/CustomHeader';
 import { StackScreenProps } from '@react-navigation/stack';
 import { SettingsStackParams } from '../../../pages/HomeStack';
 import { B14, B20 } from '../../../styles/GlobalText';
-import { BLACK, MINT } from '../../../styles/GlobalColor';
+import { BLACK, PURPLE } from '../../../styles/GlobalColor';
 
 interface OptionProps {
   label: string;
@@ -33,7 +33,7 @@ const SettingsHome = ({
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader label="설정" />
       <View style={{ paddingHorizontal: 20 }}>
-        <B14 style={{ color: MINT, marginVertical: 10 }}>사용자 정보</B14>
+        <B14 style={{ color: PURPLE, marginVertical: 10 }}>사용자 정보</B14>
         <Option
           label="내가 쓴 글"
           onPress={() => navigation.navigate('MyFeed', { title: '내가 쓴 글' })}
@@ -51,7 +51,7 @@ const SettingsHome = ({
         <View
           style={{ height: 1, backgroundColor: BLACK, marginVertical: 10 }}
         />
-        <B14 style={{ color: MINT, marginVertical: 10 }}>사용자 문의</B14>
+        <B14 style={{ color: PURPLE, marginVertical: 10 }}>사용자 문의</B14>
         <Option label="이용약관" onPress={() => {}} />
         <Option label="로그아웃" onPress={() => {}} />
         <Option
