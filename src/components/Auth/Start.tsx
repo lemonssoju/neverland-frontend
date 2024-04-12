@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { B24, Title } from '../../styles/GlobalText';
 import styled from 'styled-components/native';
-import { BLACK, MINT, PURPLE, WHITE } from '../../styles/GlobalColor';
+import { BLACK, PURPLE, WHITE } from '../../styles/GlobalColor';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AuthStackParams } from '../../pages/AuthStack';
 import Background from '../../assets/Background.svg';

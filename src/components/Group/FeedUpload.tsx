@@ -12,6 +12,8 @@ import {
   Image,
   Alert,
   Dimensions,
+  Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import styled from 'styled-components/native';
@@ -24,7 +26,6 @@ import {
   BLACK,
   GRAY,
   LIGHTPURPLE,
-  MINT,
   PURPLE,
   WHITE,
 } from '../../styles/GlobalColor';
@@ -117,181 +118,195 @@ const FeedUpload = ({
           navigation.goBack();
         }}
       />
-      <FlatList
-        data={data}
-        ListHeaderComponent={() => {
-          return (
-            <View>
-              <View style={{ alignItems: 'center', paddingVertical: 5 }}>
-                <PaintIcon style={{ marginVertical: 20 }} />
-                <Title>사진과 함께 추억 퍼즐을 생성해드려요</Title>
-                <Caption style={{ color: GRAY }}>
-                  사진이 없으시다면, 내용을 기반으로 AI 화가가 추억 퍼즐을
-                  그려드려요.{' '}
-                </Caption>
-              </View>
-              <PhotoBox>
-                <PhotoButton photo={photo} setPhoto={setPhoto} />
-              </PhotoBox>
-              <Input
-                label="제목"
-                value={feed.title}
-                onChangeText={title => {
-                  setFeed({ ...feed, title: title });
-                }}
-                isRequired
-                placeholder="제목을 작성해주세요"
-              />
-              <Input
-                value={moment(feed.date).format('YYYY년 MM월').toString()}
-                label="날짜"
-                isRequired
-              />
-              <TouchableOpacity
-                onPress={() => showPicker(true)}
-                style={{
-                  position: 'absolute',
-                  bottom: 433,
-                  right: 5,
-                  zIndex: 1,
-                }}>
-                <CalendarIcon />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ zIndex: 1 }}
-                onPress={() => setPostModal(true)}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={10}
+        style={{
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <Pressable
+          style={{ width: '100%', height: '100%', position: 'absolute' }}
+          onPress={() => Keyboard.dismiss()}
+        />
+        <FlatList
+          data={data}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={() => {
+            return (
+              <View>
+                <View style={{ alignItems: 'center', paddingVertical: 5 }}>
+                  <PaintIcon style={{ marginVertical: 20 }} />
+                  <Title>사진과 함께 추억 퍼즐을 생성해드려요</Title>
+                  <Caption style={{ color: GRAY }}>
+                    사진이 없으시다면, 내용을 기반으로 AI 화가가 추억 퍼즐을
+                    그려드려요.{' '}
+                  </Caption>
+                </View>
+                <PhotoBox>
+                  <PhotoButton photo={photo} setPhoto={setPhoto} />
+                </PhotoBox>
                 <Input
-                  label="장소"
+                  label="제목"
+                  value={feed.title}
+                  onChangeText={title => {
+                    setFeed({ ...feed, title: title });
+                  }}
                   isRequired
-                  value={feed.location}
-                  placeholder="장소를 입력해주세요."
+                  placeholder="제목을 작성해주세요"
+                />
+                <Input
+                  value={moment(feed.date).format('YYYY년 MM월').toString()}
+                  label="날짜"
+                  isRequired
                   editable={false}
                 />
-              </TouchableOpacity>
-              <Input
-                label="같이 들으면 좋은 음악"
-                value={feed.music}
-                onChangeText={music => {
-                  setFeed({ ...feed, music: music });
-                }}
-                placeholder="가수 - 제목 형식으로 입력해주세요."
-                description="우측 아이콘을 클릭해 유튜브 링크를 삽입해주세요."
-              />
-              <TouchableOpacity
-                style={{ position: 'absolute', right: 5, bottom: 263 }}
-                onPress={() => setMusicVisible(true)}>
-                <LinkIcon />
-              </TouchableOpacity>
-              <Label>내용 *</Label>
-              <TextInput
-                value={feed.content}
-                onChangeText={content => {
-                  setFeed({ ...feed, content: content });
-                }}
-                style={{
-                  borderWidth: 1,
-                  borderColor: GRAY,
-                  borderRadius: 2,
-                  padding: 10,
-                  marginBottom: 20,
-                  height: 150,
-                  color: BLACK,
-                  fontSize: 14,
-                  fontFamily: 'Pretendard Variable',
-                }}
-                multiline
-              />
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Label>퍼즐러 * </Label>
-                <InfoIcon />
-                <Caption style={{ color: GRAY }}>
-                  {' '}
-                  함께 추억을 공유할 퍼즐러들을 초대하세요.
-                </Caption>
-              </View>
-            </View>
-          );
-        }}
-        style={{
-          paddingHorizontal: 25,
-        }}
-        renderItem={({ item, index }: { item: any; index: number }) => {
-          const { rep_pic, nickname } = item;
-          let isInvited = feed.members.includes(nickname);
-          let isLastItem = data.length - 1 === index;
-          return (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                borderTopWidth: 1,
-                borderStartColor: GRAY,
-                borderStartWidth: 1,
-                borderEndWidth: 1,
-                borderEndColor: GRAY,
-                borderColor: GRAY,
-                borderBottomColor: GRAY,
-                borderBottomWidth: isLastItem ? 1 : 0,
-                borderTopLeftRadius: index === 0 ? 2 : 0,
-                borderTopRightRadius: index === 0 ? 2 : 0,
-                borderBottomLeftRadius: isLastItem ? 2 : 0,
-                borderBottomRightRadius: isLastItem ? 2 : 0,
-                padding: 10,
-              }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image
-                  source={{ uri: rep_pic }}
-                  style={{ width: 30, height: 30, borderRadius: 180 }}
-                />
-                <Label style={{ marginLeft: 10 }}>{nickname}</Label>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  isInvited
-                    ? setFeed({
-                        ...feed,
-                        members: feed.members.filter(
-                          (member: string) => member !== nickname,
-                        ),
-                      })
-                    : setFeed({
-                        ...feed,
-                        members: [...feed.members, nickname],
-                      });
-                }}
-                style={{
-                  width: 80,
-                  height: 25,
-                  backgroundColor: isInvited ? LIGHTPURPLE : PURPLE,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 12,
-                }}>
-                <Caption
+                <TouchableOpacity
+                  onPress={() => showPicker(true)}
                   style={{
-                    color: isInvited ? PURPLE : WHITE,
-                    fontWeight: '700',
+                    position: 'absolute',
+                    bottom: 433,
+                    right: 5,
+                    zIndex: 1,
                   }}>
-                  {isInvited ? '추가 완료' : '추가'}
-                </Caption>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
-        ListFooterComponentStyle={{ marginTop: 20 }}
-        ListFooterComponent={() => {
-          return (
-            <BottomButton
-              label="등록"
-              onPress={() => {
-                navigation.goBack();
-                navigation.navigate('FeedDetail', { id: 1 });
-              }}
-            />
-          );
-        }}
-      />
+                  <CalendarIcon />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ zIndex: 1 }}
+                  onPress={() => setPostModal(true)}>
+                  <Input
+                    label="장소"
+                    isRequired
+                    value={feed.location}
+                    placeholder="장소를 입력해주세요."
+                    editable={false}
+                  />
+                </TouchableOpacity>
+                <Input
+                  label="같이 들으면 좋은 음악"
+                  value={feed.music}
+                  onChangeText={music => {
+                    setFeed({ ...feed, music: music });
+                  }}
+                  placeholder="가수 - 제목 형식으로 입력해주세요."
+                  description="우측 아이콘을 클릭해 유튜브 링크를 삽입해주세요."
+                />
+                <TouchableOpacity
+                  style={{ position: 'absolute', right: 5, bottom: 263 }}
+                  onPress={() => setMusicVisible(true)}>
+                  <LinkIcon />
+                </TouchableOpacity>
+                <Label>내용 *</Label>
+                <TextInput
+                  value={feed.content}
+                  onChangeText={content => {
+                    setFeed({ ...feed, content: content });
+                  }}
+                  style={{
+                    borderWidth: 1,
+                    borderColor: GRAY,
+                    borderRadius: 2,
+                    padding: 10,
+                    marginBottom: 20,
+                    height: 150,
+                    color: BLACK,
+                    fontSize: 14,
+                    fontFamily: 'Pretendard Variable',
+                  }}
+                  multiline
+                />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Label>퍼즐러 * </Label>
+                  <InfoIcon />
+                  <Caption style={{ color: GRAY }}>
+                    {' '}
+                    함께 추억을 공유할 퍼즐러들을 초대하세요.
+                  </Caption>
+                </View>
+              </View>
+            );
+          }}
+          style={{
+            paddingHorizontal: 25,
+          }}
+          renderItem={({ item, index }: { item: any; index: number }) => {
+            const { rep_pic, nickname } = item;
+            let isInvited = feed.members.includes(nickname);
+            let isLastItem = data.length - 1 === index;
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderTopWidth: 1,
+                  borderStartColor: GRAY,
+                  borderStartWidth: 1,
+                  borderEndWidth: 1,
+                  borderEndColor: GRAY,
+                  borderColor: GRAY,
+                  borderBottomColor: GRAY,
+                  borderBottomWidth: isLastItem ? 1 : 0,
+                  borderTopLeftRadius: index === 0 ? 2 : 0,
+                  borderTopRightRadius: index === 0 ? 2 : 0,
+                  borderBottomLeftRadius: isLastItem ? 2 : 0,
+                  borderBottomRightRadius: isLastItem ? 2 : 0,
+                  padding: 10,
+                }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image
+                    source={{ uri: rep_pic }}
+                    style={{ width: 30, height: 30, borderRadius: 180 }}
+                  />
+                  <Label style={{ marginLeft: 10 }}>{nickname}</Label>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    isInvited
+                      ? setFeed({
+                          ...feed,
+                          members: feed.members.filter(
+                            (member: string) => member !== nickname,
+                          ),
+                        })
+                      : setFeed({
+                          ...feed,
+                          members: [...feed.members, nickname],
+                        });
+                  }}
+                  style={{
+                    width: 80,
+                    height: 25,
+                    backgroundColor: isInvited ? LIGHTPURPLE : PURPLE,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 12,
+                  }}>
+                  <Caption
+                    style={{
+                      color: isInvited ? PURPLE : WHITE,
+                      fontWeight: '700',
+                    }}>
+                    {isInvited ? '추가 완료' : '추가'}
+                  </Caption>
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+          ListFooterComponentStyle={{ marginTop: 20 }}
+          ListFooterComponent={() => {
+            return (
+              <BottomButton
+                label="등록"
+                onPress={() => {
+                  navigation.goBack();
+                  navigation.navigate('FeedDetail', { id: 1 });
+                }}
+              />
+            );
+          }}
+        />
+      </KeyboardAvoidingView>
       {show && (
         <MonthPicker
           onChange={onValueChange}

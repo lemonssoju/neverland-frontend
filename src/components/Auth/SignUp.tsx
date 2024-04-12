@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Alert, SafeAreaView, View } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Pressable,
+  SafeAreaView,
+  View,
+} from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { AuthStackParams } from '../../pages/AuthStack';
 import CustomHeader from '../common/CustomHeader';
@@ -96,80 +103,91 @@ const SignUp = ({
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'space-between' }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader label="회원정보 입력" onBack={() => navigation.goBack()} />
-      <View style={{ paddingHorizontal: 25 }}>
-        <Input
-          label="아이디"
-          value={form.loginId}
-          onChangeText={loginId => {
-            setForm({ ...form, loginId: loginId });
-            setCheck({ ...check, loginId: false });
-          }}
-          isRequired
-          placeholder="아이디를 입력해주세요."
-          isAlert={!check.loginId && !form.loginId}
-          alert="중복된 아이디입니다."
-          description={
-            check.loginId && form.loginId ? '사용 가능한 아이디입니다.' : ''
-          }
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={10}
+        style={{
+          paddingHorizontal: 20,
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <Pressable
+          style={{ width: '100%', height: '100%', position: 'absolute' }}
+          onPress={() => Keyboard.dismiss()}
         />
-        <DuplicateButton
-          style={{ top: 36 }}
-          onPress={() => duplicateCheck('loginId')}>
-          <Caption style={{ color: WHITE, fontWeight: '700' }}>
-            중복 확인
-          </Caption>
-        </DuplicateButton>
-        <Input
-          label="닉네임"
-          value={form.nickname}
-          onChangeText={nickname => {
-            setForm({ ...form, nickname: nickname });
-            setCheck({ ...check, nickname: false });
-          }}
-          isRequired
-          placeholder="닉네임을 입력해주세요."
-          isAlert={!check.nickname && !form.nickname}
-          alert="중복된 닉네임입니다."
-          description={
-            check.nickname && form.nickname ? '사용 가능한 닉네임입니다.' : ''
-          }
-        />
-        <DuplicateButton
-          style={{ top: 131 }}
-          onPress={() => duplicateCheck('nickname')}>
-          <Caption style={{ color: WHITE, fontWeight: '700' }}>
-            중복 확인
-          </Caption>
-        </DuplicateButton>
-        <Input
-          label="비밀번호"
-          value={form.password}
-          onChangeText={password => setForm({ ...form, password: password })}
-          isRequired
-          secureTextEntry
-          placeholder="비밀번호를 입력해주세요."
-          // description="8자 이상의 알파벳 소문자, 숫자를 포함합니다."
-          alert="잘못된 형식의 비밀번호입니다."
-        />
-        <Input
-          label="비밀번호 확인"
-          value={form.passwordCheck}
-          onChangeText={passwordCheck => {
-            setForm({ ...form, passwordCheck: passwordCheck });
-            setCheck({ ...check, password: false });
-          }}
-          isRequired
-          secureTextEntry
-          placeholder="비밀번호를 한 번 더 입력해주세요."
-          isAlert={!check.password}
-          alert="비밀번호가 일치하지 않습니다."
-        />
-      </View>
-      <View style={{ paddingHorizontal: 25 }}>
+        <View style={{justifyContent: 'center', flex: 1}}>
+          <Input
+            label="아이디"
+            value={form.loginId}
+            onChangeText={loginId => {
+              setForm({ ...form, loginId: loginId });
+              setCheck({ ...check, loginId: false });
+            }}
+            isRequired
+            placeholder="아이디를 입력해주세요."
+            isAlert={!check.loginId && !form.loginId}
+            alert="중복된 아이디입니다."
+            description={
+              check.loginId && form.loginId ? '사용 가능한 아이디입니다.' : ''
+            }
+          />
+          <DuplicateButton
+            style={{ top: 180 }}
+            onPress={() => duplicateCheck('loginId')}>
+            <Caption style={{ color: WHITE, fontWeight: '700' }}>
+              중복 확인
+            </Caption>
+          </DuplicateButton>
+          <Input
+            label="닉네임"
+            value={form.nickname}
+            onChangeText={nickname => {
+              setForm({ ...form, nickname: nickname });
+              setCheck({ ...check, nickname: false });
+            }}
+            isRequired
+            placeholder="닉네임을 입력해주세요."
+            isAlert={!check.nickname && !form.nickname}
+            alert="중복된 닉네임입니다."
+            description={
+              check.nickname && form.nickname ? '사용 가능한 닉네임입니다.' : ''
+            }
+          />
+          <DuplicateButton
+            style={{ top: 275}}
+            onPress={() => duplicateCheck('nickname')}>
+            <Caption style={{ color: WHITE, fontWeight: '700' }}>
+              중복 확인
+            </Caption>
+          </DuplicateButton>
+          <Input
+            label="비밀번호"
+            value={form.password}
+            onChangeText={password => setForm({ ...form, password: password })}
+            isRequired
+            secureTextEntry
+            placeholder="비밀번호를 입력해주세요."
+            // description="8자 이상의 알파벳 소문자, 숫자를 포함합니다."
+            alert="잘못된 형식의 비밀번호입니다."
+          />
+          <Input
+            label="비밀번호 확인"
+            value={form.passwordCheck}
+            onChangeText={passwordCheck => {
+              setForm({ ...form, passwordCheck: passwordCheck });
+              setCheck({ ...check, password: false });
+            }}
+            isRequired
+            secureTextEntry
+            placeholder="비밀번호를 한 번 더 입력해주세요."
+            isAlert={!check.password}
+            alert="비밀번호가 일치하지 않습니다."
+          />
+        </View>
         <BottomButton label="가입" onPress={signup} />
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -181,7 +199,7 @@ const DuplicateButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   position: absolute;
-  right: 35px;
+  right: 10px;
   border-radius: 12px;
   background: ${PURPLE};
 `;

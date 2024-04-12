@@ -5,5 +5,3 @@ export const LIGHTPURPLE = '#FAF5FF';
 export const GRAY = '#BBBBBB';
 export const LIGHTGRAY = '#E6E6E6';
 export const WHITE = '#FFFFFF';
-
-export const MINT = '#10F1AD';
