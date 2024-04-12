@@ -1,5 +1,20 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
-import { SafeAreaView, View, TouchableOpacity, Image } from 'react-native';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import {
+  SafeAreaView,
+  View,
+  TouchableOpacity,
+  Image,
+  KeyboardAvoidingView,
+  Pressable,
+  Keyboard,
+  ScrollView,
+} from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import { GRAY, WHITE } from '../../styles/GlobalColor';
 import { Body, Caption, Title } from '../../styles/GlobalText';
@@ -43,11 +58,47 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
     [group.date, showPicker],
   );
 
+  const [keyboardOpen, setKeyboardOpen] = useState<boolean>(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardOpen(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardOpen(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
       <CustomHeader label="그룹 만들기" onClose={() => setFormVisible(false)} />
-      <View style={{ paddingHorizontal: 25 }}>
-        <View style={{ alignItems: 'center', marginBottom: 30, marginTop: 5 }}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={10}
+        style={{
+          paddingHorizontal: 25,
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <Pressable
+          style={{ width: '100%', height: '100%', position: 'absolute' }}
+          onPress={() => Keyboard.dismiss()}
+        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ marginBottom: 10, marginTop: 5 }}
+          contentContainerStyle={{ alignItems: 'center' }}
+          scrollEnabled={keyboardOpen}>
           <Image
             source={require('../../assets/Puzzle2.png')}
             style={{ width: 170, height: 180 }}
@@ -58,7 +109,7 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
           <Body style={{ color: GRAY }}>
             추억 퍼즐을 맞추고 모아볼 수 있어요
           </Body>
-        </View>
+        </ScrollView>
         <PhotoBox>
           <PhotoButton photo={photo} setPhoto={setPhoto} />
         </PhotoBox>
@@ -78,25 +129,26 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
           value={moment(group.date).format('YYYY년 MM월').toString()}
           label="처음 만난 날"
           isRequired
+          editable={false}
         />
         <TouchableOpacity
           onPress={() => showPicker(true)}
-          style={{ position: 'absolute', bottom: 185, right: 30, zIndex: 1 }}>
+          style={{ position: 'absolute', bottom: 100, right: 30, zIndex: 1 }}>
           <CalendarIcon />
         </TouchableOpacity>
-        {show && (
-          <MonthPicker
-            onChange={onValueChange}
-            value={group.date}
-            minimumDate={new Date(1970, 1)}
-            maximumDate={new Date()}
-            locale="ko"
-          />
-        )}
         <View style={{ marginTop: 20 }}>
           <BottomButton label="등록" onPress={() => setFormVisible(false)} />
         </View>
-      </View>
+      </KeyboardAvoidingView>
+      {show && (
+        <MonthPicker
+          onChange={onValueChange}
+          value={group.date}
+          minimumDate={new Date(1970, 1)}
+          maximumDate={new Date()}
+          locale="ko"
+        />
+      )}
     </SafeAreaView>
   );
 };

@@ -4,8 +4,6 @@ import EditButton from '../common/EditButton';
 import { BLACK, GRAY, LIGHTGRAY, LIGHTPURPLE } from '../../styles/GlobalColor';
 import DotsIcon from '../../assets/common/Dots.svg';
 import {
-  B12,
-  R12,
   Label,
   Content,
   Caption,
