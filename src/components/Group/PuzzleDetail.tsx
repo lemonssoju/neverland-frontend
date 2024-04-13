@@ -73,7 +73,7 @@ const DetailSection = ({ puzzle }: { puzzle: PuzzleDetailProps }) => {
           })}
         </View>
         <Image
-          source={{ uri: puzzle.rep_pic }}
+          source={(puzzle.rep_pic && puzzle.rep_pic.length > 0) ? { uri: puzzle.rep_pic } : require('../../assets/tmp/puzzle1.png')}
           style={{ width: '100%', height: 360, borderRadius: 8 }}
         />
         <View
@@ -142,12 +142,12 @@ const PuzzleDetail = ({
     date: new Date(2023, 6, 23),
     location: '제주 한림읍',
     members: ['김토끼', '박댕댕', '최냥냥'],
-    rep_pic: route.params?.rep_pic,
+    rep_pic: '',
     content:
       '작년 여름에 우리 제주도 간 여행이 생각나. 맛집도 많이 가고 바다에서 수영도 했었어. 특히 새벽에 노을을 보러 일어나서 정말 행복했었지. 함께한 추억이 너무 소중해.',
   });
   const [comment, setComment] = useState<string>('');
-
+  
   useEffect(() => {
     setPuzzle({ ...puzzle, rep_pic: route.params?.rep_pic });
   }, [route.params?.rep_pic]);

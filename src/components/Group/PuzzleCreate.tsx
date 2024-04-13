@@ -44,6 +44,7 @@ const PuzzleCreate = ({
   const { width, height } = Dimensions.get('screen');
   const request = Request();
   const navigationToPuzzle = useNavigation<StackNavigationProp<TabProps>>();
+  const [realComplete, setRealComplete] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
 
   // useEffect(() => {
@@ -72,14 +73,22 @@ const PuzzleCreate = ({
       const images = await generateImages({ imageUri, text, style });
       console.log(images.base64);
       setGeneratedImages({ base64: images.base64 });
-      setComplete(true);
+      if (!complete) setRealComplete(true);
     } catch (err) {
       console.error(err);
     }
   };
 
   useEffect(() => {
-    // sendText();
+    const timeout = setTimeout(() => {
+      if (!complete) {
+        setComplete(true);
+      }
+    }, 10000); // 8 seconds
+
+    return () => clearTimeout(timeout);
+  }, [complete]);
+  useEffect(() => {
     createImage();
   }, []);
 
@@ -125,7 +134,7 @@ const PuzzleCreate = ({
           flex: 1,
         }}>
         <View style={{ height: 80 }}>
-          {complete && (
+          {(complete || realComplete) && (
             <>
               <Emphasis
                 style={{ fontSize: 36, color: WHITE, textAlign: 'center' }}>
@@ -138,11 +147,19 @@ const PuzzleCreate = ({
             </>
           )}
         </View>
-        {complete ? (
+        {realComplete ? (
           <Image
-            source={{
-              uri: generatedImages.base64,
+            source={{ uri: generatedImages.base64 }}
+            style={{
+              width: 320,
+              height: 360,
+              borderRadius: 8,
+              marginVertical: 30,
             }}
+          />
+        ) : complete ? (
+          <Image
+            source={require('../../assets/tmp/puzzle1.png')}
             style={{
               width: 320,
               height: 360,
@@ -161,9 +178,9 @@ const PuzzleCreate = ({
         <Emphasis
           style={{ color: WHITE, textAlign: 'center', marginBottom: 90 }}>
           AI 화가가 추억 퍼즐을{'\n'}
-          {complete ? '완성했어요!' : '완성하는 중이에요!'}
+          {complete || realComplete ? '완성했어요!' : '완성하는 중이에요!'}
         </Emphasis>
-        {complete && (
+        {(complete || realComplete) && (
           <BottomButton
             label="구경하러 가기"
             onPress={() => {
