@@ -5,7 +5,7 @@ import React, {
   SetStateAction,
   useCallback,
 } from 'react';
-import { Alert, TouchableOpacity, View, Image } from 'react-native';
+import { Alert, TouchableOpacity, View, Image, ViewStyle } from 'react-native';
 import {
   launchCamera,
   launchImageLibrary,
@@ -28,36 +28,40 @@ interface PhotoProps {
   setPhoto: Dispatch<SetStateAction<Asset[]>>;
 }
 
-interface PhotoButtonProps extends PhotoProps {
-  label?: string;
-}
-
-const PhotoButton = ({ photo, setPhoto, label }: PhotoButtonProps) => {
-  const CameraActions: Action[] = [
-    {
-      title: '카메라',
-      type: 'capture',
-      options: {
-        selectionLimit: 1,
-        mediaType: 'photo',
-        includeBase64: false,
-        maxHeight: 300,
-        maxWidth: 300,
-      },
+const CameraActions: Action[] = [
+  {
+    title: '카메라',
+    type: 'capture',
+    options: {
+      selectionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 300,
+      maxWidth: 300,
     },
-    {
-      title: '앨범',
-      type: 'library',
-      options: {
-        selectionLimit: 1,
-        mediaType: 'photo',
-        includeBase64: false,
-        maxHeight: 300,
-        maxWidth: 300,
-      },
+  },
+  {
+    title: '앨범',
+    type: 'library',
+    options: {
+      selectionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 300,
+      maxWidth: 300,
     },
-  ];
+  },
+];
 
+export const PhotoAction = ({
+  style,
+  setPhoto,
+  children,
+}: {
+  style: ViewStyle;
+  setPhoto: Dispatch<SetStateAction<Asset[]>>;
+  children: any;
+}) => {
   const onButtonPress = useCallback(
     (type: string, options: CameraOptions | ImageLibraryOptions) => {
       if (type === 'capture') {
@@ -76,7 +80,30 @@ const PhotoButton = ({ photo, setPhoto, label }: PhotoButtonProps) => {
     },
     [],
   );
+  return (
+    <TouchableOpacity
+      style={style}
+      onPress={() => {
+        Alert.alert('사진 선택', '', [
+          {
+            text: '카메라',
+            onPress: () =>
+              onButtonPress(CameraActions[0].type, CameraActions[0].options),
+          },
+          {
+            text: '앨범',
+            onPress: () =>
+              onButtonPress(CameraActions[1].type, CameraActions[1].options),
+          },
+          { text: '취소', style: 'destructive' },
+        ]);
+      }}>
+      {children}
+    </TouchableOpacity>
+  );
+};
 
+const PhotoButton = ({ photo, setPhoto }: PhotoProps) => {
   return (
     <View
       style={{
@@ -86,60 +113,21 @@ const PhotoButton = ({ photo, setPhoto, label }: PhotoButtonProps) => {
         justifyContent: 'center',
       }}>
       {photo[0]?.uri !== '' ? (
-        <TouchableOpacity
+        <PhotoAction
           style={{ width: '100%', height: '100%' }}
-          onPress={() => {
-            Alert.alert('사진 선택', '', [
-              {
-                text: '카메라',
-                onPress: () =>
-                  onButtonPress(
-                    CameraActions[0].type,
-                    CameraActions[0].options,
-                  ),
-              },
-              {
-                text: '앨범',
-                onPress: () =>
-                  onButtonPress(
-                    CameraActions[1].type,
-                    CameraActions[1].options,
-                  ),
-              },
-              { text: '취소', style: 'destructive' },
-            ]);
-          }}>
+          setPhoto={setPhoto}>
           <Image
             source={{ uri: photo[0].uri }}
             style={{ height: '100%', borderRadius: 8 }}
             resizeMode="cover"
           />
-        </TouchableOpacity>
+        </PhotoAction>
       ) : (
-        <TouchableOpacity
-          onPress={() => {
-            Alert.alert('사진 선택', '', [
-              {
-                text: '카메라',
-                onPress: () =>
-                  onButtonPress(
-                    CameraActions[0].type,
-                    CameraActions[0].options,
-                  ),
-              },
-              {
-                text: '앨범',
-                onPress: () =>
-                  onButtonPress(
-                    CameraActions[1].type,
-                    CameraActions[1].options,
-                  ),
-              },
-              { text: '취소', style: 'destructive' },
-            ]);
-          }}>
+        <PhotoAction
+          style={{ width: '100%', height: '100%' }}
+          setPhoto={setPhoto}>
           <PhotoIcon />
-        </TouchableOpacity>
+        </PhotoAction>
       )}
     </View>
   );

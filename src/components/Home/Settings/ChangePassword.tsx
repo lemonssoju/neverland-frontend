@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { SafeAreaView, View, TouchableOpacity } from 'react-native';
 import CustomHeader from '../../common/CustomHeader';
 import { StackScreenProps } from '@react-navigation/stack';
-import { SettingsStackParams } from '../../../pages/Home';
+import { SettingsStackParams } from '../../../pages/HomeStack';
 import styled from 'styled-components/native';
 import Input from '../../common/Input';
 import BottomButton from '../../common/BottomButton';

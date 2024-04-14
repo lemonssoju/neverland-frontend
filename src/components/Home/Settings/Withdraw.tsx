@@ -10,12 +10,13 @@ import { BLACK, MINT } from '../../../styles/GlobalColor';
 import { B16, B24 } from '../../../styles/GlobalText';
 import { useNavigation } from '@react-navigation/native';
 import { HomeStackParams } from '../../../pages/HomeStack';
+import { RootStackParams } from '../../../../App';
 
 const Withdraw = ({
   navigation,
 }: StackScreenProps<SettingsStackParams, 'Withdraw'>) => {
   const navigationToHome =
-    useNavigation<StackNavigationProp<HomeStackParams>>();
+    useNavigation<StackNavigationProp<RootStackParams>>();
   const [form, setForm] = useState<{
     password: string;
     passwordConfirm: string;
@@ -31,7 +32,7 @@ const Withdraw = ({
         {
           text: '예',
           onPress: () => {
-            navigationToHome.navigate('FeedList');
+            navigationToHome.navigate('Auth');
           },
           style: 'destructive',
         },

@@ -1,10 +1,20 @@
-import { useState } from 'react';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { useRef, useState } from 'react';
+import {
+  Image,
+  SafeAreaView,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import CustomHeader from '../../common/CustomHeader';
 import { StackScreenProps } from '@react-navigation/stack';
 import { SettingsStackParams } from '../../../pages/HomeStack';
-import { B14, B20 } from '../../../styles/GlobalText';
-import { BLACK, PURPLE } from '../../../styles/GlobalColor';
+import { Body, Subtitle, Title } from '../../../styles/GlobalText';
+import { BLACK, LIGHTPURPLE, PURPLE } from '../../../styles/GlobalColor';
+import PhotoIcon from '../../../assets/common/PhotoWithBg.svg';
+import PencilIcon from '../../../assets/common/Pencil.svg';
+import { PhotoAction } from '../../common/PhotoButton';
+import { Asset } from 'react-native-image-picker';
 
 interface OptionProps {
   label: string;
@@ -16,42 +26,106 @@ const Option = ({ label, onPress }: OptionProps) => {
     <TouchableOpacity
       onPress={onPress}
       style={{
-        padding: 20,
-        backgroundColor: BLACK,
-        borderRadius: 12,
-        marginVertical: 10,
+        padding: 17,
+        backgroundColor: LIGHTPURPLE,
+        borderRadius: 8,
+        marginVertical: 7,
       }}>
-      <B20>{label}</B20>
+      <Body style={{ fontWeight: '600' }}>{label}</Body>
     </TouchableOpacity>
   );
 };
 
+interface UserProps {
+  nickname: string;
+  profile: string;
+}
+
 const SettingsHome = ({
   navigation,
 }: StackScreenProps<SettingsStackParams, 'SettingsHome'>) => {
+  const [user, setUser] = useState<UserProps>({
+    nickname: '김토끼',
+    profile: '',
+  });
+  const textInputRef = useRef<TextInput | null>(null);
+  const [editable, setEditable] = useState<boolean>(false);
+  const [photo, setPhoto] = useState<Asset[]>([
+    {
+      fileName: '',
+      width: 0,
+      height: 0,
+      uri: '',
+    },
+  ]);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CustomHeader label="설정" />
-      <View style={{ paddingHorizontal: 20 }}>
-        <B14 style={{ color: PURPLE, marginVertical: 10 }}>사용자 정보</B14>
-        <Option
-          label="내가 쓴 글"
-          onPress={() => navigation.navigate('MyFeed', { title: '내가 쓴 글' })}
-        />
-        <Option
-          label="내가 좋아요한 글"
-          onPress={() =>
-            navigation.navigate('MyFeed', { title: '내가 좋아요한 글' })
-          }
-        />
+      <CustomHeader label="마이페이지" onBack={() => navigation.goBack()} />
+      <View style={{ padding: 20 }}>
+        <View style={{ alignItems: 'center', marginBottom: 70 }}>
+          <Image
+            source={
+              photo[0].uri
+                ? { uri: photo[0].uri }
+                : user.profile
+                ? { uri: user.profile }
+                : require('../../../assets/Puzzle.png')
+            }
+            style={{
+              width: 140,
+              height: 140,
+              borderRadius: 180,
+              borderWidth: 2,
+              borderColor: PURPLE,
+            }}
+            resizeMode={photo[0].uri || user.profile ? 'cover' : 'contain'}
+          />
+          <PhotoAction
+            setPhoto={setPhoto}
+            style={{ position: 'absolute', zIndex: 1, top: 110, left: 210 }}>
+            <PhotoIcon />
+          </PhotoAction>
+          <View style={{ flexDirection: 'row', marginTop: 20 }}>
+            {/* <Title style={{ letterSpacing: -0.2 }}>{user.nickname}</Title> */}
+            <TextInput
+              ref={textInputRef}
+              value={user.nickname}
+              onChangeText={text => setUser({ ...user, nickname: text })}
+              style={{
+                fontFamily: 'Pretendard Variable',
+                fontWeight: '700',
+                fontSize: 20,
+              }}
+              editable={editable}
+              autoFocus={editable}
+            />
+            <Title style={{ letterSpacing: -0.2, fontWeight: '500' }}>님</Title>
+            <TouchableOpacity
+              style={{ position: 'absolute', left: 80 }}
+              onPress={() => {
+                editable
+                  ? setEditable(false)
+                  : (setEditable(true),
+                    setTimeout(() => textInputRef.current?.focus(), 0));
+              }}>
+              {editable ? <Body>완료</Body> : <PencilIcon />}
+            </TouchableOpacity>
+            <View
+              style={{
+                height: 9,
+                backgroundColor: LIGHTPURPLE,
+                width: 17 * (user.nickname.length + 1),
+                position: 'absolute',
+                top: 15,
+                zIndex: -1,
+              }}
+            />
+          </View>
+        </View>
         <Option
           label="개인정보 변경"
           onPress={() => navigation.navigate('ChangePassword')}
         />
-        <View
-          style={{ height: 1, backgroundColor: BLACK, marginVertical: 10 }}
-        />
-        <B14 style={{ color: PURPLE, marginVertical: 10 }}>사용자 문의</B14>
         <Option label="이용약관" onPress={() => {}} />
         <Option label="로그아웃" onPress={() => {}} />
         <Option
