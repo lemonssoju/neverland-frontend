@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import {
+  Alert,
   Image,
   SafeAreaView,
   TextInput,
@@ -7,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import CustomHeader from '../../common/CustomHeader';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { SettingsStackParams } from '../../../pages/HomeStack';
 import { Body, Subtitle, Title } from '../../../styles/GlobalText';
 import { BLACK, LIGHTPURPLE, PURPLE } from '../../../styles/GlobalColor';
@@ -15,6 +16,8 @@ import PhotoIcon from '../../../assets/common/PhotoWithBg.svg';
 import PencilIcon from '../../../assets/common/Pencil.svg';
 import { PhotoAction } from '../../common/PhotoButton';
 import { Asset } from 'react-native-image-picker';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParams } from '../../../../App';
 
 interface OptionProps {
   label: string;
@@ -44,6 +47,8 @@ interface UserProps {
 const SettingsHome = ({
   navigation,
 }: StackScreenProps<SettingsStackParams, 'SettingsHome'>) => {
+  const navigationToAuth =
+    useNavigation<StackNavigationProp<RootStackParams>>();
   const [user, setUser] = useState<UserProps>({
     nickname: '김토끼',
     profile: '',
@@ -58,6 +63,26 @@ const SettingsHome = ({
       uri: '',
     },
   ]);
+  const logout = () => {
+    Alert.alert(
+      '알림',
+      '로그아웃하시겠습니까?',
+      [
+        {
+          text: '예',
+          onPress: () => {
+            navigationToAuth.replace('Auth');
+          },
+          style: 'destructive',
+        },
+        {
+          text: '아니오',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false },
+    );
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader label="마이페이지" onBack={() => navigation.goBack()} />
@@ -127,7 +152,7 @@ const SettingsHome = ({
           onPress={() => navigation.navigate('ChangePassword')}
         />
         <Option label="이용약관" onPress={() => {}} />
-        <Option label="로그아웃" onPress={() => {}} />
+        <Option label="로그아웃" onPress={logout} />
         <Option
           label="회원 탈퇴"
           onPress={() => navigation.navigate('Withdraw')}
