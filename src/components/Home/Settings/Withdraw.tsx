@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, SafeAreaView, View } from 'react-native';
 import CustomHeader from '../../common/CustomHeader';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
@@ -10,19 +10,28 @@ import { BLACK, MINT } from '../../../styles/GlobalColor';
 import { B16, B24 } from '../../../styles/GlobalText';
 import { useNavigation } from '@react-navigation/native';
 import { HomeStackParams } from '../../../pages/HomeStack';
+import { RootStackParams } from '../../../../App';
+
+interface FormTypes {
+  password: string;
+  passwordCheck: string;
+}
 
 const Withdraw = ({
   navigation,
 }: StackScreenProps<SettingsStackParams, 'Withdraw'>) => {
-  const navigationToHome =
-    useNavigation<StackNavigationProp<HomeStackParams>>();
-  const [form, setForm] = useState<{
-    password: string;
-    passwordConfirm: string;
-  }>({
+  const navigationToAuth =
+    useNavigation<StackNavigationProp<RootStackParams>>();
+  const [form, setForm] = useState<FormTypes>({
     password: '',
-    passwordConfirm: '',
+    passwordCheck: '',
   });
+  const [check, setCheck] = useState<boolean>(false);
+  useEffect(() => {
+    if (form.password === form.passwordCheck) {
+      setCheck(true);
+    }
+  }, [form.passwordCheck]);
   const withdrawConfirmAlert = () => {
     Alert.alert(
       '알림',
@@ -31,7 +40,7 @@ const Withdraw = ({
         {
           text: '예',
           onPress: () => {
-            navigationToHome.navigate('FeedList');
+            navigationToAuth.replace('Auth');
           },
           style: 'destructive',
         },
@@ -46,7 +55,8 @@ const Withdraw = ({
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader label="회원 탈퇴" onBack={() => navigation.goBack()} />
-      <View style={{ flex: 1, justifyContent: 'center' }}>
+      <View
+        style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 20 }}>
         <B24 style={{ textAlign: 'center', marginBottom: 80 }}>
           정말로 탈퇴하시겠습니까?
         </B24>
@@ -61,15 +71,18 @@ const Withdraw = ({
         <Input
           label="비밀번호 확인"
           isRequired
-          value={form.passwordConfirm}
+          value={form.passwordCheck}
           onChangeText={password =>
-            setForm({ ...form, passwordConfirm: password })
+            setForm({ ...form, passwordCheck: password })
           }
           placeholder="비밀번호를 한 번 더 입력해주세요."
+          isAlert={check}
           alert="비밀번호가 일치하지 않습니다."
         />
       </View>
-      <BottomButton label="회원 탈퇴" onPress={withdrawConfirmAlert} />
+      <View style={{ paddingHorizontal: 20 }}>
+        <BottomButton label="회원 탈퇴" onPress={withdrawConfirmAlert} />
+      </View>
     </SafeAreaView>
   );
 };
