@@ -10,7 +10,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
 import { useNavigation } from '@react-navigation/native';
-import { B14, B12, Content, Subtitle } from '../../styles/GlobalText';
+import { Content, Subtitle } from '../../styles/GlobalText';
 import MarkerIcon from '../../assets/common/Marker.svg';
 import { WHITE } from '../../styles/GlobalColor';
 

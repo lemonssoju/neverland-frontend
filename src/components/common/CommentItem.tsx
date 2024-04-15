@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Image } from 'react-native';
 import EditButton from './EditButton';
 import { BLACK, GRAY, LIGHTPURPLE } from '../../styles/GlobalColor';
 import DotsIcon from '../../assets/common/Dots.svg';
-import { B12, R12, Label, Content, Caption } from '../../styles/GlobalText';
+import { Label, Content, Caption } from '../../styles/GlobalText';
 
 export interface CommentProps {
   writer: string;

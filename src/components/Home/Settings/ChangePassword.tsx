@@ -14,8 +14,8 @@ import { SettingsStackParams } from '../../../pages/HomeStack';
 import styled from 'styled-components/native';
 import Input from '../../common/Input';
 import BottomButton from '../../common/BottomButton';
-import { BLACK, MINT, PURPLE, WHITE } from '../../../styles/GlobalColor';
-import { B16, Caption } from '../../../styles/GlobalText';
+import { BLACK, PURPLE, WHITE } from '../../../styles/GlobalColor';
+import { Caption } from '../../../styles/GlobalText';
 import Request from '../../../services/requests';
 
 interface FormTypes {

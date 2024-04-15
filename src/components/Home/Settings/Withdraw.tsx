@@ -6,11 +6,10 @@ import { SettingsStackParams } from '../../../pages/HomeStack';
 import styled from 'styled-components/native';
 import Input from '../../common/Input';
 import BottomButton from '../../common/BottomButton';
-import { BLACK, MINT } from '../../../styles/GlobalColor';
-import { B16, B24 } from '../../../styles/GlobalText';
 import { useNavigation } from '@react-navigation/native';
 import { HomeStackParams } from '../../../pages/HomeStack';
 import { RootStackParams } from '../../../../App';
+import { Emphasis } from '../../../styles/GlobalText';
 
 interface FormTypes {
   password: string;
@@ -57,9 +56,9 @@ const Withdraw = ({
       <CustomHeader label="회원 탈퇴" onBack={() => navigation.goBack()} />
       <View
         style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 20 }}>
-        <B24 style={{ textAlign: 'center', marginBottom: 80 }}>
+        <Emphasis style={{ textAlign: 'center', marginBottom: 80 }}>
           정말로 탈퇴하시겠습니까?
-        </B24>
+        </Emphasis>
         <Input
           label="비밀번호 입력"
           isRequired

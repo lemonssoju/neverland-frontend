@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { View, TextInput, TextStyle, TextInputProps } from 'react-native';
-import { B14, Caption, Label, R14 } from '../../styles/GlobalText';
+import { Caption, Label } from '../../styles/GlobalText';
 import { BLACK, GRAY, PURPLE, WHITE } from '../../styles/GlobalColor';
 
 interface InputProps extends TextInputProps {

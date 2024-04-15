@@ -1,6 +1,6 @@
 import { TouchableOpacity } from 'react-native';
 import PlusIcon from '../../assets/common/Plus.svg';
-import { MINT } from '../../styles/GlobalColor';
+import { PURPLE } from '../../styles/GlobalColor';
 
 interface PlusButtonProps {
   onPress: () => void;
@@ -13,7 +13,7 @@ const PlusButton = ({ onPress }: PlusButtonProps) => {
       style={{
         justifyContent: 'center', 
         alignItems: 'center', 
-        backgroundColor: MINT, 
+        backgroundColor: PURPLE, 
         width: 50, 
         height: 50, 
         position: 'absolute', 
