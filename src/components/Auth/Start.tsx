@@ -5,7 +5,7 @@ import {
   Text,
   Dimensions,
 } from 'react-native';
-import { B24, Title } from '../../styles/GlobalText';
+import { Title } from '../../styles/GlobalText';
 import styled from 'styled-components/native';
 import { BLACK, PURPLE, WHITE } from '../../styles/GlobalColor';
 import { StackScreenProps } from '@react-navigation/stack';

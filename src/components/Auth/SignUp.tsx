@@ -14,7 +14,7 @@ import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import styled from 'styled-components/native';
 import { BLACK, PURPLE, WHITE } from '../../styles/GlobalColor';
-import { B16, Caption } from '../../styles/GlobalText';
+import { Caption } from '../../styles/GlobalText';
 import Request from '../../services/requests';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';

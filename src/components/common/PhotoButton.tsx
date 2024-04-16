@@ -15,7 +15,6 @@ import {
 } from 'react-native-image-picker';
 import styled from 'styled-components/native';
 import PhotoIcon from '../../assets/common/Photo.svg';
-import { B14 } from '../../styles/GlobalText';
 
 interface Action {
   title: string;

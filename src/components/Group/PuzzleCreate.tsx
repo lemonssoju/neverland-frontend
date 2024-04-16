@@ -21,6 +21,7 @@ import BottomButton from '../common/BottomButton';
 import { TabProps } from '../../../App';
 import generateImages from '../../services/ImageToImage';
 import Request from '../../services/requests';
+import Video from 'react-native-video';
 
 interface PuzzleCreateProps {
   date: string;
@@ -84,38 +85,14 @@ const PuzzleCreate = ({
       if (!complete) {
         setComplete(true);
       }
-    }, 10000); // 8 seconds
+    }, 10000);
 
     return () => clearTimeout(timeout);
   }, [complete]);
-  useEffect(() => {
-    createImage();
-  }, []);
+  // useEffect(() => {
+  //   createImage();
+  // }, []);
 
-  const animation = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    if (!complete) {
-      Animated.loop(
-        Animated.timing(animation, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-      ).start();
-    }
-  }, [complete, animation]);
-
-  const animatedStyles: StyleProp<ViewStyle> = {
-    transform: [
-      {
-        rotateY: animation.interpolate({
-          inputRange: [0, 1],
-          outputRange: ['0deg', '360deg'],
-        }),
-      },
-    ],
-  };
   return (
     <View style={{ backgroundColor: '#100125', flex: 1 }}>
       <IconButton
@@ -168,12 +145,21 @@ const PuzzleCreate = ({
             }}
           />
         ) : (
-          <Animated.View style={[{ height: 360 }, animatedStyles]}>
-            <Image
-              source={require('../../assets/Puzzle2.png')}
-              style={{ width: 250, height: 280 }}
-            />
-          </Animated.View>
+          // <Animated.View style={[{ height: 360 }, animatedStyles]}>
+          //   <Image
+          //     source={require('../../assets/Puzzle2.png')}
+          //     style={{ width: 250, height: 280 }}
+          //   />
+          // </Animated.View>
+          <Video
+            source={require('../../assets/PuzzleAnimation.mp4')}
+            style={{
+              width: 280,
+              height: 360,
+            }}
+            resizeMode='contain'
+            repeat
+          />
         )}
         <Emphasis
           style={{ color: WHITE, textAlign: 'center', marginBottom: 90 }}>
