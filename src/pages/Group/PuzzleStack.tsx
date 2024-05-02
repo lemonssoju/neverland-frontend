@@ -23,7 +23,7 @@ const PuzzleStack = ({
   const navigationToPuzzle =
     useNavigation<StackNavigationProp<PuzzleStackParams>>();
   useEffect(() => {
-    if (route.params?.id && route.params?.rep_pic) {
+    if (route.params?.id) {
       navigationToPuzzle.push('PuzzleDetail', {
         id: route.params.id,
         rep_pic: route.params.rep_pic,

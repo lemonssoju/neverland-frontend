@@ -39,11 +39,23 @@ interface PuzzleDetailProps {
   content: string;
 }
 
-const DetailSection = ({ puzzle }: { puzzle: PuzzleDetailProps }) => {
+const DetailSection = ({
+  puzzle,
+  navigation,
+}: {
+  puzzle: PuzzleDetailProps;
+  navigation: any;
+}) => {
   const navigationToFeed = useNavigation<StackNavigationProp<TabProps>>();
   return (
     <>
-      <CustomHeader label="퍼즐 앨범" onBack={() => {}} onClose={() => {}} />
+      <CustomHeader
+        label="퍼즐 앨범"
+        onBack={() => {
+          navigation.goBack();
+        }}
+        onClose={() => {}}
+      />
       <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
         <Emphasis style={{ fontSize: 30 }}>
           {moment(puzzle.date).format('YYYY.MM.DD')}
@@ -73,7 +85,11 @@ const DetailSection = ({ puzzle }: { puzzle: PuzzleDetailProps }) => {
           })}
         </View>
         <Image
-          source={(puzzle.rep_pic && puzzle.rep_pic.length > 0) ? { uri: puzzle.rep_pic } : require('../../assets/tmp/puzzle1.png')}
+          source={
+            puzzle.rep_pic && puzzle.rep_pic.length > 0
+              ? { uri: puzzle.rep_pic }
+              : require('../../assets/tmp/puzzle1.png')
+          }
           style={{ width: '100%', height: 360, borderRadius: 8 }}
         />
         <View
@@ -147,13 +163,13 @@ const PuzzleDetail = ({
       '작년 여름에 우리 제주도 간 여행이 생각나. 맛집도 많이 가고 바다에서 수영도 했었어. 특히 새벽에 노을을 보러 일어나서 정말 행복했었지. 함께한 추억이 너무 소중해.',
   });
   const [comment, setComment] = useState<string>('');
-  
+
   useEffect(() => {
     setPuzzle({ ...puzzle, rep_pic: route.params?.rep_pic });
   }, [route.params?.rep_pic]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
         behavior="padding"
         keyboardVerticalOffset={10}
@@ -169,7 +185,7 @@ const PuzzleDetail = ({
           data={commentData}
           ListHeaderComponent={() => (
             <>
-              <DetailSection puzzle={puzzle} />
+              <DetailSection puzzle={puzzle} navigation={navigation} />
               <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
                 <Label style={{ color: PURPLE, marginBottom: 10 }}>댓글</Label>
                 <CommentInput
