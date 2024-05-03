@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 import { LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
 import { useState } from 'react';
 import { Body } from '../../styles/GlobalText';
+import Map from '../Map/Map';
 
 const PuzzleList = ({
   navigation,
@@ -12,7 +13,7 @@ const PuzzleList = ({
 }: StackScreenProps<PuzzleStackParams, 'PuzzleList'>) => {
   const [option, setOption] = useState<string>('시간');
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <OptionContainer>
         <OptionButton
           style={{
@@ -43,6 +44,7 @@ const PuzzleList = ({
           </Body>
         </OptionButton>
       </OptionContainer>
+      {option === '시간' ? <></> : <Map />}
     </SafeAreaView>
   );
 };
@@ -53,8 +55,7 @@ const OptionContainer = styled.View`
   align-items: center;
   align-self: center;
   flex-direction: row;
-  margin-top: 10px;
-  margin-bottom: 2px;
+  margin: 10px 0px;
   background: ${LIGHTPURPLE};
   border-radius: 8px;
   border: 1px solid ${PURPLE};
