@@ -6,6 +6,7 @@ import { LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
 import { useState } from 'react';
 import { Body } from '../../styles/GlobalText';
 import Map from '../Map/Map';
+import { PuzzleTimeItem } from './PuzzleItem';
 
 const PuzzleList = ({
   navigation,
