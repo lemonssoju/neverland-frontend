@@ -45,7 +45,7 @@ const PuzzleList = ({
           </Body>
         </OptionButton>
       </OptionContainer>
-      {option === '시간' ? <></> : <Map />}
+      {option === '시간' ? <></> : <Map navigation={navigation} />}
     </SafeAreaView>
   );
 };
