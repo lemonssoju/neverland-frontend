@@ -29,7 +29,7 @@ import {
   PURPLE,
   WHITE,
 } from '../../styles/GlobalColor';
-import { Caption, Label, Title } from '../../styles/GlobalText';
+import { Caption, Label, Title, Content } from '../../styles/GlobalText';
 import InfoIcon from '../../assets/common/Info.svg';
 import PaintIcon from '../../assets/common/Paint.svg';
 import LinkIcon from '../../assets/common/Link.svg';
@@ -138,10 +138,10 @@ const FeedUpload = ({
                 <View style={{ alignItems: 'center', paddingVertical: 5 }}>
                   <PaintIcon style={{ marginVertical: 20 }} />
                   <Title>사진과 함께 추억 퍼즐을 생성해드려요</Title>
-                  <Caption style={{ color: GRAY }}>
+                  <Content style={{ color: GRAY }}>
                     사진이 없으시다면, 내용을 기반으로 AI 화가가 추억 퍼즐을
                     그려드려요.{' '}
-                  </Caption>
+                  </Content>
                 </View>
                 <PhotoBox>
                   <PhotoButton photo={photo} setPhoto={setPhoto} />
@@ -165,7 +165,7 @@ const FeedUpload = ({
                   onPress={() => showPicker(true)}
                   style={{
                     position: 'absolute',
-                    bottom: 433,
+                    bottom: 312,
                     right: 5,
                     zIndex: 1,
                   }}>
@@ -182,7 +182,7 @@ const FeedUpload = ({
                     editable={false}
                   />
                 </TouchableOpacity>
-                <Input
+                {/* <Input
                   label="같이 들으면 좋은 음악"
                   value={feed.music}
                   onChangeText={music => {
@@ -195,7 +195,7 @@ const FeedUpload = ({
                   style={{ position: 'absolute', right: 5, bottom: 263 }}
                   onPress={() => setMusicVisible(true)}>
                   <LinkIcon />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <Label>내용 *</Label>
                 <TextInput
                   value={feed.content}
@@ -251,12 +251,13 @@ const FeedUpload = ({
                   borderTopRightRadius: index === 0 ? 2 : 0,
                   borderBottomLeftRadius: isLastItem ? 2 : 0,
                   borderBottomRightRadius: isLastItem ? 2 : 0,
-                  padding: 10,
+                  paddingHorizontal: 10,
+                  paddingVertical: 5
                 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image
                     source={{ uri: rep_pic }}
-                    style={{ width: 30, height: 30, borderRadius: 180 }}
+                    style={{ width: 36, height: 36, borderRadius: 180 }}
                   />
                   <Label style={{ marginLeft: 10 }}>{nickname}</Label>
                 </View>

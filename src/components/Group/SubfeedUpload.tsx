@@ -72,6 +72,7 @@ const SubfeedUpload = ({
           placeholder={
             '추억 퍼즐 내용을 작성해 주세요.\n\n해당 퍼즐 내용을 모아 추억 퍼즐이 완성되니 신중하게 적어주세요.'
           }
+          placeholderTextColor={GRAY}
           style={{
             padding: 10,
             color: BLACK,
@@ -84,7 +85,22 @@ const SubfeedUpload = ({
           }}
           multiline
           autoFocus
+          maxLength={2000}
         />
+        {/* {subfeed.length === 0 &&
+          <Body
+            style={{
+              color: GRAY,
+              position: 'absolute',
+              fontWeight: '400',
+              left: 55,
+              paddingRight: 70,
+              top: 160,
+              lineHeight: 19,
+            }}>
+            자세히 적으실수록 더 풍성한 내용의 퍼즐 앨범이 완성돼요!
+          </Body>
+        } */}
         <Body
           style={{
             color: GRAY,

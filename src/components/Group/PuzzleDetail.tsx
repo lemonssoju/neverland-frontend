@@ -15,15 +15,23 @@ import {
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import CommentInput from '../common/CommentInput';
 import CommentItem from '../common/CommentItem';
-import { Emphasis, Caption, Label, Body } from '../../styles/GlobalText';
+import {
+  Emphasis,
+  Caption,
+  Label,
+  Body,
+  Content,
+} from '../../styles/GlobalText';
 import {
   BLACK,
   LIGHTGRAY,
   LIGHTPURPLE,
+  MIDPURPLE,
   PURPLE,
   WHITE,
 } from '../../styles/GlobalColor';
-
+import TimeIcon from '../../assets/common/Time.svg';
+import MarkerIcon from '../../assets/common/Marker.svg';
 import ArrowIcon from '../../assets/common/ArrowSmall.svg';
 import { PuzzleStackParams } from '../../pages/Group/PuzzleStack';
 import CustomHeader from '../common/CustomHeader';
@@ -32,6 +40,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TabProps } from '../../../App';
 
 interface PuzzleDetailProps {
+  title: string;
   date: Date;
   location: string;
   members: string[];
@@ -47,6 +56,7 @@ const DetailSection = ({
   navigation: any;
 }) => {
   const navigationToFeed = useNavigation<StackNavigationProp<TabProps>>();
+  const [showAll, setShowAll] = useState<boolean>(false);
   return (
     <>
       <CustomHeader
@@ -54,15 +64,43 @@ const DetailSection = ({
         onBack={() => {
           navigation.goBack();
         }}
-        onClose={() => {}}
       />
       <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
-        <Emphasis style={{ fontSize: 30 }}>
-          {moment(puzzle.date).format('YYYY.MM.DD')}
-        </Emphasis>
-        <Emphasis style={{ fontSize: 30 }}>{puzzle.location}</Emphasis>
+        <Emphasis style={{ fontSize: 32 }}>{puzzle.title}</Emphasis>
+        <View
+          style={{
+            height: 9,
+            backgroundColor: MIDPURPLE,
+            width: 18 * (puzzle.title.length + 1),
+            position: 'absolute',
+            top: 45,
+            left: 20,
+            zIndex: -1,
+          }}
+        />
         <View style={{ flexDirection: 'row', marginVertical: 15 }}>
-          {puzzle.members.map((item, index) => {
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TimeIcon />
+            <Emphasis
+              style={{ fontSize: 20, marginLeft: 5, fontWeight: '600' }}>
+              {moment(puzzle.date).format('YYYY.MM.DD')}
+            </Emphasis>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginLeft: 10,
+            }}>
+            <MarkerIcon width={20} height={20} color={BLACK} />
+            <Emphasis
+              style={{ fontSize: 20, marginLeft: 5, fontWeight: '600' }}>
+              {puzzle.location}
+            </Emphasis>
+          </View>
+        </View>
+        <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+          {puzzle.members.slice(0, 4).map((item, index) => {
             return (
               <View
                 key={index}
@@ -70,20 +108,55 @@ const DetailSection = ({
                   backgroundColor: '#6200DF26',
                   borderColor: PURPLE,
                   borderWidth: 1,
-                  borderRadius: 12,
-                  marginRight: 8,
+                  borderRadius: 16,
+                  marginRight: 5,
                 }}>
-                <Caption
+                <Body
                   style={{
                     color: PURPLE,
-                    paddingHorizontal: 8,
+                    paddingHorizontal: 12,
+                    paddingVertical: 2,
                   }}>
                   {item}
-                </Caption>
+                </Body>
               </View>
             );
           })}
+          {puzzle.members.length > 4 && (
+            <TouchableOpacity
+              onPress={() => setShowAll(!showAll)}
+              style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 5 }}>
+              <Content style={{ color: PURPLE }}>{showAll ? '접어보기' : '더보기'}</Content>
+              <ArrowIcon transform={[{ rotate: showAll ? '270deg' : '90deg' }]} />
+            </TouchableOpacity>
+          )}
         </View>
+        {showAll &&
+          puzzle.members.slice(4).map((item, index) => {
+            return (
+              <View
+                key={index}
+                style={{
+                  backgroundColor: '#6200DF26',
+                  borderColor: PURPLE,
+                  borderWidth: 1,
+                  borderRadius: 16,
+                  marginRight: 8,
+                  alignSelf: 'flex-start',
+                  marginBottom: 10,
+                }}>
+                <Body
+                  style={{
+                    color: PURPLE,
+                    paddingHorizontal: 12,
+                    paddingVertical: 2,
+                  }}>
+                  {item}
+                </Body>
+              </View>
+            );
+          })}
+          <View style={{height: 10}} />
         <Image
           source={
             puzzle.rep_pic && puzzle.rep_pic.length > 0
@@ -118,8 +191,10 @@ const DetailSection = ({
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Caption style={{ color: PURPLE }}>추억 퍼즐 조각 보러가기</Caption>
-            <ArrowIcon color={PURPLE} />
+            <Content style={{ color: PURPLE, fontWeight: '600' }}>
+              추억 퍼즐 조각 보러가기
+            </Content>
+            <ArrowIcon strokeWidth={1.5} color={PURPLE} />
           </TouchableOpacity>
         </View>
       </View>
@@ -155,9 +230,10 @@ const PuzzleDetail = ({
   route,
 }: StackScreenProps<PuzzleStackParams, 'PuzzleDetail'>) => {
   const [puzzle, setPuzzle] = useState<PuzzleDetailProps>({
+    title: '제주도 소품샵 투어',
     date: new Date(2023, 6, 23),
     location: '제주 한림읍',
-    members: ['김토끼', '박댕댕', '최냥냥'],
+    members: ['김토끼', '박댕댕', '최냥냥', '이미미', '곽모모'],
     rep_pic: '',
     content:
       '작년 여름에 우리 제주도 간 여행이 생각나. 맛집도 많이 가고 바다에서 수영도 했었어. 특히 새벽에 노을을 보러 일어나서 정말 행복했었지. 함께한 추억이 너무 소중해.',
@@ -187,7 +263,7 @@ const PuzzleDetail = ({
             <>
               <DetailSection puzzle={puzzle} navigation={navigation} />
               <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
-                <Label style={{ color: PURPLE, marginBottom: 10 }}>댓글</Label>
+                <Label style={{ color: PURPLE, marginBottom: 10, fontSize: 16 }}>댓글</Label>
                 <CommentInput
                   comment={comment}
                   setComment={setComment}

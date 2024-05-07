@@ -17,6 +17,7 @@ import {
   Modal,
   Alert,
   Pressable,
+  Image,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { FeedProps } from './FeedUpload';
@@ -67,7 +68,7 @@ const DetailSection = ({
 }) => {
   const [like, setLike] = useState<boolean>(feed.like);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
-  const isWriter = feed.writer === user;
+  const isWriter = feed.writer !== user;
 
   const [playing, setPlaying] = useState(false);
   const onStateChange = useCallback((state: string) => {
@@ -183,11 +184,14 @@ const DetailSection = ({
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginTop: 165,
+            marginTop: 160,
             marginLeft: 10,
           }}>
-          <MarkerIcon color={WHITE} />
-          <Title style={{ color: WHITE }}> {feed.location}</Title>
+          <MarkerIcon width={28} height={28} color={WHITE} />
+          <Title style={{ color: WHITE, fontSize: 24, lineHeight: 32 }}>
+            {' '}
+            {feed.location}
+          </Title>
         </View>
         {/* <TouchableOpacity
           onPress={() => setPlaying(!playing)}
@@ -210,6 +214,46 @@ const DetailSection = ({
         <Label style={{ marginBottom: 5 }}>
           {moment(feed.date).format('YYYY-MM')} | {feed.writer}
         </Label>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+          {feed.members.slice(0, 3).map((item, index) => {
+            return (
+              <Image
+                key={index}
+                source={{ uri: item }}
+                style={{
+                  width: 35,
+                  height: 35,
+                  borderRadius: 180,
+                  borderColor: PURPLE,
+                  borderWidth: 0.7,
+                  position: 'absolute',
+                  top: -30,
+                  right: feed.members.length > 3 ? index * 20 + 15 : index * 20,
+                }}
+              />
+            );
+          })}
+          {feed.members.length > 3 && (
+            <View
+              style={{
+                width: 25,
+                height: 25,
+                borderRadius: 180,
+                borderWidth: 1.2,
+                borderColor: PURPLE,
+                backgroundColor: LIGHTPURPLE,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                top: -24,
+                right: 0,
+              }}>
+              <Caption style={{ color: PURPLE, lineHeight: 15 }}>
+                +{feed.members.length - 3}
+              </Caption>
+            </View>
+          )}
+        </View>
         <Subtitle style={{ marginBottom: 5 }}>{feed.title}</Subtitle>
         <Body style={{ marginBottom: 15 }}>{feed.content}</Body>
         <TouchableOpacity
@@ -229,8 +273,9 @@ const DetailSection = ({
             flexDirection: 'row',
           }}>
           <PuzzleIcon style={{ marginRight: 10 }} />
-          <Body style={{ color: WHITE }}>
+          <Body style={{ color: WHITE, fontWeight: '600' }}>
             {isWriter ? '추억 퍼즐 완성하기' : '추억 퍼즐 맞추기'}
+            {` (${subfeed.length}/${feed.members.length})`}
           </Body>
         </TouchableOpacity>
       </View>
@@ -339,7 +384,12 @@ const FeedDetail = ({
       'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
     music: '미쓰에이 - Bad girl Good girl',
     musicUrl: 'https://youtu.be/8TeeJvcBdLA?si=yffEamC12OAFs7HQ',
-    members: ['', '', ''],
+    members: [
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    ],
     like: true,
   });
   const [subfeedModal, setSubfeedModal] = useState<boolean>(false);
