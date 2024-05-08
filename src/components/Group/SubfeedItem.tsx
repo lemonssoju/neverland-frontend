@@ -42,7 +42,7 @@ const SubfeedItem = ({
       <View
         style={{
           backgroundColor: background,
-          marginVertical: 8,
+          marginBottom: 5,
           marginLeft: 35,
           borderRadius: 12,
           paddingVertical: 12,

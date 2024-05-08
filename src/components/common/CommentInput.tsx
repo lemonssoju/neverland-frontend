@@ -28,7 +28,7 @@ const CommentInput = ({ comment, setComment, onPress }: CommentInputProps) => {
           paddingVertical: 10,
           paddingHorizontal: 12,
           color: GRAY,
-          fontSize: 14,
+          fontSize: 16,
           width: '90%',
         }}
       />

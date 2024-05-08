@@ -100,7 +100,7 @@ const SettingsHome = ({
               width: 140,
               height: 140,
               borderRadius: 180,
-              borderWidth: 2,
+              borderWidth: 1.5,
               borderColor: PURPLE,
             }}
             resizeMode={photo[0].uri || user.profile ? 'cover' : 'contain'}
