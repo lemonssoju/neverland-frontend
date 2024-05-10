@@ -24,7 +24,7 @@ import { Asset } from 'react-native-image-picker';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import CalendarIcon from '../../assets/common/Calendar.svg';
-import MonthPicker from 'react-native-month-year-picker';
+import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 
 interface GroupCreateProps {
@@ -49,14 +49,11 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
 
   const showPicker = useCallback((value: boolean) => setShow(value), []);
 
-  const onValueChange = useCallback(
-    (event: any, newDate: any) => {
-      const selectedDate = newDate || group.date;
-      showPicker(false);
-      setGroup({ ...group, date: selectedDate });
-    },
-    [group.date, showPicker],
-  );
+  const onValueChange = (newDate: Date) => {
+    const selectedDate = newDate || group.date;
+    showPicker(false);
+    setGroup({ ...group, date: selectedDate });
+  };
 
   const [keyboardOpen, setKeyboardOpen] = useState<boolean>(false);
   useEffect(() => {
@@ -78,6 +75,8 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
       keyboardDidHideListener.remove();
     };
   }, []);
+
+  // console.log(group.date.toISOString().split('T')[0]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
@@ -126,7 +125,7 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
           placeholder="그룹명을 입력해주세요."
         />
         <Input
-          value={moment(group.date).format('YYYY년 MM월').toString()}
+          value={moment(group.date).format('YYYY년 MM월 DD일').toString()}
           label="처음 만난 날"
           isRequired
           editable={false}
@@ -141,13 +140,16 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
         </View>
       </KeyboardAvoidingView>
       {show && (
-        <MonthPicker
-          onChange={onValueChange}
-          value={group.date}
-          minimumDate={new Date(1970, 1)}
-          maximumDate={new Date()}
-          locale="ko"
-        />
+        <View style={{ alignItems: 'center' }}>
+          <DatePicker
+            onDateChange={onValueChange}
+            date={group.date}
+            mode={'date'}
+            minimumDate={new Date(1970, 1)}
+            maximumDate={new Date()}
+            locale="ko"
+          />
+        </View>
       )}
     </SafeAreaView>
   );

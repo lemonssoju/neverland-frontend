@@ -35,7 +35,7 @@ import PaintIcon from '../../assets/common/Paint.svg';
 import LinkIcon from '../../assets/common/Link.svg';
 import CalendarIcon from '../../assets/common/Calendar.svg';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
-import MonthPicker from 'react-native-month-year-picker';
+import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import Postcode from '@actbase/react-daum-postcode';
 
@@ -101,14 +101,11 @@ const FeedUpload = ({
 
   const showPicker = useCallback((value: boolean) => setShow(value), []);
 
-  const onValueChange = useCallback(
-    (event: any, newDate: any) => {
-      const selectedDate = newDate || feed.date;
-      showPicker(false);
-      setFeed({ ...feed, date: selectedDate });
-    },
-    [feed.date, showPicker],
-  );
+  const onValueChange = (newDate: Date) => {
+    const selectedDate = newDate || feed.date;
+    showPicker(false);
+    setFeed({ ...feed, date: selectedDate });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
@@ -156,7 +153,7 @@ const FeedUpload = ({
                   placeholder="제목을 작성해주세요"
                 />
                 <Input
-                  value={moment(feed.date).format('YYYY년 MM월').toString()}
+                  value={moment(feed.date).format('YYYY년 MM월 DD일').toString()}
                   label="날짜"
                   isRequired
                   editable={false}
@@ -165,7 +162,7 @@ const FeedUpload = ({
                   onPress={() => showPicker(true)}
                   style={{
                     position: 'absolute',
-                    bottom: 312,
+                    bottom: height * 0.385,
                     right: 5,
                     zIndex: 1,
                   }}>
@@ -252,7 +249,7 @@ const FeedUpload = ({
                   borderBottomLeftRadius: isLastItem ? 2 : 0,
                   borderBottomRightRadius: isLastItem ? 2 : 0,
                   paddingHorizontal: 10,
-                  paddingVertical: 5
+                  paddingVertical: 5,
                 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image
@@ -309,13 +306,16 @@ const FeedUpload = ({
         />
       </KeyboardAvoidingView>
       {show && (
-        <MonthPicker
-          onChange={onValueChange}
-          value={feed.date}
-          minimumDate={new Date(1970, 1)}
-          maximumDate={new Date()}
-          locale="ko"
-        />
+        <View style={{ alignItems: 'center' }}>
+          <DatePicker
+            onDateChange={onValueChange}
+            date={feed.date}
+            mode={'date'}
+            minimumDate={new Date(1970, 1)}
+            maximumDate={new Date()}
+            locale="ko"
+          />
+        </View>
       )}
       <Modal visible={musicVisible} transparent>
         <Pressable
