@@ -145,19 +145,13 @@ const PuzzleCreate = ({
             }}
           />
         ) : (
-          // <Animated.View style={[{ height: 360 }, animatedStyles]}>
-          //   <Image
-          //     source={require('../../assets/Puzzle2.png')}
-          //     style={{ width: 250, height: 280 }}
-          //   />
-          // </Animated.View>
           <Video
             source={require('../../assets/PuzzleAnimation.mp4')}
             style={{
               width: 280,
               height: 360,
             }}
-            resizeMode='contain'
+            resizeMode="contain"
             repeat
           />
         )}

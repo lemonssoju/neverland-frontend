@@ -47,8 +47,10 @@ import DropDownPicker, {
   ValueType,
 } from 'react-native-dropdown-picker';
 import PuzzleCreate from './PuzzleCreate';
+import ImageStack from '../common/ImageStack';
 
 interface FeedDetailProps extends FeedProps {
+  createdAt: string;
   writer: string;
   like: boolean;
 }
@@ -70,17 +72,6 @@ const DetailSection = ({
   const [dotPressed, setDotPressed] = useState<boolean>(false);
   const isWriter = feed.writer !== user;
 
-  const [playing, setPlaying] = useState(false);
-  const onStateChange = useCallback((state: string) => {
-    if (state === 'ended') {
-      setPlaying(false);
-    }
-  }, []);
-  const extractVideoId = (url: string): string => {
-    const match = url.match(/be\/([^?]+)/);
-    return match ? match[1] : '';
-  };
-  const videoId = extractVideoId(feed.musicUrl ? feed.musicUrl : '');
   const subfeed = ['', '', ''];
   let isPuzzleComplete = feed.members.length === subfeed.length;
   let isAlreadyPuzzled = false;
@@ -91,11 +82,6 @@ const DetailSection = ({
     : isAlreadyPuzzled
     ? false
     : true;
-
-  // 자동재생
-  // useEffect(() => {
-  //   setPlaying(true);
-  // }, []);
 
   const onDelete = () => {
     Alert.alert(
@@ -182,28 +168,14 @@ const DetailSection = ({
         </View>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 160,
+            marginTop: 140,
             marginLeft: 10,
           }}>
-          <MarkerIcon width={28} height={28} color={WHITE} />
-          <Title style={{ color: WHITE, fontSize: 24, lineHeight: 32 }}>
-            {' '}
-            {feed.location}
+          <Title style={{ color: WHITE }}>
+            {moment(feed.date).format('YYYY.MM.DD')}
           </Title>
+          <Title style={{ color: WHITE }}>{feed.location}</Title>
         </View>
-        {/* <TouchableOpacity
-          onPress={() => setPlaying(!playing)}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 160,
-            padding: 10,
-          }}>
-          <MusicIcon />
-          <B12 style={{ marginLeft: 5 }}>{feed.music}</B12>
-        </TouchableOpacity> */}
       </ImageBackground>
       <View
         style={{
@@ -212,48 +184,9 @@ const DetailSection = ({
           backgroundColor: LIGHTPURPLE,
         }}>
         <Label style={{ marginBottom: 5 }}>
-          {moment(feed.date).format('YYYY-MM')} | {feed.writer}
+          {feed.createdAt} | {feed.writer}
         </Label>
-        <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-          {feed.members.slice(0, 3).map((item, index) => {
-            return (
-              <Image
-                key={index}
-                source={{ uri: item }}
-                style={{
-                  width: 35,
-                  height: 35,
-                  borderRadius: 180,
-                  borderColor: PURPLE,
-                  borderWidth: 0.7,
-                  position: 'absolute',
-                  top: -30,
-                  right: feed.members.length > 3 ? index * 20 + 15 : index * 20,
-                }}
-              />
-            );
-          })}
-          {feed.members.length > 3 && (
-            <View
-              style={{
-                width: 25,
-                height: 25,
-                borderRadius: 180,
-                borderWidth: 1.2,
-                borderColor: PURPLE,
-                backgroundColor: LIGHTPURPLE,
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute',
-                top: -24,
-                right: 0,
-              }}>
-              <Caption style={{ color: PURPLE, lineHeight: 15 }}>
-                +{feed.members.length - 3}
-              </Caption>
-            </View>
-          )}
-        </View>
+        <ImageStack data={feed.members} />
         <Subtitle style={{ marginBottom: 5 }}>{feed.title}</Subtitle>
         <Body style={{ marginBottom: 15 }}>{feed.content}</Body>
         <TouchableOpacity
@@ -279,12 +212,6 @@ const DetailSection = ({
           </Body>
         </TouchableOpacity>
       </View>
-      {/* <YoutubePlayer
-        height={0}
-        play={playing}
-        videoId={videoId}
-        onChangeState={onStateChange}
-      /> */}
       <Modal visible={imageStyleModal} transparent>
         <Pressable
           style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
@@ -378,6 +305,7 @@ const FeedDetail = ({
     content:
       '우리 작년 여름에 제주도 갔던거 기억나? 우리 같이 간 첫 여행이었잖아. 바다도 많이 가고 정말 좋았어.',
     date: new Date(2023, 6, 23),
+    createdAt: '2024.03.21',
     writer: '김토끼',
     location: '제주 한림읍',
     rep_pic:

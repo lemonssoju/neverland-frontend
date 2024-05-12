@@ -87,7 +87,7 @@ const SubfeedUpload = ({
           autoFocus
           maxLength={2000}
         />
-        {/* {subfeed.length === 0 &&
+        {subfeed.length === 0 &&
           <Body
             style={{
               color: GRAY,
@@ -100,7 +100,7 @@ const SubfeedUpload = ({
             }}>
             자세히 적으실수록 더 풍성한 내용의 퍼즐 앨범이 완성돼요!
           </Body>
-        } */}
+        }
         <Body
           style={{
             color: GRAY,

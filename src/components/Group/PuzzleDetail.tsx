@@ -125,9 +125,17 @@ const DetailSection = ({
           {puzzle.members.length > 4 && (
             <TouchableOpacity
               onPress={() => setShowAll(!showAll)}
-              style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 5 }}>
-              <Content style={{ color: PURPLE }}>{showAll ? '접어보기' : '더보기'}</Content>
-              <ArrowIcon transform={[{ rotate: showAll ? '270deg' : '90deg' }]} />
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginLeft: 5,
+              }}>
+              <Content style={{ color: PURPLE }}>
+                {showAll ? '접어보기' : '더보기'}
+              </Content>
+              <ArrowIcon
+                transform={[{ rotate: showAll ? '270deg' : '90deg' }]}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -156,7 +164,7 @@ const DetailSection = ({
               </View>
             );
           })}
-          <View style={{height: 10}} />
+        <View style={{ height: 10 }} />
         <Image
           source={
             puzzle.rep_pic && puzzle.rep_pic.length > 0
@@ -263,7 +271,10 @@ const PuzzleDetail = ({
             <>
               <DetailSection puzzle={puzzle} navigation={navigation} />
               <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
-                <Label style={{ color: PURPLE, marginBottom: 10, fontSize: 16 }}>댓글</Label>
+                <Label
+                  style={{ color: PURPLE, marginBottom: 10, fontSize: 16 }}>
+                  댓글
+                </Label>
                 <CommentInput
                   comment={comment}
                   setComment={setComment}

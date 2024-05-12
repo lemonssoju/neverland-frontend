@@ -10,7 +10,7 @@ interface CarouselProps {
 
 const { width } = Dimensions.get('window');
 
-const Carousel = ({ data, renderItem }: CarouselProps) => {
+export const HorizontalCarousel = ({ data, renderItem }: CarouselProps) => {
   const [page, setPage] = useState<number>(0);
   return (
     <>
@@ -21,25 +21,40 @@ const Carousel = ({ data, renderItem }: CarouselProps) => {
         itemWidth={width}
         onSnapToItem={(index: number) => setPage(index)}
         keyExtractor={(item, index) => index.toString()}
-        containerCustomStyle={{paddingBottom: 10}}
+        containerCustomStyle={{ paddingBottom: 10 }}
       />
       <Pagination
         dotsLength={data.length}
         activeDotIndex={page}
-        containerStyle={{marginTop: 10}}
+        containerStyle={{ marginTop: 10 }}
         dotStyle={{
           width: 8,
           height: 8,
-          backgroundColor: PURPLE
+          backgroundColor: PURPLE,
         }}
         inactiveDotStyle={{
           width: 6,
           height: 6,
-          opacity: 0.2
+          opacity: 0.2,
         }}
       />
     </>
   );
 };
 
-export default Carousel;
+export const VerticalCarousel = ({ data, renderItem }: CarouselProps) => {
+  const [page, setPage] = useState<number>(0);
+  return (
+    <>
+      <CarouselModule
+        data={data}
+        renderItem={renderItem}
+        sliderWidth={width}
+        itemWidth={width}
+        onSnapToItem={(index: number) => setPage(index)}
+        keyExtractor={(item, index) => index.toString()}
+        containerCustomStyle={{ paddingBottom: 10 }}
+      />
+    </>
+  );
+};

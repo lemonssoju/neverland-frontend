@@ -8,7 +8,7 @@ export const Emphasis = ({ children, style, ...rest }: any) => {
       style={{
         fontSize: 24,
         color: BLACK,
-        fontWeight: "700",
+        fontWeight: '700',
         ...style,
       }}>
       {children}
@@ -23,7 +23,7 @@ export const Title = ({ children, style, ...rest }: any) => {
       style={{
         fontSize: 20,
         color: BLACK,
-        fontWeight: "700",
+        fontWeight: '700',
         lineHeight: 24,
         ...style,
       }}>
@@ -39,7 +39,7 @@ export const Subtitle = ({ children, style, ...rest }: any) => {
       style={{
         fontSize: 18,
         color: BLACK,
-        fontWeight: "600",
+        fontWeight: '600',
         lineHeight: 24,
         ...style,
       }}>
@@ -55,7 +55,7 @@ export const Body = ({ children, style, ...rest }: any) => {
       style={{
         fontSize: 16,
         color: BLACK,
-        fontWeight: "500",
+        fontWeight: '500',
         lineHeight: 24,
         ...style,
       }}>
@@ -71,7 +71,7 @@ export const Label = ({ children, style, ...rest }: any) => {
       style={{
         fontSize: 14,
         color: BLACK,
-        fontWeight: "700",
+        fontWeight: '700',
         lineHeight: 24,
         ...style,
       }}>
@@ -87,7 +87,7 @@ export const Content = ({ children, style, ...rest }: any) => {
       style={{
         fontSize: 14,
         color: BLACK,
-        fontWeight: "400",
+        fontWeight: '400',
         lineHeight: 24,
         ...style,
       }}>
@@ -103,7 +103,7 @@ export const Caption = ({ children, style, ...rest }: any) => {
       style={{
         fontSize: 12,
         color: BLACK,
-        fontWeight: "400",
+        fontWeight: '400',
         lineHeight: 24,
         ...style,
       }}>

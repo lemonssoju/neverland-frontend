@@ -10,6 +10,7 @@ import {
   Body,
 } from '../../styles/GlobalText';
 import { SubfeedProps } from './SubfeedUpload';
+import IconButton from '../common/IconButton';
 
 interface SubfeedItemProps extends SubfeedProps {
   onEdit: () => void;
@@ -49,7 +50,7 @@ const SubfeedItem = ({
           paddingHorizontal: 20,
         }}>
         {user === writer && (
-          <TouchableOpacity
+          <IconButton
             onPress={() => setDotPressed(!dotPressed)}
             style={{
               width: 30,
@@ -67,7 +68,7 @@ const SubfeedItem = ({
               height={23}
               transform={[{ rotate: '90deg' }]}
             />
-          </TouchableOpacity>
+          </IconButton>
         )}
         {dotPressed && (
           <EditButton
