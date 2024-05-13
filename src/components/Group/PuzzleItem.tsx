@@ -3,9 +3,37 @@ import { LIGHTPURPLE, PURPLE } from '../../styles/GlobalColor';
 import { Body, Caption, Content, Subtitle } from '../../styles/GlobalText';
 import { useState } from 'react';
 import BubbleIcon from '../../assets/common/Bubble.svg';
+import ImageStack from '../common/ImageStack';
 
-export const PuzzleTimeItem = ({ navigation }: any) => {
-  return <TouchableOpacity></TouchableOpacity>;
+interface PuzzleTimeItemProps {
+  date: string;
+  rep_pic: string;
+  title: string;
+  content: string;
+  members: string[];
+}
+
+export const PuzzleTimeItem = ({
+  navigation,
+  puzzle,
+}: {
+  puzzle: PuzzleTimeItemProps;
+  navigation: any;
+}) => {
+  const { date, rep_pic, title, content, members } = puzzle;
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      <Content>{date}</Content>
+      <TouchableOpacity style={{ flexDirection: 'row' }}>
+        <Image source={{ uri: rep_pic }} width={110} height={100} />
+        <View>
+          <Subtitle>{title}</Subtitle>
+          <Content>{content}</Content>
+          <ImageStack data={members} />
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 export const PuzzlePlaceItem = ({ navigation }: any) => {

@@ -30,8 +30,7 @@ const Map = ({ navigation }: any) => {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
-      zoomEnabled={true}
-      >
+      zoomEnabled={true}>
       {places.map((marker, index) => (
         <Marker key={index} coordinate={marker}>
           <PuzzlePlaceItem navigation={navigation} />

@@ -18,6 +18,7 @@ import { PhotoAction } from '../../common/PhotoButton';
 import { Asset } from 'react-native-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../../App';
+import IconButton from '../../common/IconButton';
 
 interface OptionProps {
   label: string;
@@ -125,7 +126,7 @@ const SettingsHome = ({
               autoFocus={editable}
             />
             <Title style={{ letterSpacing: -0.2, fontWeight: '500' }}>님</Title>
-            <TouchableOpacity
+            <IconButton
               style={{ position: 'absolute', left: 80 }}
               onPress={() => {
                 editable
@@ -134,7 +135,7 @@ const SettingsHome = ({
                     setTimeout(() => textInputRef.current?.focus(), 0));
               }}>
               {editable ? <Body>완료</Body> : <PencilIcon />}
-            </TouchableOpacity>
+            </IconButton>
             <View
               style={{
                 height: 9,

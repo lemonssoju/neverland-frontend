@@ -35,7 +35,7 @@ const FeedItem = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('FeedDetail', { id: 1});
+        navigation.navigate('FeedDetail', { id: 1 });
       }}
       style={{ marginLeft: 10, marginBottom: 10, width: width / 2 - 15 }}>
       <ImageBackground

@@ -26,6 +26,7 @@ import BottomButton from '../common/BottomButton';
 import CalendarIcon from '../../assets/common/Calendar.svg';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
+import IconButton from '../common/IconButton';
 
 interface GroupCreateProps {
   setFormVisible: Dispatch<SetStateAction<boolean>>;
@@ -130,11 +131,11 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
           isRequired
           editable={false}
         />
-        <TouchableOpacity
+        <IconButton
           onPress={() => showPicker(true)}
           style={{ position: 'absolute', bottom: 100, right: 30, zIndex: 1 }}>
           <CalendarIcon />
-        </TouchableOpacity>
+        </IconButton>
         <View style={{ marginTop: 20 }}>
           <BottomButton label="등록" onPress={() => setFormVisible(false)} />
         </View>

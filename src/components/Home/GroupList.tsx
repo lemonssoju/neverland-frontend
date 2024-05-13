@@ -10,16 +10,14 @@ import {
   View,
 } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
-import PlusButton from '../common/PlusButton';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParams } from '../../pages/HomeStack';
 import styled from 'styled-components/native';
 import { GRAY, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
 import { Body, Caption, Subtitle, Title } from '../../styles/GlobalText';
-import PuzzleButton from '../common/PuzzleButton';
 import UserIcon from '../../assets/common/User.svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Carousel from '../common/Carousel';
+import { HorizontalCarousel } from '../common/Carousel';
 import GroupItem, { GroupProps } from './GroupItem';
 import GroupCreate from './GroupCreate';
 import LogoText from '../../assets/LogoText.svg';
@@ -29,6 +27,7 @@ import BottomButton from '../common/BottomButton';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
 import Input from '../common/Input';
+import IconButton from '../common/IconButton';
 
 const groupData: GroupProps[] = [
   {
@@ -76,18 +75,16 @@ const HeaderSection = ({ navigation }: { navigation: any }) => {
           justifyContent: 'space-between',
         }}>
         <LogoText />
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Settings')}
-          style={{
-            width: 40,
-            height: 40,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+        <IconButton onPress={() => navigation.navigate('Settings')}>
           <UserIcon />
-        </TouchableOpacity>
+        </IconButton>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+        }}>
         <Subtitle style={{ color: WHITE, marginBottom: 10 }}>
           함께 맞춰가는{'\n'}우리의 추억 퍼즐
         </Subtitle>
@@ -150,7 +147,7 @@ const GroupList = ({
         <Body style={{ marginLeft: 30, marginVertical: 10 }}>
           이제 추억 퍼즐을 맞추러 가볼까요?
         </Body>
-        <Carousel
+        <HorizontalCarousel
           data={groupData}
           renderItem={({ item }: any) => {
             const {

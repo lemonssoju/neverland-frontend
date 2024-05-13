@@ -8,7 +8,7 @@ export type AuthStackParams = {
   Start: undefined;
   Login: undefined;
   SignUp: undefined;
-}
+};
 
 const Stack = createStackNavigator<AuthStackParams>();
 
@@ -16,13 +16,13 @@ const Auth = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false,
       }}>
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
 export default Auth;

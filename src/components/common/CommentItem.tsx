@@ -4,6 +4,7 @@ import EditButton from './EditButton';
 import { BLACK, GRAY, LIGHTPURPLE } from '../../styles/GlobalColor';
 import DotsIcon from '../../assets/common/Dots.svg';
 import { Label, Body, Content, Caption } from '../../styles/GlobalText';
+import IconButton from './IconButton';
 
 export interface CommentProps {
   writer: string;
@@ -35,7 +36,7 @@ const CommentItem = ({
         marginTop: 10,
       }}>
       {
-        <TouchableOpacity
+        <IconButton
           onPress={() => setDotPressed(!dotPressed)}
           style={{
             width: 30,
@@ -48,7 +49,7 @@ const CommentItem = ({
             zIndex: 1,
           }}>
           <DotsIcon color={BLACK} width={15} height={30} transform={[{ rotate: '90deg' }]} />
-        </TouchableOpacity>
+        </IconButton>
       }
       {dotPressed && (
         <EditButton

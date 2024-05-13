@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import SendIcon from '../../assets/common/Send.svg';
 import { GRAY, LIGHTPURPLE, MIDPURPLE } from '../../styles/GlobalColor';
+import IconButton from './IconButton';
 
 interface CommentInputProps {
   comment: string;
@@ -32,7 +33,7 @@ const CommentInput = ({ comment, setComment, onPress }: CommentInputProps) => {
           width: '90%',
         }}
       />
-      <TouchableOpacity
+      <IconButton
         onPress={onPress}
         style={{
           position: 'absolute',
@@ -44,7 +45,7 @@ const CommentInput = ({ comment, setComment, onPress }: CommentInputProps) => {
           alignItems: 'center',
         }}>
         <SendIcon />
-      </TouchableOpacity>
+      </IconButton>
     </View>
   );
 };

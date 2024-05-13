@@ -38,7 +38,6 @@
     "react-native-svg": "^14.1.0",
     "react-native-video": "^5.2.1",
     "react-native-webview": "^13.6.3",
-    "react-native-youtube-iframe": "^2.3.0",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {

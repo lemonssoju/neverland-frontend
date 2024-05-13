@@ -6,7 +6,11 @@ interface generateImagesProps {
   style?: string;
 }
 
-const generateImages = async ({ imageUri, text, style }: generateImagesProps) => {
+const generateImages = async ({
+  imageUri,
+  text,
+  style,
+}: generateImagesProps) => {
   const engineId = 'stable-diffusion-v1-6';
   const apiHost = 'https://api.stability.ai';
   const apiKey = STABILITY_API_KEY;

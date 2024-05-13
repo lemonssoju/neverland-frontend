@@ -38,6 +38,7 @@ import { FeedStackParams } from '../../pages/Group/FeedStack';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import Postcode from '@actbase/react-daum-postcode';
+import IconButton from '../common/IconButton';
 
 export interface FeedProps {
   title: string;
@@ -135,7 +136,7 @@ const FeedUpload = ({
                 <View style={{ alignItems: 'center', paddingVertical: 5 }}>
                   <PaintIcon style={{ marginVertical: 20 }} />
                   <Title>사진과 함께 추억 퍼즐을 생성해드려요</Title>
-                  <Content style={{ color: GRAY }}>
+                  <Content style={{ color: GRAY, textAlign: 'center' }}>
                     사진이 없으시다면, 내용을 기반으로 AI 화가가 추억 퍼즐을
                     그려드려요.{' '}
                   </Content>
@@ -153,12 +154,15 @@ const FeedUpload = ({
                   placeholder="제목을 작성해주세요"
                 />
                 <Input
-                  value={moment(feed.date).format('YYYY년 MM월 DD일').toString()}
+                  value={moment(feed.date)
+                    .format('YYYY년 MM월 DD일')
+                    .toString()}
                   label="날짜"
                   isRequired
                   editable={false}
+                  placeholder="추억 날짜를 입력해주세요"
                 />
-                <TouchableOpacity
+                <IconButton
                   onPress={() => showPicker(true)}
                   style={{
                     position: 'absolute',
@@ -167,7 +171,7 @@ const FeedUpload = ({
                     zIndex: 1,
                   }}>
                   <CalendarIcon />
-                </TouchableOpacity>
+                </IconButton>
                 <TouchableOpacity
                   style={{ zIndex: 1 }}
                   onPress={() => setPostModal(true)}>
