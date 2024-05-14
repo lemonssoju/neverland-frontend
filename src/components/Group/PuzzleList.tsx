@@ -1,12 +1,69 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import { SafeAreaView } from 'react-native';
+import { FlatList, SafeAreaView, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { PuzzleStackParams } from '../../pages/Group/PuzzleStack';
 import styled from 'styled-components/native';
 import { LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
 import { useState } from 'react';
-import { Body } from '../../styles/GlobalText';
+import { Body, Emphasis } from '../../styles/GlobalText';
 import Map from '../Map/Map';
-import { PuzzleTimeItem } from './PuzzleItem';
+import { PuzzleTimeItem, PuzzleTimeItemProps } from './PuzzleItem';
+import { HorizontalCarousel, VerticalCarousel } from '../common/Carousel';
+
+const data: PuzzleTimeItemProps[] = [
+  {
+    date: '2023.12.18',
+    rep_pic:
+      'https://pbs.twimg.com/profile_images/1656346926063960064/YZpCofx8_400x400.jpg',
+    title: '제주도 소품샵 투어',
+    content: '제주도 좋아조하ㅗㅈ아홪홪오핮오하ㅗ앟',
+    members: [
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    ],
+  },
+  {
+    date: '2023.12.18',
+    rep_pic:
+      'https://pbs.twimg.com/profile_images/1656346926063960064/YZpCofx8_400x400.jpg',
+    title: '제주도 소품샵 투어',
+    content: '제주도 좋아조하ㅗㅈ아홪홪오핮오하ㅗ앟',
+    members: [
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    ],
+  },
+  {
+    date: '2022.12.31',
+    rep_pic:
+      'https://pbs.twimg.com/profile_images/1656346926063960064/YZpCofx8_400x400.jpg',
+    title: '제주도 소품샵 투어',
+    content: '제주도 좋아조하ㅗㅈ아홪홪오핮오하ㅗ앟',
+    members: [
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    ],
+  },
+  {
+    date: '2022.12.18',
+    rep_pic:
+      'https://pbs.twimg.com/profile_images/1656346926063960064/YZpCofx8_400x400.jpg',
+    title: '제주도 소품샵 투어',
+    content: '제주도 좋아조하ㅗㅈ아홪홪오핮오하ㅗ앟',
+    members: [
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    ],
+  },
+];
 
 const PuzzleList = ({
   navigation,
@@ -45,7 +102,35 @@ const PuzzleList = ({
           </Body>
         </OptionButton>
       </OptionContainer>
-      {option === '시간' ? <></> : <Map navigation={navigation} />}
+      {option === '시간' ? (
+        <FlatList
+        style={{flex:1}}
+          data={data}
+          renderItem={({
+            item,
+            index,
+          }: {
+            item: PuzzleTimeItemProps;
+            index: number;
+          }) => {
+            const isFirstItem = index === 0;
+            var isYearChanged = false;
+            var year = item.date.split('.')[0];
+            if (!isFirstItem && year !== data[index - 1].date.split('.')[0]) {
+              isYearChanged = true;
+            }
+            const isLastItemOfYear = !isYearChanged && (index === data.length - 1 || year !== data[index + 1].date.split('.')[0]);
+            return (
+              <>
+                {(isFirstItem || isYearChanged) && <Emphasis style={{marginLeft: 10}}>{year}</Emphasis>}
+                <PuzzleTimeItem navigation={navigation} puzzle={item} isLast={isLastItemOfYear} />
+              </>
+            );
+          }}
+        />
+      ) : (
+        <Map navigation={navigation} />
+      )}
     </SafeAreaView>
   );
 };
