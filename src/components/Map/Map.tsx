@@ -27,8 +27,8 @@ const Map = ({ navigation }: any) => {
       initialRegion={{
         latitude: 33.450701,
         longitude: 126.570667,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 3.5,
+        longitudeDelta: 3.5
       }}
       zoomEnabled={true}>
       {places.map((marker, index) => (
