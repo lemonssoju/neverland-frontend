@@ -16,7 +16,7 @@ import {
   ScrollView,
 } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
-import { GRAY, WHITE } from '../../styles/GlobalColor';
+import { BLACK, GRAY, WHITE } from '../../styles/GlobalColor';
 import { Body, Caption, Title } from '../../styles/GlobalText';
 import styled from 'styled-components/native';
 import PhotoButton from '../common/PhotoButton';
@@ -24,7 +24,7 @@ import { Asset } from 'react-native-image-picker';
 import Input from '../common/Input';
 import BottomButton from '../common/BottomButton';
 import CalendarIcon from '../../assets/common/Calendar.svg';
-import DatePicker from 'react-native-date-picker';
+import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
 import IconButton from '../common/IconButton';
 
@@ -50,11 +50,14 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
 
   const showPicker = useCallback((value: boolean) => setShow(value), []);
 
-  const onValueChange = (newDate: Date) => {
-    const selectedDate = newDate || group.date;
-    showPicker(false);
-    setGroup({ ...group, date: selectedDate });
-  };
+  const onValueChange = useCallback(
+    (event: any, newDate: any) => {
+      const selectedDate = newDate || group.date;
+      showPicker(false);
+      setGroup({ ...group, date: selectedDate });
+    },
+    [group.date, showPicker],
+  );
 
   const [keyboardOpen, setKeyboardOpen] = useState<boolean>(false);
   useEffect(() => {
@@ -78,6 +81,9 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
   }, []);
 
   // console.log(group.date.toISOString().split('T')[0]);
+  var isDatePicked =
+    moment(group.date).format('YYYY.MM.DD').toString() !==
+    moment(new Date()).format('YYYY.MM.DD').toString();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
@@ -125,27 +131,33 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
           isRequired
           placeholder="그룹명을 입력해주세요."
         />
-        <Input
-          value={moment(group.date).format('YYYY년 MM월 DD일').toString()}
-          label="처음 만난 날"
-          isRequired
-          editable={false}
-        />
-        <IconButton
-          onPress={() => showPicker(true)}
-          style={{ position: 'absolute', bottom: 100, right: 30, zIndex: 1 }}>
-          <CalendarIcon />
-        </IconButton>
+        <View>
+          <Input
+            value={
+              isDatePicked
+                ? moment(group.date).format('YYYY년 MM월').toString()
+                : undefined
+            }
+            placeholder="그룹 멤버들과 처음 만난 날짜를 입력해주세요."
+            label="처음 만난 날"
+            isRequired
+            editable={false}
+          />
+          <IconButton
+            onPress={() => showPicker(true)}
+            style={{ position: 'absolute', top: 27, right: 3, zIndex: 1 }}>
+            <CalendarIcon />
+          </IconButton>
+        </View>
         <View style={{ marginTop: 20 }}>
           <BottomButton label="등록" onPress={() => setFormVisible(false)} />
         </View>
       </KeyboardAvoidingView>
       {show && (
         <View style={{ alignItems: 'center' }}>
-          <DatePicker
-            onDateChange={onValueChange}
-            date={group.date}
-            mode={'date'}
+          <MonthPicker
+            onChange={onValueChange}
+            value={group.date}
             minimumDate={new Date(1970, 1)}
             maximumDate={new Date()}
             locale="ko"

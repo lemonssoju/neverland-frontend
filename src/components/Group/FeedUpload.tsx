@@ -102,11 +102,9 @@ const FeedUpload = ({
 
   const showPicker = useCallback((value: boolean) => setShow(value), []);
 
-  const onValueChange = (newDate: Date) => {
-    const selectedDate = newDate || feed.date;
-    showPicker(false);
-    setFeed({ ...feed, date: selectedDate });
-  };
+  var isDatePicked =
+    moment(feed.date).format('YYYY.MM.DD').toString() !==
+    moment(new Date()).format('YYYY.MM.DD').toString();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
@@ -151,27 +149,31 @@ const FeedUpload = ({
                     setFeed({ ...feed, title: title });
                   }}
                   isRequired
-                  placeholder="제목을 작성해주세요"
+                  placeholder="제목을 작성해주세요."
                 />
-                <Input
-                  value={moment(feed.date)
-                    .format('YYYY년 MM월 DD일')
-                    .toString()}
-                  label="날짜"
-                  isRequired
-                  editable={false}
-                  placeholder="추억 날짜를 입력해주세요"
-                />
-                <IconButton
-                  onPress={() => showPicker(true)}
-                  style={{
-                    position: 'absolute',
-                    bottom: height * 0.385,
-                    right: 5,
-                    zIndex: 1,
-                  }}>
-                  <CalendarIcon />
-                </IconButton>
+                <View>
+                  <Input
+                    value={
+                      isDatePicked
+                        ? moment(feed.date).format('YYYY년 MM월 DD일').toString()
+                        : undefined
+                    }
+                    placeholder="추억 날짜를 입력해주세요."
+                    label="날짜"
+                    isRequired
+                    editable={false}
+                  />
+                  <IconButton
+                    onPress={() => showPicker(true)}
+                    style={{
+                      position: 'absolute',
+                      top: 27,
+                      right: 3,
+                      zIndex: 1,
+                    }}>
+                    <CalendarIcon />
+                  </IconButton>
+                </View>
                 <TouchableOpacity
                   style={{ zIndex: 1 }}
                   onPress={() => setPostModal(true)}>
@@ -183,20 +185,6 @@ const FeedUpload = ({
                     editable={false}
                   />
                 </TouchableOpacity>
-                {/* <Input
-                  label="같이 들으면 좋은 음악"
-                  value={feed.music}
-                  onChangeText={music => {
-                    setFeed({ ...feed, music: music });
-                  }}
-                  placeholder="가수 - 제목 형식으로 입력해주세요."
-                  description="우측 아이콘을 클릭해 유튜브 링크를 삽입해주세요."
-                />
-                <TouchableOpacity
-                  style={{ position: 'absolute', right: 5, bottom: 263 }}
-                  onPress={() => setMusicVisible(true)}>
-                  <LinkIcon />
-                </TouchableOpacity> */}
                 <Label>내용 *</Label>
                 <TextInput
                   value={feed.content}
@@ -309,18 +297,20 @@ const FeedUpload = ({
           }}
         />
       </KeyboardAvoidingView>
-      {show && (
-        <View style={{ alignItems: 'center' }}>
-          <DatePicker
-            onDateChange={onValueChange}
-            date={feed.date}
-            mode={'date'}
-            minimumDate={new Date(1970, 1)}
-            maximumDate={new Date()}
-            locale="ko"
-          />
-        </View>
-      )}
+      <DatePicker
+        modal
+        open={show}
+        onConfirm={date => {
+          setShow(false);
+          setFeed({ ...feed, date: date });
+        }}
+        onCancel={() => setShow(false)}
+        date={feed.date}
+        mode={'date'}
+        minimumDate={new Date(1970, 1)}
+        maximumDate={new Date()}
+        locale="ko"
+      />
       <Modal visible={musicVisible} transparent>
         <Pressable
           style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
