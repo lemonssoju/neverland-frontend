@@ -192,15 +192,8 @@ const GroupList = ({
           }}>
           <Title style={{ textAlign: 'center' }}>그룹 입장하기</Title>
           <Caption style={{ color: GRAY, textAlign: 'center' }}>
-            공유받은 그룹 이름과 코드를 입력하세요.
+            공유받은 그룹 코드를 입력하세요.
           </Caption>
-          <Input
-            label="그룹 이름"
-            isRequired
-            value={group.name}
-            onChangeText={name => setGroup({ ...group, name: name })}
-            placeholder="그룹 이름을 입력하세요"
-          />
           <Input
             label="그룹 코드"
             isRequired

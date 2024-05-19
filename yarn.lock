@@ -6421,7 +6421,7 @@ mkdirp@^1.0.4:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-moment@^2.30.1:
+moment@^2.29.4, moment@^2.30.1:
   version "2.30.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
   integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
@@ -7052,6 +7052,14 @@ react-native-maps@^1.14.0:
   integrity sha512-ai7h4UdRLGPFCguz1fI8n4sKLEh35nZXHAH4nSWyAeHGrN8K9GjICu9Xd4Q5Ok4h+WwrM6Xz5pGbF3Qm1tO6iQ==
   dependencies:
     "@types/geojson" "^7946.0.13"
+
+react-native-month-year-picker@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-month-year-picker/-/react-native-month-year-picker-1.9.0.tgz#8110738c430ad4d888166b2eae6fac1393a121e9"
+  integrity sha512-VO1nzPQ3x1rW/qFKaTAIPSdj8KA+BD+/UCeoYwTfpliiu1QRmJvkItdWihYY8noP4qIvoXA0raBdFuL7sKN9Nw==
+  dependencies:
+    invariant "^2.2.4"
+    moment "^2.29.4"
 
 react-native-reanimated@^3.5.4:
   version "3.5.4"
