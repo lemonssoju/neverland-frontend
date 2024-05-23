@@ -169,7 +169,7 @@ const DetailSection = ({
           source={
             puzzle.rep_pic && puzzle.rep_pic.length > 0
               ? { uri: puzzle.rep_pic }
-              : require('../../assets/tmp/puzzle1.png')
+              : require('../../assets/tmp/Puzzlejeju.png')
           }
           style={{ width: '100%', height: 360, borderRadius: 8 }}
         />
@@ -212,24 +212,24 @@ const DetailSection = ({
 
 const commentData = [
   {
-    writer: '이왈왈',
+    writer: '김중현',
     date: '2024.03.22',
-    content: '와 제주도 미쳤다 나도 데려가지!!!',
+    content: '우리 사진을 이렇게 만들어주니까 이쁘네',
     profile:
-      'https://pbs.twimg.com/profile_images/1656346926063960064/YZpCofx8_400x400.jpg',
+      'https://ifh.cc/g/5ZL9HY.png',
   },
   {
-    writer: '박댕댕',
-    date: '2024.03.23',
-    content: '우리 사진을 이렇게 만들어주니까 너무 이쁘다',
-    profile: 'https://dimg.donga.com/wps/NEWS/IMAGE/2023/06/22/119900215.1.jpg',
-  },
-  {
-    writer: '최냥냥',
+    writer: '이혜인',
     date: '2023.04.01',
-    content: '우리 언제 또 같이 여행갈까? 당장 날짜 잡아',
+    content: '나도 같이 갔으면 좋았을텐데ㅜㅜ',
     profile:
-      'https://img2.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202208/09/hani/20220809132012529emoo.jpg',
+      'https://static.wikia.nocookie.net/pokemon/images/3/3f/%EC%9D%B4%EB%B8%8C%EC%9D%B4_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170405085011&path-prefix=ko',
+  },
+  {
+    writer: '곽서진',
+    date: '2024.05.23',
+    content: '나 오랜만에 이거 보러 다시 왔잖아',
+    profile: 'https://dimg.donga.com/wps/NEWS/IMAGE/2023/06/22/119900215.1.jpg',
   },
 ];
 
@@ -238,13 +238,13 @@ const PuzzleDetail = ({
   route,
 }: StackScreenProps<PuzzleStackParams, 'PuzzleDetail'>) => {
   const [puzzle, setPuzzle] = useState<PuzzleDetailProps>({
-    title: '제주도 소품샵 투어',
-    date: new Date(2023, 6, 23),
-    location: '제주 한림읍',
-    members: ['김토끼', '박댕댕', '최냥냥', '이미미', '곽모모'],
+    title: '작년 여름 제주에서',
+    date: new Date(2023, 7, 21),
+    location: '제주시 한림읍',
+    members: ['지소민', '김중현', '곽서진', '한서연'],
     rep_pic: '',
     content:
-      '작년 여름에 우리 제주도 간 여행이 생각나. 맛집도 많이 가고 바다에서 수영도 했었어. 특히 새벽에 노을을 보러 일어나서 정말 행복했었지. 함께한 추억이 너무 소중해.',
+      '작년 여름에 우리 제주도 여행했던 거 기억나? 맛집도 잔뜩 가고 바다에서 수영도 하고! 저녁에 본 핑크 노을은 진짜 예술이었지~ 같이 했던 그 추억들 너무 소중해! 이번 여름에도 같이 여행 가자~',
   });
   const [comment, setComment] = useState<string>('');
 
@@ -261,12 +261,14 @@ const PuzzleDetail = ({
           flex: 1,
           justifyContent: 'space-between',
         }}>
-        <Pressable
+          <ScrollView>
+        {/* <Pressable
           style={{ width: '100%', height: '100%', position: 'absolute' }}
           onPress={() => Keyboard.dismiss()}
-        />
+        /> */}
         <FlatList
           data={commentData}
+          scrollEnabled={false}
           ListHeaderComponent={() => (
             <>
               <DetailSection puzzle={puzzle} navigation={navigation} />
@@ -298,6 +300,7 @@ const PuzzleDetail = ({
           }}
           ListFooterComponent={<View style={{ height: 10 }} />}
         />
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

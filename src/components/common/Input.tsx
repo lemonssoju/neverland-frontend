@@ -36,6 +36,7 @@ const Input = ({
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={GRAY}
+        blurOnSubmit={false}
         style={{
           borderColor: GRAY,
           borderWidth: 1,

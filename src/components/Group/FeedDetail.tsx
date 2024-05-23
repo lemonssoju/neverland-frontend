@@ -61,20 +61,21 @@ const DetailSection = ({
   user,
   setSubfeedModal,
   subfeedText,
+  tmp
 }: {
   feed: FeedDetailProps;
   navigation: any;
   user: string;
   setSubfeedModal: Dispatch<SetStateAction<boolean>>;
   subfeedText: string[];
+  tmp: boolean;
 }) => {
   const [like, setLike] = useState<boolean>(feed.like);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
-  const isWriter = feed.writer !== user;
+  const isWriter = feed.writer === user;
 
-  const subfeed = ['', '', ''];
-  let isPuzzleComplete = feed.members.length === subfeed.length;
-  let isAlreadyPuzzled = false;
+  let isPuzzleComplete = feed.members.length === subfeedText.length+1;
+  let isAlreadyPuzzled = tmp ? feed.members.length === subfeedText.length+1 : false;
   let puzzleButtonEnabled = isWriter
     ? isPuzzleComplete
       ? true
@@ -208,7 +209,7 @@ const DetailSection = ({
           <PuzzleIcon style={{ marginRight: 10 }} />
           <Body style={{ color: WHITE, fontWeight: '600' }}>
             {isWriter ? '추억 퍼즐 완성하기' : '추억 퍼즐 맞추기'}
-            {` (${subfeed.length}/${feed.members.length})`}
+            {` (${tmp ? subfeedText.length+1 : 3}/${feed.members.length})`}
           </Body>
         </TouchableOpacity>
       </View>
@@ -284,16 +285,24 @@ const DetailSection = ({
 
 const subfeedData: SubfeedProps[] = [
   {
-    writer: '박댕댕',
-    content: '완전 행복했었는데! 우리 새벽에 일어나서 노을도 봤었잖아.',
-    profile: 'https://dimg.donga.com/wps/NEWS/IMAGE/2023/06/22/119900215.1.jpg',
+    writer: '김중현',
+    content:
+      '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
+    profile: 'https://ifh.cc/g/5ZL9HY.png',
   },
   {
-    writer: '최냥냥',
+    writer: '한서연',
     content:
-      '맞아 기억나! 맛집도 완전 많이 가고 바다에 들어가서 수영도 했었잖아.',
+      '맞아 기억난다! 벌써 이게 반년 전이네. 맛집도 완전 많이 가고 바다에 들어가서 수영도 했었지~ 그때 우리 청춘이었다..',
     profile:
-      'https://img2.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202208/09/hani/20220809132012529emoo.jpg',
+      'https://ifh.cc/g/1CLCRY.png',
+  },
+  {
+    writer: '곽서진',
+    content:
+      '핑크 노을이 환상적이었어 또 가고싶다 올해 여름에도 다같이 여행 가자!!! 휴가 날짜 맞춰보자 ㅎㅎ',
+    profile:
+      'https://ifh.cc/g/06Q0DB.png',
   },
 ];
 
@@ -301,22 +310,20 @@ const FeedDetail = ({
   navigation,
 }: StackScreenProps<FeedStackParams, 'FeedDetail'>) => {
   const [feed, setFeed] = useState<FeedDetailProps>({
-    title: '제주도 여행 갔던 거 기억 ㄴrㄴㅣ',
+    title: '작년 여름 제주에서',
     content:
-      '우리 작년 여름에 제주도 갔던거 기억나? 우리 같이 간 첫 여행이었잖아. 바다도 많이 가고 정말 좋았어.',
-    date: new Date(2023, 6, 23),
+      '여름 제주도 낭만 있고 너무 좋았어\n한 여름 밤의 꿈이다...',
+    date: new Date(2023, 7, 21),
     createdAt: '2024.03.21',
-    writer: '김토끼',
+    writer: '지소민',
     location: '제주 한림읍',
     rep_pic:
       'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
-    music: '미쓰에이 - Bad girl Good girl',
-    musicUrl: 'https://youtu.be/8TeeJvcBdLA?si=yffEamC12OAFs7HQ',
     members: [
-      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://ifh.cc/g/1CLCRY.png', // 4
+      'https://ifh.cc/g/06Q0DB.png', // 3
+      'https://ifh.cc/g/5ZL9HY.png', // 2
+      'https://ifh.cc/g/2xCPH5.png', // 1
     ],
     like: true,
   });
@@ -342,30 +349,32 @@ const FeedDetail = ({
     );
   };
   const contentArray: string[] = subfeedData.map(item => item.content);
-
+  const [tmp, setTmp] = useState<boolean>(true);
+console.log(tmp)
   return (
     <>
       <FlatList
-        data={subfeedData}
+        data={tmp ? subfeedData : subfeedData.slice(0,2)}
         ListHeaderComponent={
           <DetailSection
             feed={feed}
             navigation={navigation}
-            user={'김토끼'}
+            user={'지소민'}
             setSubfeedModal={setSubfeedModal}
             subfeedText={contentArray}
+            tmp={tmp}
           />
         }
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }: { item: any; index: number }) => {
           const { writer, content, profile } = item;
-          const randomColors = ['#EEF8FF', '#FFF8F5', '#FFFEEE', '#F5FFF8'];
+          const randomColors = ['#F5FFF8', '#EEF8FF', '#FFFEEE', '#FFF8F5'];
           return (
             <SubfeedItem
               background={randomColors[index % 4]}
-              isLast={subfeedData.length - 1 === index}
-              user={'이왈왈'}
+              isLast={tmp ? subfeedData.length - 1 === index : subfeedData.slice(0,2).length-1 === index}
+              user={'곽서진'}
               writer={writer}
               content={content}
               profile={profile}
@@ -381,8 +390,9 @@ const FeedDetail = ({
       <Modal visible={subfeedModal} animationType="slide">
         <SubfeedUpload
           setSubfeedModal={setSubfeedModal}
-          writer={'김토끼'}
-          profile="https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABUEy7m5EHhjNhJ1p1itC34MCXg11eTU7Uvc9eRkDJE9nJsGwZk2mej7FpG_nmWeAFkpcb9f7Gk39ZXsJApq214kipyZe9sXVeIWc.jpg?r=169"
+          setTmp={setTmp}
+          writer={'곽서진'}
+          profile="https://ifh.cc/g/06Q0DB.png"
         />
       </Modal>
     </>

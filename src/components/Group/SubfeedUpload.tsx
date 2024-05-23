@@ -25,12 +25,14 @@ interface SubfeedUploadProps {
   content?: string;
   profile: string;
   setSubfeedModal: Dispatch<SetStateAction<boolean>>;
+  setTmp: Dispatch<SetStateAction<boolean>>;
 }
 const SubfeedUpload = ({
   writer,
   content,
   profile,
   setSubfeedModal,
+  setTmp
 }: SubfeedUploadProps) => {
   const [subfeed, setSubfeed] = useState<string>('');
   return (
@@ -110,7 +112,7 @@ const SubfeedUpload = ({
           }}>
           {subfeed.length} / 100
         </Body>
-        <BottomButton label="등록" onPress={() => setSubfeedModal(false)} />
+        <BottomButton label="등록" onPress={() => {setSubfeedModal(false); setTmp(true)}} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

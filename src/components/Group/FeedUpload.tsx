@@ -53,24 +53,25 @@ export interface FeedProps {
 
 const data = [
   {
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-    nickname: '피터팬',
+    rep_pic: 'https://ifh.cc/g/5ZL9HY.png',
+    nickname: '김중현',
   },
   {
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-    nickname: '황은정',
+    rep_pic: 'https://ifh.cc/g/06Q0DB.png',
+    nickname: '곽서진',
   },
   {
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+    rep_pic: 'https://www.econovill.com/news/photo/201603/285365_95988_038.png',
     nickname: '김예지',
   },
   {
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-    nickname: '울랄라',
+    rep_pic: 'https://ifh.cc/g/1CLCRY.png',
+    nickname: '한서연',
   },
   {
-    rep_pic: 'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-    nickname: '푸하하',
+    rep_pic:
+      'https://static.wikia.nocookie.net/pokemon/images/3/3f/%EC%9D%B4%EB%B8%8C%EC%9D%B4_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170405085011&path-prefix=ko',
+    nickname: '이혜인',
   },
 ];
 
@@ -106,6 +107,10 @@ const FeedUpload = ({
     moment(feed.date).format('YYYY.MM.DD').toString() !==
     moment(new Date()).format('YYYY.MM.DD').toString();
 
+  const handleInputChange = (key: keyof FeedProps, value: any) => {
+    setFeed({ ...feed, [key]: value });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
       <CustomHeader
@@ -117,175 +122,157 @@ const FeedUpload = ({
       <KeyboardAvoidingView
         behavior="padding"
         keyboardVerticalOffset={10}
-        style={{
-          flex: 1,
-          justifyContent: 'space-between',
-        }}>
-        <Pressable
-          style={{ width: '100%', height: '100%', position: 'absolute' }}
-          onPress={() => Keyboard.dismiss()}
-        />
-        <FlatList
-          data={data}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={() => {
-            return (
-              <View>
-                <View style={{ alignItems: 'center', paddingVertical: 5 }}>
-                  <PaintIcon style={{ marginVertical: 20 }} />
-                  <Title>사진과 함께 추억 퍼즐을 생성해드려요</Title>
-                  <Content style={{ color: GRAY, textAlign: 'center' }}>
-                    사진이 없으시다면, 내용을 기반으로 AI 화가가 추억 퍼즐을
-                    그려드려요.{' '}
-                  </Content>
-                </View>
-                <PhotoBox>
-                  <PhotoButton photo={photo} setPhoto={setPhoto} />
-                </PhotoBox>
-                <Input
-                  label="제목"
-                  value={feed.title}
-                  onChangeText={title => {
-                    setFeed({ ...feed, title: title });
-                  }}
-                  isRequired
-                  placeholder="제목을 작성해주세요."
-                />
-                <View>
-                  <Input
-                    value={
-                      isDatePicked
-                        ? moment(feed.date).format('YYYY년 MM월 DD일').toString()
-                        : undefined
-                    }
-                    placeholder="추억 날짜를 입력해주세요."
-                    label="날짜"
-                    isRequired
-                    editable={false}
-                  />
-                  <IconButton
-                    onPress={() => showPicker(true)}
-                    style={{
-                      position: 'absolute',
-                      top: 27,
-                      right: 3,
-                      zIndex: 1,
-                    }}>
-                    <CalendarIcon />
-                  </IconButton>
-                </View>
-                <TouchableOpacity
-                  style={{ zIndex: 1 }}
-                  onPress={() => setPostModal(true)}>
-                  <Input
-                    label="장소"
-                    isRequired
-                    value={feed.location}
-                    placeholder="장소를 입력해주세요."
-                    editable={false}
-                  />
-                </TouchableOpacity>
-                <Label>내용 *</Label>
-                <TextInput
-                  value={feed.content}
-                  onChangeText={content => {
-                    setFeed({ ...feed, content: content });
-                  }}
-                  style={{
-                    borderWidth: 1,
-                    borderColor: GRAY,
-                    borderRadius: 2,
-                    padding: 10,
-                    marginBottom: 20,
-                    height: 150,
-                    color: BLACK,
-                    fontSize: 14,
-                    fontFamily: 'Pretendard Variable',
-                  }}
-                  multiline
-                />
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Label>퍼즐러 * </Label>
-                  <InfoIcon />
-                  <Caption style={{ color: GRAY }}>
-                    {' '}
-                    함께 추억을 공유할 퍼즐러들을 초대하세요.
-                  </Caption>
-                </View>
-              </View>
-            );
-          }}
-          style={{
+        style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{
             paddingHorizontal: 25,
-          }}
-          renderItem={({ item, index }: { item: any; index: number }) => {
-            const { rep_pic, nickname } = item;
-            let isInvited = feed.members.includes(nickname);
-            let isLastItem = data.length - 1 === index;
-            return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  borderTopWidth: 1,
-                  borderStartColor: GRAY,
-                  borderStartWidth: 1,
-                  borderEndWidth: 1,
-                  borderEndColor: GRAY,
-                  borderColor: GRAY,
-                  borderBottomColor: GRAY,
-                  borderBottomWidth: isLastItem ? 1 : 0,
-                  borderTopLeftRadius: index === 0 ? 2 : 0,
-                  borderTopRightRadius: index === 0 ? 2 : 0,
-                  borderBottomLeftRadius: isLastItem ? 2 : 0,
-                  borderBottomRightRadius: isLastItem ? 2 : 0,
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
-                }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Image
-                    source={{ uri: rep_pic }}
-                    style={{ width: 36, height: 36, borderRadius: 180 }}
-                  />
-                  <Label style={{ marginLeft: 10 }}>{nickname}</Label>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    isInvited
-                      ? setFeed({
-                          ...feed,
-                          members: feed.members.filter(
-                            (member: string) => member !== nickname,
-                          ),
-                        })
-                      : setFeed({
-                          ...feed,
-                          members: [...feed.members, nickname],
-                        });
-                  }}
+            paddingBottom: 20,
+          }}>
+          <View style={{ alignItems: 'center', paddingVertical: 5 }}>
+            <PaintIcon style={{ marginVertical: 20 }} />
+            <Title>사진과 함께 추억 퍼즐을 생성해드려요</Title>
+            <Content style={{ color: GRAY, textAlign: 'center', fontSize: 12 }}>
+              사진이 없으시다면, 내용을 기반으로 AI 화가가 추억 퍼즐을
+              그려드려요.
+            </Content>
+          </View>
+          <PhotoBox>
+            <PhotoButton photo={photo} setPhoto={setPhoto} />
+          </PhotoBox>
+          <Input
+            label="제목"
+            value={feed.title}
+            onChangeText={title => handleInputChange('title', title)}
+            isRequired
+            placeholder="제목을 작성해주세요."
+          />
+          <View>
+            <Input
+              value={
+                isDatePicked
+                  ? moment(feed.date).format('YYYY년 MM월 DD일').toString()
+                  : undefined
+              }
+              placeholder="추억 날짜를 입력해주세요."
+              label="날짜"
+              isRequired
+              editable={false}
+            />
+            <IconButton
+              onPress={() => showPicker(true)}
+              style={{
+                position: 'absolute',
+                top: 27,
+                right: 3,
+                zIndex: 1,
+              }}>
+              <CalendarIcon />
+            </IconButton>
+          </View>
+          <TouchableOpacity
+            style={{ zIndex: 1 }}
+            onPress={() => setPostModal(true)}>
+            <Input
+              label="장소"
+              isRequired
+              value={feed.location}
+              placeholder="장소를 입력해주세요."
+              editable={false}
+            />
+          </TouchableOpacity>
+          <Label>내용 *</Label>
+          <TextInput
+            value={feed.content}
+            onChangeText={content => handleInputChange('content', content)}
+            style={{
+              borderWidth: 1,
+              borderColor: GRAY,
+              borderRadius: 2,
+              padding: 10,
+              marginBottom: 20,
+              height: 150,
+              color: BLACK,
+              fontSize: 14,
+              fontFamily: 'Pretendard Variable',
+            }}
+            multiline
+          />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Label>퍼즐러 * </Label>
+            <InfoIcon />
+            <Caption style={{ color: GRAY }}>
+              {' '}
+              함께 추억을 공유할 퍼즐러들을 초대하세요.
+            </Caption>
+          </View>
+          <FlatList
+            data={data}
+            scrollEnabled={false}
+            keyExtractor={item => item.nickname}
+            renderItem={({ item, index }) => {
+              const { rep_pic, nickname } = item;
+              const isInvited = feed.members.includes(nickname);
+              const isLastItem = data.length - 1 === index;
+              return (
+                <View
                   style={{
-                    width: 80,
-                    height: 25,
-                    backgroundColor: isInvited ? LIGHTPURPLE : PURPLE,
-                    justifyContent: 'center',
+                    flexDirection: 'row',
                     alignItems: 'center',
-                    borderRadius: 12,
+                    justifyContent: 'space-between',
+                    borderTopWidth: 1,
+                    borderStartColor: GRAY,
+                    borderStartWidth: 1,
+                    borderEndWidth: 1,
+                    borderEndColor: GRAY,
+                    borderColor: GRAY,
+                    borderBottomColor: GRAY,
+                    borderBottomWidth: isLastItem ? 1 : 0,
+                    borderTopLeftRadius: index === 0 ? 2 : 0,
+                    borderTopRightRadius: index === 0 ? 2 : 0,
+                    borderBottomLeftRadius: isLastItem ? 2 : 0,
+                    borderBottomRightRadius: isLastItem ? 2 : 0,
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
                   }}>
-                  <Caption
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image
+                      source={{ uri: rep_pic }}
+                      style={{ width: 36, height: 36, borderRadius: 180 }}
+                    />
+                    <Label style={{ marginLeft: 10 }}>{nickname}</Label>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      isInvited
+                        ? handleInputChange(
+                            'members',
+                            feed.members.filter(member => member !== nickname),
+                          )
+                        : handleInputChange('members', [
+                            ...feed.members,
+                            nickname,
+                          ]);
+                    }}
                     style={{
-                      color: isInvited ? PURPLE : WHITE,
-                      fontWeight: '700',
+                      width: 80,
+                      height: 25,
+                      backgroundColor: isInvited ? LIGHTPURPLE : PURPLE,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: 12,
                     }}>
-                    {isInvited ? '추가 완료' : '추가'}
-                  </Caption>
-                </TouchableOpacity>
-              </View>
-            );
-          }}
-          ListFooterComponentStyle={{ marginTop: 20 }}
-          ListFooterComponent={() => {
-            return (
+                    <Caption
+                      style={{
+                        color: isInvited ? PURPLE : WHITE,
+                        fontWeight: '700',
+                      }}>
+                      {isInvited ? '추가 완료' : '추가'}
+                    </Caption>
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+            ListFooterComponent={() => (
               <BottomButton
                 label="등록"
                 onPress={() => {
@@ -293,79 +280,25 @@ const FeedUpload = ({
                   navigation.navigate('FeedDetail', { id: 1 });
                 }}
               />
-            );
-          }}
-        />
+            )}
+            ListFooterComponentStyle={{ marginTop: 20 }}
+          />
+        </ScrollView>
       </KeyboardAvoidingView>
       <DatePicker
         modal
         open={show}
         onConfirm={date => {
           setShow(false);
-          setFeed({ ...feed, date: date });
+          handleInputChange('date', date);
         }}
         onCancel={() => setShow(false)}
         date={feed.date}
-        mode={'date'}
+        mode="date"
         minimumDate={new Date(1970, 1)}
         maximumDate={new Date()}
         locale="ko"
       />
-      <Modal visible={musicVisible} transparent>
-        <Pressable
-          style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
-          onPress={() => setMusicVisible(false)}
-        />
-        <View
-          style={{
-            backgroundColor: LIGHTPURPLE,
-            position: 'absolute',
-            width: '80%',
-            height: 160,
-            top: 340,
-            alignSelf: 'center',
-            borderRadius: 24,
-            padding: 15,
-          }}>
-          <Input
-            label="Youtube"
-            value={feed.musicUrl}
-            onChangeText={musicUrl => {
-              setFeed({ ...feed, musicUrl: musicUrl });
-            }}
-            placeholder="유튜브 링크를 삽입해주세요."
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <TouchableOpacity
-              style={{
-                paddingVertical: 10,
-                paddingHorizontal: 55,
-                backgroundColor: PURPLE,
-                borderRadius: 12,
-              }}
-              onPress={() => {
-                setFeed({ ...feed, musicUrl: '' });
-                setMusicVisible(false);
-              }}>
-              <Label style={{ color: WHITE }}>취소</Label>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                paddingVertical: 10,
-                paddingHorizontal: 55,
-                backgroundColor: PURPLE,
-                borderRadius: 12,
-              }}
-              onPress={() => setMusicVisible(false)}>
-              <Label style={{ color: WHITE }}>완료</Label>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
       <Modal visible={postModal}>
         <SafeAreaView>
           <CustomHeader
@@ -381,7 +314,7 @@ const FeedUpload = ({
             }}
             jsOptions={{ animation: true, hideMapBtn: true }}
             onSelected={data => {
-              setFeed({ ...feed, location: data.address });
+              handleInputChange('location', data.address);
               setPostModal(false);
             }}
           />
@@ -390,7 +323,6 @@ const FeedUpload = ({
     </SafeAreaView>
   );
 };
-
 const PhotoBox = styled.View`
   margin: 5px 0px;
   border-radius: 2px;

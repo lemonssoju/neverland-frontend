@@ -23,6 +23,7 @@ const CommentInput = ({ comment, setComment, onPress }: CommentInputProps) => {
         onChangeText={(text: string) => {
           setComment(text);
         }}
+        blurOnSubmit={false}
         placeholder="댓글을 남겨주세요."
         placeholderTextColor={GRAY}
         style={{

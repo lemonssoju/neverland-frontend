@@ -136,7 +136,7 @@ const PuzzleCreate = ({
           />
         ) : complete ? (
           <Image
-            source={require('../../assets/tmp/puzzle1.png')}
+            source={require('../../assets/tmp/Puzzlejeju.png')}
             style={{
               width: 320,
               height: 360,

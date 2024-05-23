@@ -29,10 +29,11 @@ import moment from 'moment';
 import IconButton from '../common/IconButton';
 
 interface GroupCreateProps {
+  setTmp: Dispatch<SetStateAction<boolean>>;
   setFormVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
+const GroupCreate = ({ setTmp, setFormVisible }: GroupCreateProps) => {
   const [photo, setPhoto] = useState<Asset[]>([
     {
       fileName: '',
@@ -54,7 +55,7 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
     (event: any, newDate: any) => {
       const selectedDate = newDate || group.date;
       showPicker(false);
-      setGroup({ ...group, date: selectedDate });
+      setGroup({ ...group, name: '화정동 칠공주', date: selectedDate });
     },
     [group.date, showPicker],
   );
@@ -102,7 +103,7 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
         />
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{ marginBottom: 10, marginTop: 5 }}
+          style={{ marginVertical: 10 }}
           contentContainerStyle={{ alignItems: 'center' }}
           scrollEnabled={keyboardOpen}>
           <Image
@@ -145,12 +146,12 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
           />
           <IconButton
             onPress={() => showPicker(true)}
-            style={{ position: 'absolute', top: 27, right: 3, zIndex: 1 }}>
+            style={{ position: 'absolute', top: 23, right: 3, zIndex: 1 }}>
             <CalendarIcon />
           </IconButton>
         </View>
         <View style={{ marginTop: 20 }}>
-          <BottomButton label="등록" onPress={() => setFormVisible(false)} />
+          <BottomButton label="등록" onPress={() => {setFormVisible(false); setTmp(true)}} />
         </View>
       </KeyboardAvoidingView>
       {show && (
