@@ -51,7 +51,7 @@ const SettingsHome = ({
   const navigationToAuth =
     useNavigation<StackNavigationProp<RootStackParams>>();
   const [user, setUser] = useState<UserProps>({
-    nickname: '김토끼',
+    nickname: '곽서진',
     profile: '',
   });
   const textInputRef = useRef<TextInput | null>(null);

@@ -45,7 +45,7 @@ export const PuzzleTimeItem = ({
           style={{
             position: 'absolute',
             top: 10,
-            left: 50,
+            left: 53,
             backgroundColor: PURPLE,
             width: 1.6,
             height: '120%',
@@ -56,7 +56,7 @@ export const PuzzleTimeItem = ({
         style={{
           position: 'absolute',
           top: 10,
-          left: 45,
+          left: 48,
           backgroundColor: PURPLE,
           width: 12,
           height: 12,
@@ -94,11 +94,17 @@ export const PuzzleTimeItem = ({
   );
 };
 
-export const PuzzlePlaceItem = ({ navigation }: any) => {
+export const PuzzlePlaceItem = ({
+  navigation,
+  image,
+}: {
+  navigation: any;
+  image: string;
+}) => {
   return (
     <Pressable
       onPress={() => navigation.navigate('PuzzleDetail', { id: 1 })}
-      style={{ width: 100, height: 120}}>
+      style={{ width: 100, height: 120 }}>
       <BubbleIcon style={{ position: 'absolute' }} />
       <View
         style={{
@@ -110,7 +116,7 @@ export const PuzzlePlaceItem = ({ navigation }: any) => {
         <Image
           style={{ width: 90, height: 90, borderRadius: 8 }}
           source={{
-            uri: 'https://img.allurekorea.com/allure/2023/01/style_63d8c8ce24a31-966x1200.jpeg',
+            uri: image,
           }}
         />
       </View>

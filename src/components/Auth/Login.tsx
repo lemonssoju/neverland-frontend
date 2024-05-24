@@ -62,6 +62,7 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
             value={form.password}
             onChangeText={password => setForm({ ...form, password: password })}
             isRequired
+            secureTextEntry
             placeholder="비밀번호를 입력해주세요."
           />
         </View>

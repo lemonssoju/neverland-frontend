@@ -37,32 +37,39 @@ import ShareModal from '../common/ShareModal';
 import ImageStack from '../common/ImageStack';
 
 const data = [
+  // {
+  //   writer: '지소민',
+  //   title: '작년 여름 제주에서',
+  //   date: '2023.08.21',
+  //   location: '제주시 한림읍',
+  //   rep_pic: require('../../assets/tmp/feed1.jpeg'),
+  // },
   {
-    writer: '김토끼',
-    title: '제주도 여행 기억ㄴrㄴㅣ',
-    date: '2023.06.23',
-    location: '제주 한림읍',
-    rep_pic: require('../../assets/tmp/feed1.jpeg'),
-  },
-  {
-    writer: '곽미미',
+    writer: '곽서진',
     title: '유럽 돌려보내줘',
-    date: '2022.08.30',
+    date: '2022.06.30',
     location: '체코 프라하',
     rep_pic: require('../../assets/tmp/feed2.jpeg'),
   },
   {
-    writer: '이왈왈',
+    writer: '한서연',
+    title: '깡총깡총 토끼',
+    date: '2023.05.19',
+    location: '전라북도 군산시',
+    rep_pic: require('../../assets/tmp/feed5.png'),
+  },
+  {
+    writer: '김중현',
     title: '목포가 여긴가',
-    date: '2017.02.16',
+    date: '2020.02.16',
     location: '전라남도 목포시',
     rep_pic: require('../../assets/tmp/feed3.jpeg'),
   },
   {
-    writer: '최멍멍',
-    title: '우리 벚꽃 사진 찍었잖아',
+    writer: '이혜인',
+    title: '벚꽃엔딩',
     date: '2017.04.02',
-    location: '서울 강동구',
+    location: '서울시 강동구',
     rep_pic: require('../../assets/tmp/feed4.jpeg'),
   },
 ];
@@ -73,18 +80,22 @@ const FeedList = ({
   const navigationToHome =
     useNavigation<StackNavigationProp<RootStackParams>>();
   const { width, height } = Dimensions.get('window');
+  const [tmp, setTmp] = useState<boolean>(false);
   const [group, setGroup] = useState({
-    name: '악당 꼬부기',
+    name: '화정동 칠공주',
     since: 2008,
     members: [
-      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
-      'https://i.ytimg.com/vi/PFsH2I7xeFA/hqdefault.jpg',
+      'https://ifh.cc/g/1CLCRY.png', // 4
+      'https://ifh.cc/g/06Q0DB.png', // 3
+      'https://ifh.cc/g/5ZL9HY.png', // 2
+      'https://ifh.cc/g/2xCPH5.png', // 1
+      'https://ifh.cc/g/2xCPH5.png', // 1
+      'https://ifh.cc/g/2xCPH5.png', // 1
+      'https://ifh.cc/g/2xCPH5.png', // 1
     ],
     puzzles: 17,
     during: 16,
-    code: 123456,
+    code: 627693,
   });
   const isManager: boolean = false;
   const [formVisible, setFormVisible] = useState<boolean>(false);
@@ -224,7 +235,7 @@ const FeedList = ({
         }}
       />
       <Modal visible={formVisible} animationType="slide">
-        <GroupCreate setFormVisible={setFormVisible} />
+        <GroupCreate setFormVisible={setFormVisible} setTmp={setTmp} />
       </Modal>
       <ShareModal
         modalVisible={inviteVisible}
