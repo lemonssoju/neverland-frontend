@@ -18,6 +18,7 @@ import { Caption } from '../../styles/GlobalText';
 import Request from '../../services/requests';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
+import { setAccessToken, setRefreshToken } from '../../services/storage';
 
 interface FormTypes {
   loginId: string;
@@ -81,7 +82,7 @@ const SignUp = ({
     }
   }, [form.passwordCheck]);
 
-  const signup = () => {
+  const signup = async () => {
     if (
       form.loginId.length *
         form.nickname.length *
@@ -97,8 +98,19 @@ const SignUp = ({
     } else if (!check.password) {
       Alert.alert('입력한 비밀번호가 일치하지 않습니다!');
     } else {
-      // 다음으로 이동 ? 회원가입 완료 ?
-      navigationToTab.replace('Home');
+      const response = await request.post('/users/signup', {
+        loginId: form.loginId,
+        nickname: form.nickname,
+        password: form.password,
+        passwordCheck: form.passwordCheck,
+      });
+      if (response.isSuccess) {
+        setAccessToken(response.result.accessToken);
+        setRefreshToken(response.result.refreshToken);
+        navigationToTab.replace('Home');
+      } else {
+        Alert.alert('회원가입에 실패하였습니다. 다시 시도해주세요.');
+      }
     }
   };
 
@@ -117,57 +129,64 @@ const SignUp = ({
           style={{ width: '100%', height: '100%', position: 'absolute' }}
           onPress={() => Keyboard.dismiss()}
         />
-        <View style={{justifyContent: 'center', flex: 1}}>
-          <Input
-            label="아이디"
-            value={form.loginId}
-            onChangeText={loginId => {
-              setForm({ ...form, loginId: loginId });
-              setCheck({ ...check, loginId: false });
-            }}
-            isRequired
-            placeholder="아이디를 입력해주세요."
-            isAlert={!check.loginId && !form.loginId}
-            alert="중복된 아이디입니다."
-            description={
-              check.loginId && form.loginId ? '사용 가능한 아이디입니다.' : ''
-            }
-          />
-          <DuplicateButton
-            style={{ top: 180 }}
-            onPress={() => duplicateCheck('loginId')}>
-            <Caption style={{ color: WHITE, fontWeight: '700' }}>
-              중복 확인
-            </Caption>
-          </DuplicateButton>
-          <Input
-            label="닉네임"
-            value={form.nickname}
-            onChangeText={nickname => {
-              setForm({ ...form, nickname: nickname });
-              setCheck({ ...check, nickname: false });
-            }}
-            isRequired
-            placeholder="닉네임을 입력해주세요."
-            isAlert={!check.nickname && !form.nickname}
-            alert="중복된 닉네임입니다."
-            description={
-              check.nickname && form.nickname ? '사용 가능한 닉네임입니다.' : ''
-            }
-          />
-          <DuplicateButton
-            style={{ top: 275}}
-            onPress={() => duplicateCheck('nickname')}>
-            <Caption style={{ color: WHITE, fontWeight: '700' }}>
-              중복 확인
-            </Caption>
-          </DuplicateButton>
+        <View style={{ justifyContent: 'center', flex: 1 }}>
+          <View>
+            <Input
+              label="아이디"
+              value={form.loginId}
+              onChangeText={loginId => {
+                setForm({ ...form, loginId: loginId });
+                setCheck({ ...check, loginId: false });
+              }}
+              isRequired
+              placeholder="아이디를 입력해주세요."
+              isAlert={!check.loginId && !form.loginId}
+              alert="중복된 아이디입니다."
+              description={
+                check.loginId && form.loginId ? '사용 가능한 아이디입니다.' : ''
+              }
+            />
+            <DuplicateButton
+              style={{ top: 36 }}
+              onPress={() => duplicateCheck('loginId')}>
+              <Caption style={{ color: WHITE, fontWeight: '700' }}>
+                중복 확인
+              </Caption>
+            </DuplicateButton>
+          </View>
+          <View>
+            <Input
+              label="닉네임"
+              value={form.nickname}
+              onChangeText={nickname => {
+                setForm({ ...form, nickname: nickname });
+                setCheck({ ...check, nickname: false });
+              }}
+              isRequired
+              placeholder="닉네임을 입력해주세요."
+              isAlert={!check.nickname && !form.nickname}
+              alert="중복된 닉네임입니다."
+              description={
+                check.nickname && form.nickname
+                  ? '사용 가능한 닉네임입니다.'
+                  : ''
+              }
+            />
+            <DuplicateButton
+              style={{ top: 36 }}
+              onPress={() => duplicateCheck('nickname')}>
+              <Caption style={{ color: WHITE, fontWeight: '700' }}>
+                중복 확인
+              </Caption>
+            </DuplicateButton>
+          </View>
           <Input
             label="비밀번호"
             value={form.password}
             onChangeText={password => setForm({ ...form, password: password })}
             isRequired
             secureTextEntry
+            blurOnSubmit={false}
             placeholder="비밀번호를 입력해주세요."
             // description="8자 이상의 알파벳 소문자, 숫자를 포함합니다."
             alert="잘못된 형식의 비밀번호입니다."
@@ -181,6 +200,7 @@ const SignUp = ({
             }}
             isRequired
             secureTextEntry
+            blurOnSubmit={false}
             placeholder="비밀번호를 한 번 더 입력해주세요."
             isAlert={!check.password}
             alert="비밀번호가 일치하지 않습니다."
