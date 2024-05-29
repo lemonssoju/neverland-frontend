@@ -37,6 +37,7 @@ const Input = ({
         placeholder={placeholder}
         placeholderTextColor={GRAY}
         blurOnSubmit={false}
+        autoCapitalize="none"
         style={{
           borderColor: GRAY,
           borderWidth: 1,
@@ -50,7 +51,8 @@ const Input = ({
       />
       <Caption style={{ marginTop: 3, color: PURPLE }}>
         {isAlert && alert}
-        {description && description}{''}
+        {description && description}
+        {''}
       </Caption>
     </View>
   );

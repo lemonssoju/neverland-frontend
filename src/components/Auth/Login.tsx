@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Pressable,
   Keyboard,
+  Alert,
 } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import CustomHeader from '../common/CustomHeader';
@@ -14,13 +15,34 @@ import BottomButton from '../common/BottomButton';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
 import { AuthStackParams } from '../../pages/AuthStack';
+import Request from '../../services/requests';
+import { setAccessToken, setRefreshToken } from '../../services/storage';
 
 const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
   const navigationToTab = useNavigation<StackNavigationProp<RootStackParams>>();
-  const [form, setForm] = useState<{ id: string; password: string }>({
-    id: '',
+  const request = Request();
+  const [form, setForm] = useState<{ loginId: string; password: string }>({
+    loginId: '',
     password: '',
   });
+
+  const login = async () => {
+    if (form.loginId.length * form.password.length === 0) {
+      Alert.alert('빈칸을 채워주세요!');
+    } else {
+      const response = await request.post('/users/login', {
+        loginId: form.loginId,
+        password: form.password,
+      });
+      if (response.isSuccess) {
+        setAccessToken(response.result.accessToken);
+        setRefreshToken(response.result.refreshToken);
+        navigationToTab.replace('Home');
+      } else {
+        Alert.alert('로그인에 실패하였습니다. 다시 시도해주세요.');
+      }
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -51,8 +73,8 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
         <View>
           <Input
             label="아이디"
-            value={form.id}
-            onChangeText={id => setForm({ ...form, id: id })}
+            value={form.loginId}
+            onChangeText={loginId => setForm({ ...form, loginId: loginId })}
             isRequired
             placeholder="아이디를 입력해주세요."
           />
@@ -66,12 +88,7 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
             placeholder="비밀번호를 입력해주세요."
           />
         </View>
-        <BottomButton
-          label="로그인"
-          onPress={() => {
-            navigationToTab.replace('Home');
-          }}
-        />
+        <BottomButton label="로그인" onPress={login} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
