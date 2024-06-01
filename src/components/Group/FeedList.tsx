@@ -235,7 +235,7 @@ const FeedList = ({
         }}
       />
       <Modal visible={formVisible} animationType="slide">
-        <GroupCreate setFormVisible={setFormVisible} setTmp={setTmp} />
+        <GroupCreate setFormVisible={setFormVisible} />
       </Modal>
       <ShareModal
         modalVisible={inviteVisible}
