@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import {
   Alert,
   Image,
@@ -20,7 +20,11 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../../App';
 import IconButton from '../../common/IconButton';
 import Request from '../../../services/requests';
-import { getAccessToken, removeAccessToken, removeRefreshToken } from '../../../services/storage';
+import {
+  getAccessToken,
+  removeAccessToken,
+  removeRefreshToken,
+} from '../../../services/storage';
 
 interface OptionProps {
   label: string;
@@ -59,12 +63,14 @@ const SettingsHome = ({
   const textInputRef = useRef<TextInput | null>(null);
   const [editable, setEditable] = useState<boolean>(false);
   const request = Request();
-  const [photo, setPhoto] = useState<Asset[]>([{
-    fileName: '',
-    width: 0,
-    height: 0,
-    uri: '',
-  }]);
+  const [photo, setPhoto] = useState<Asset[]>([
+    {
+      fileName: '',
+      width: 0,
+      height: 0,
+      uri: '',
+    },
+  ]);
   const logout = () => {
     const logoutRequest = async () => {
       const accessToken = await getAccessToken();

@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { NavigationContainer, DefaultTheme, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  useNavigation,
+  useRoute,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import {
   createBottomTabNavigator,
   BottomTabBarProps,
@@ -21,6 +27,7 @@ import PuzzleStack from './src/pages/Group/PuzzleStack';
 import FeedIcon from './src/assets/navbar/Feed.svg';
 import WriteIcon from './src/assets/navbar/Write.svg';
 import PuzzleIcon from './src/assets/navbar/Puzzle.svg';
+import { getAccessToken } from './src/services/storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,25 +40,59 @@ const GlobalTheme = {
 };
 
 export type RootStackParams = {
-  Auth: any;
-  Home: any;
-  GroupTab: { groupIdx: number | undefined };
+  'Auth': any;
+  'Home': any;
+  'GroupTab': { groupIdx: number | undefined };
 };
 
 function App(): JSX.Element {
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const checkLogin = async () => {
+    const accessToken = await getAccessToken();
+    if(accessToken) setIsLogin(true)
+  }
+  useEffect(() => {
+    checkLogin();
+  }, [isLogin])
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer theme={GlobalTheme}>
-        <Stack.Navigator
-          screenOptions={() => ({
-            headerShown: false,
-          })}>
-          <Stack.Screen name="Auth" component={AuthStack} />
-          <Stack.Screen name="Home" component={HomeStack} />
-          <Stack.Screen name="GroupTab" component={GroupTab} />
-        </Stack.Navigator>
-      </NavigationContainer>
+
+      <RootStack initialRouteName={isLogin ? 'Home' : 'Auth'} />
+
     </GestureHandlerRootView>
+  );
+}
+
+const RootStack = ({ initialRouteName }: {initialRouteName: keyof RootStackParams}) => {
+  const navigationRef = useNavigationContainerRef();
+  useEffect(() => {
+    if (navigationRef.isReady()) {
+      navigationRef.reset({
+        index: 0,
+        routes: [{ name: initialRouteName }],
+      });
+    }
+  }, [initialRouteName, navigationRef]);
+  return (
+    <NavigationContainer theme={GlobalTheme} ref={navigationRef}>
+      <Stack.Navigator
+        initialRouteName={initialRouteName}
+        screenOptions={() => ({
+          headerShown: false,
+        })}>
+        {/* {isLogin ? (
+          <Stack.Screen name="Auth" component={AuthStack} />
+        ) : (
+          <>
+            <Stack.Screen name="Home" component={HomeStack} />
+            <Stack.Screen name="GroupTab" component={GroupTab} />
+          </>
+        )} */}
+        <Stack.Screen name="Auth" component={AuthStack} />
+            <Stack.Screen name="Home" component={HomeStack} />
+            <Stack.Screen name="GroupTab" component={GroupTab} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
