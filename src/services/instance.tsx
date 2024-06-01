@@ -39,7 +39,6 @@ const createInstance = async (): Promise<AxiosInstance> => {
       } else {
         config.headers['Authorization'] = `Bearer ${accessToken}`;
       }
-      console.log('instance config', config)
       return config;
     },
     (err: unknown) => {
@@ -53,7 +52,6 @@ const createInstance = async (): Promise<AxiosInstance> => {
     async (response: AxiosResponse) => {
       const { config } = response;
       const originalRequest = config;
-      console.log('instance response', response);
       if (response.status === 401) {
         removeAccessToken();
         const tokenResponse = await instance.post('/users/reissue-token', {

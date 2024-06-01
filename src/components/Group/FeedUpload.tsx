@@ -277,7 +277,7 @@ const FeedUpload = ({
                 label="등록"
                 onPress={() => {
                   navigation.goBack();
-                  navigation.navigate('FeedDetail', { id: 1 });
+                  navigation.navigate('FeedDetail', { feedIdx: 1 });
                 }}
               />
             )}
