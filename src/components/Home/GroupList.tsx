@@ -93,11 +93,11 @@ const GroupList = ({
       const response = await request.post('/groups/join', {
         joinCode: groupCode
       });
-      console.log(response)
+      console.log(response, 're')
       if(response.isSuccess) {
         setInviteVisible(false);
         console.log(response.result)
-        // navigationToTab.navigate('GroupTab', { groupIdx: 1});
+        navigationToTab.navigate('GroupTab', { groupIdx: response.result.groupIdx});
       } else {
         Alert.alert('그룹 입장에 실패했습니다. 코드를 다시 확인해주세요.');
       }

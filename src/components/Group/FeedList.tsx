@@ -109,7 +109,7 @@ const FeedList = ({
     during: 16,
     code: 627693,
   });
-  const isManager: boolean = true;
+  const isManager: boolean = false;
   const [formVisible, setFormVisible] = useState<boolean>(false);
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
@@ -145,7 +145,7 @@ const FeedList = ({
     const quitRequest = async () => {
       const response = await request.patch(`/groups/${groupIdx}/withdraw`, {});
       console.log(response);
-      // if(response.isSuccess) navigationToHome.navigate('Home');
+      if(response.isSuccess) navigationToHome.navigate('Home');
     }
     Alert.alert(
       '알림',
