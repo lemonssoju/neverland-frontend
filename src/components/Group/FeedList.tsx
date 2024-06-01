@@ -14,7 +14,7 @@ import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
 import CustomHeader from '../common/CustomHeader';
 import FeedItem from './FeedItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import HomeIcon from '../../assets/common/Home.svg';
 import DotsIcon from '../../assets/common/Dots.svg';
@@ -35,6 +35,9 @@ import GroupCreate from '../Home/GroupCreate';
 import BottomButton from '../common/BottomButton';
 import ShareModal from '../common/ShareModal';
 import ImageStack from '../common/ImageStack';
+import { groupState } from '../../recoil/groupState';
+import { useRecoilState } from 'recoil';
+import Request from '../../services/requests';
 
 const data = [
   // {
@@ -80,7 +83,16 @@ const FeedList = ({
   const navigationToHome =
     useNavigation<StackNavigationProp<RootStackParams>>();
   const { width, height } = Dimensions.get('window');
-  const [tmp, setTmp] = useState<boolean>(false);
+  const request = Request();
+  const [groupIdx, setGroupIdx] = useRecoilState(groupState);
+  console.log('groupidx', groupIdx)
+  const getGroupProfile = async () => {
+    const response = await request.get(`/groups/${groupIdx}/profile`);
+    console.log(response)
+  }
+  useEffect(() => {
+    getGroupProfile();
+  }, [groupIdx])
   const [group, setGroup] = useState({
     name: '화정동 칠공주',
     since: 2008,
@@ -101,16 +113,24 @@ const FeedList = ({
   const [formVisible, setFormVisible] = useState<boolean>(false);
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
+  const [joinCode, setJoinCode] = useState<number>(0);
+  const onInvite = async () => {
+    const response = await request.post(`/groups/${groupIdx}/invite`, {});
+    setJoinCode(response.result.joinCode);
+    setInviteVisible(true)
+  }
   const onDelete = () => {
+    const deleteRequest = async () => {
+      const response = await request.patch(`/groups/${groupIdx}/delete`, {});
+      if(response.isSuccess) navigationToHome.navigate('Home');
+    }
     Alert.alert(
       '알림',
       '정말로 그룹을 삭제하시겠습니까?',
       [
         {
           text: '예',
-          onPress: () => {
-            navigationToHome.navigate('Home');
-          },
+          onPress: deleteRequest,
           style: 'destructive',
         },
         {
@@ -122,15 +142,18 @@ const FeedList = ({
     );
   };
   const onQuit = () => {
+    const quitRequest = async () => {
+      const response = await request.patch(`/groups/${groupIdx}/withdraw`, {});
+      console.log(response);
+      if(response.isSuccess) navigationToHome.navigate('Home');
+    }
     Alert.alert(
       '알림',
       '정말로 그룹을 나가시겠습니까?',
       [
         {
           text: '예',
-          onPress: () => {
-            navigationToHome.navigate('Home');
-          },
+          onPress: quitRequest,
           style: 'destructive',
         },
         {
@@ -190,7 +213,7 @@ const FeedList = ({
                   <Body>Since </Body>
                   <Body style={{ color: PURPLE }}>{group.since}</Body>
                 </HorizontalText>
-                <RoundButton onPress={() => setInviteVisible(true)}>
+                <RoundButton onPress={onInvite}>
                   <Content style={{ fontWeight: '700', color: WHITE }}>
                     초대하기
                   </Content>
@@ -235,12 +258,12 @@ const FeedList = ({
         }}
       />
       <Modal visible={formVisible} animationType="slide">
-        <GroupCreate setFormVisible={setFormVisible} />
+        <GroupCreate setFormVisible={setFormVisible} groupIdx={groupIdx} />
       </Modal>
       <ShareModal
         modalVisible={inviteVisible}
         setModalVisible={setInviteVisible}
-        code={group.code}
+        code={joinCode}
       />
     </SafeAreaView>
   );

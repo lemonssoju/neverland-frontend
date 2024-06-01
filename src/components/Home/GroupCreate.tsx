@@ -34,10 +34,11 @@ import { getAccessToken } from '../../services/storage';
 import axios from 'axios';
 
 interface GroupCreateProps {
+  groupIdx?: number;
   setFormVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
+const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
   const request = Request();
   const [photo, setPhoto] = useState<Asset[]>([
     {
@@ -51,9 +52,7 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
     name: '',
     date: new Date(),
   });
-
   const [show, setShow] = useState<boolean>(false);
-
   const showPicker = useCallback((value: boolean) => setShow(value), []);
 
   const onValueChange = useCallback(
@@ -67,6 +66,23 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
 
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   const [joinCode, setJoinCode] = useState<number>(0);
+
+  const getGroupData = async () => {
+    const response = await request.get(`/groups/${groupIdx}/editView`)
+    console.log(response)
+    if(response.isSuccess) {
+      setGroup({name: response.result.name, date: new Date(response.result.startDate)})
+      setPhoto([{fileName: 'group-profile', width: 0, height: 0, uri: response.result.groupImage}])
+    }
+  }
+
+  useEffect(() => {
+    if(groupIdx) getGroupData();
+  }, [groupIdx])
+
+  const onEdit = async () => {
+
+  }
 
   const onCreate = async () => {
     if (group.name.length * photo[0].uri!.length === 0) {
@@ -89,10 +105,6 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
       type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
     });
     formData.append('createGroupRequest', createGroupRequest);
-
-    console.log(formData, 'formdata');
-    console.log(createGroupRequest);
-    console.log(group);
     const response = await request.post('/groups/create', formData, {
       headers: {
         'Content-Type': 'multipart/formdata',
@@ -198,7 +210,7 @@ const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
           </IconButton>
         </View>
         <View style={{ marginTop: 20 }}>
-          <BottomButton label="등록" onPress={onCreate} />
+          <BottomButton label="등록" onPress={groupIdx ? onEdit : onCreate} />
         </View>
       </KeyboardAvoidingView>
       {show && (
