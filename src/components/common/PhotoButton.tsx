@@ -117,7 +117,7 @@ const PhotoButton = ({ photo, setPhoto }: PhotoProps) => {
           setPhoto={setPhoto}>
           <Image
             source={{ uri: photo[0].uri }}
-            style={{ height: '100%', borderRadius: 8 }}
+            style={{ height: '100%', borderRadius: 2 }}
             resizeMode="cover"
           />
         </PhotoAction>

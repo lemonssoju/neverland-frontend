@@ -7,6 +7,7 @@ import {
   useNavigation,
   useRoute,
   useNavigationContainerRef,
+  RouteProp,
 } from '@react-navigation/native';
 import {
   createBottomTabNavigator,
@@ -28,6 +29,8 @@ import FeedIcon from './src/assets/navbar/Feed.svg';
 import WriteIcon from './src/assets/navbar/Write.svg';
 import PuzzleIcon from './src/assets/navbar/Puzzle.svg';
 import { getAccessToken } from './src/services/storage';
+import { RecoilRoot, useRecoilState } from 'recoil';
+import { groupState } from './src/recoil/groupState';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,30 +43,34 @@ const GlobalTheme = {
 };
 
 export type RootStackParams = {
-  'Auth': any;
-  'Home': any;
-  'GroupTab': { groupIdx: number | undefined };
+  Auth: any;
+  Home: any;
+  GroupTab: { groupIdx: number | undefined };
 };
 
 function App(): JSX.Element {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const checkLogin = async () => {
     const accessToken = await getAccessToken();
-    if(accessToken) setIsLogin(true)
-  }
+    if (accessToken) setIsLogin(true);
+  };
   useEffect(() => {
     checkLogin();
-  }, [isLogin])
+  }, [isLogin]);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-
-      <RootStack initialRouteName={isLogin ? 'Home' : 'Auth'} />
-
+      <RecoilRoot>
+        <RootStack initialRouteName={isLogin ? 'Home' : 'Auth'} />
+      </RecoilRoot>
     </GestureHandlerRootView>
   );
 }
 
-const RootStack = ({ initialRouteName }: {initialRouteName: keyof RootStackParams}) => {
+const RootStack = ({
+  initialRouteName,
+}: {
+  initialRouteName: keyof RootStackParams;
+}) => {
   const navigationRef = useNavigationContainerRef();
   useEffect(() => {
     if (navigationRef.isReady()) {
@@ -80,21 +87,13 @@ const RootStack = ({ initialRouteName }: {initialRouteName: keyof RootStackParam
         screenOptions={() => ({
           headerShown: false,
         })}>
-        {/* {isLogin ? (
-          <Stack.Screen name="Auth" component={AuthStack} />
-        ) : (
-          <>
-            <Stack.Screen name="Home" component={HomeStack} />
-            <Stack.Screen name="GroupTab" component={GroupTab} />
-          </>
-        )} */}
         <Stack.Screen name="Auth" component={AuthStack} />
-            <Stack.Screen name="Home" component={HomeStack} />
-            <Stack.Screen name="GroupTab" component={GroupTab} />
+        <Stack.Screen name="Home" component={HomeStack} />
+        <Stack.Screen name="GroupTab" component={GroupTab} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export type TabProps = {
   Feed: { feedIdx?: number | undefined };
@@ -170,9 +169,14 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 
 const Tab = createBottomTabNavigator<TabProps>();
 const GroupTab = (): JSX.Element => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  // console.log(route.params.groupIdx)
+  const route = useRoute<RouteProp<RootStackParams, 'GroupTab'>>();
+  const [groupIdx, setGroupIdx] = useRecoilState(groupState);
+  useEffect(() => {
+    if (route.params.groupIdx) {
+      setGroupIdx(route.params.groupIdx);
+    }
+  }, []);
+  console.log(route.params.groupIdx);
   return (
     <Tab.Navigator
       tabBar={props => <CustomTab {...props} />}
