@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeStackParams } from '../../../pages/HomeStack';
 import { RootStackParams } from '../../../../App';
 import { Emphasis } from '../../../styles/GlobalText';
+import Request from '../../../services/requests';
 
 interface FormTypes {
   password: string;
@@ -21,6 +22,7 @@ const Withdraw = ({
 }: StackScreenProps<SettingsStackParams, 'Withdraw'>) => {
   const navigationToAuth =
     useNavigation<StackNavigationProp<RootStackParams>>();
+  const request = Request();
   const [form, setForm] = useState<FormTypes>({
     password: '',
     passwordCheck: '',
@@ -29,18 +31,21 @@ const Withdraw = ({
   useEffect(() => {
     if (form.password === form.passwordCheck) {
       setCheck(true);
+      console.log(form.password, form.passwordCheck, check);
     }
   }, [form.passwordCheck]);
   const withdrawConfirmAlert = () => {
+    const withdraw = async () => {
+      const response = await request.patch('/users/signout', {});
+      if (response.isSuccess) navigationToAuth.replace('Auth');
+    };
     Alert.alert(
       '알림',
       '정말로 탈퇴하시겠습니까?',
       [
         {
           text: '예',
-          onPress: () => {
-            navigationToAuth.replace('Auth');
-          },
+          onPress: withdraw,
           style: 'destructive',
         },
         {
@@ -62,6 +67,7 @@ const Withdraw = ({
         <Input
           label="비밀번호 입력"
           isRequired
+          secureTextEntry
           value={form.password}
           onChangeText={password => setForm({ ...form, password: password })}
           placeholder="비밀번호를 입력해주세요."
@@ -71,6 +77,7 @@ const Withdraw = ({
           label="비밀번호 확인"
           isRequired
           value={form.passwordCheck}
+          secureTextEntry
           onChangeText={password =>
             setForm({ ...form, passwordCheck: password })
           }
