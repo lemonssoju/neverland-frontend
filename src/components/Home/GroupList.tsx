@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   Alert,
   Dimensions,
@@ -28,36 +28,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
 import Input from '../common/Input';
 import IconButton from '../common/IconButton';
-
-const groupData: GroupProps[] = [
-  // {
-  //   name: '화정동 칠공주',
-  //   members: 7,
-  //   leader: '곽서진',
-  //   since: '2008',
-  //   recent: 47,
-  //   rep_pic:
-  //     'https://mblogthumb-phinf.pstatic.net/MjAxNzAyMjFfMjcy/MDAxNDg3NjY0Njg3NzYx.6r5I3IC2ylmlmI-HaE08964MDcj-N_fUyYv7X5z1iXUg.tyZXU56CLkgR0TFC1ObNCyvSaEDutcfg5G2kVxxaLW8g.PNG.ioea65ztem/08.20170221_153307.png?type=w800',
-  // },
-  // {
-  //   name: '곽가네 최고심',
-  //   members: 4,
-  //   leader: '곽서진',
-  //   since: '2001',
-  //   recent: 3,
-  //   rep_pic:
-  //     'https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/dEE6/image/7lkqup4njmhDmZX2ltE6HgiJqiY.jpg',
-  // },
-  {
-    name: '지가네',
-    members: 4,
-    leader: '지소민',
-    since: '2001',
-    recent: 3,
-    rep_pic:
-      'https://cdn2.colley.kr/item_91604_1_1_title_1.jpeg',
-  },
-];
+import Request from '../../services/requests';
 
 const HeaderSection = ({ navigation }: { navigation: any }) => {
   return (
@@ -101,23 +72,47 @@ const GroupList = ({
   navigation,
 }: StackScreenProps<HomeStackParams, 'GroupList'>) => {
   const navigationToTab = useNavigation<StackNavigationProp<RootStackParams>>();
+  const request = Request();
   const [formVisible, setFormVisible] = useState<boolean>(false);
   const { width, height } = Dimensions.get('window');
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
-  const [group, setGroup] = useState<{ name: string; code: string }>({
+  const [groupCode, setGroupCode] = useState<string>('');
+  const [group, setGroup] = useState<GroupProps[]>([{
+    admin: '',
+    groupIdx: 0,
+    groupImage: '',
+    memberCount: 0,
     name: '',
-    code: '',
-  });
-  const onJoin = () => {
-    if (group.code.length === 0) {
+    recentUpdate: '',
+    startYear: '',
+  }]);
+  const onJoin = async () => {
+    if (groupCode.length === 0) {
       Alert.alert('빈칸을 채워주세요!');
     } else {
-      setInviteVisible(false);
-      setGroup({ name: '', code: '' });
-      navigationToTab.navigate('GroupTab');
+      const response = await request.post('/groups/join', {
+        joinCode: groupCode
+      });
+      console.log(response)
+      if(response.isSuccess) {
+        setInviteVisible(false);
+        console.log(response.result)
+        // navigationToTab.navigate('GroupTab', { groupIdx: 1});
+      } else {
+        Alert.alert('그룹 입장에 실패했습니다. 코드를 다시 확인해주세요.');
+      }
     }
   };
-  const [tmp, setTmp] = useState<boolean>(false);
+
+  const getGroupList = async () => {
+    const response = await request.get('/groups');
+    setGroup(response.result.groupList);
+  };
+
+  useEffect(() => {
+    getGroupList();
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <HeaderSection navigation={navigation} />
@@ -149,31 +144,14 @@ const GroupList = ({
           이제 추억 퍼즐을 맞추러 가볼까요?
         </Body>
         <HorizontalCarousel
-          data={tmp ? groupData : groupData.slice(1,3)}
+          data={group}
           renderItem={({ item }: any) => {
-            const {
-              name,
-              members,
-              leader,
-              since,
-              recent,
-              rep_pic,
-            }: GroupProps = item;
-            return (
-              <GroupItem
-                name={name}
-                members={members}
-                leader={leader}
-                since={since}
-                recent={recent}
-                rep_pic={rep_pic}
-              />
-            );
+            return <GroupItem group={item} />;
           }}
         />
       </View>
       <Modal visible={formVisible} animationType="slide">
-        <GroupCreate setFormVisible={setFormVisible} setTmp={setTmp} />
+        <GroupCreate setFormVisible={setFormVisible} />
       </Modal>
       <Modal visible={inviteVisible} transparent>
         <Pressable
@@ -198,9 +176,9 @@ const GroupList = ({
           <Input
             label="그룹 코드"
             isRequired
-            keyboardType='numeric'
-            value={group.code}
-            onChangeText={code => setGroup({ ...group, code: code })}
+            keyboardType="numeric"
+            value={groupCode}
+            onChangeText={code => setGroupCode(code)}
             placeholder="그룹 코드를 입력하세요"
           />
           <BottomButton label="입장하기" onPress={onJoin} />

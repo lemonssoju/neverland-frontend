@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 export type FeedStackParams = {
   FeedList: undefined;
   FeedDetail: {
-    id: number;
+    feedIdx: number;
   };
   FeedUpload: undefined;
 };
@@ -24,10 +24,10 @@ const FeedStack = ({
   const navigationToFeed =
     useNavigation<StackNavigationProp<FeedStackParams>>();
   useEffect(() => {
-    if (route.params?.id) {
-      navigationToFeed.push('FeedDetail', { id: route.params.id });
+    if (route.params?.feedIdx) {
+      navigationToFeed.push('FeedDetail', { feedIdx: route.params.feedIdx });
     }
-  }, [route.params?.id]);
+  }, [route.params?.feedIdx]);
   return (
     <Stack.Navigator
       initialRouteName="FeedList"

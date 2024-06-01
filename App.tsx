@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, useNavigation, useRoute } from '@react-navigation/native';
 import {
   createBottomTabNavigator,
   BottomTabBarProps,
@@ -35,7 +35,7 @@ const GlobalTheme = {
 export type RootStackParams = {
   Auth: any;
   Home: any;
-  GroupTab: any;
+  GroupTab: { groupIdx: number | undefined };
 };
 
 function App(): JSX.Element {
@@ -56,7 +56,7 @@ function App(): JSX.Element {
 }
 
 export type TabProps = {
-  Feed: { id: number | undefined };
+  Feed: { feedIdx?: number | undefined };
   Write: any;
   Puzzle: { id: number | undefined; rep_pic: string };
 };
@@ -129,6 +129,9 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 
 const Tab = createBottomTabNavigator<TabProps>();
 const GroupTab = (): JSX.Element => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  // console.log(route.params.groupIdx)
   return (
     <Tab.Navigator
       tabBar={props => <CustomTab {...props} />}

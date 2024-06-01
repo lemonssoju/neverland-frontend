@@ -192,7 +192,7 @@ const DetailSection = ({
           />
           <TouchableOpacity
             onPress={() => {
-              navigationToFeed.navigate('Feed', { id: 1 });
+              navigationToFeed.navigate('Feed', { feedIdx: 1 });
             }}
             style={{
               flexDirection: 'row',

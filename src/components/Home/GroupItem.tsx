@@ -9,26 +9,29 @@ import { FeedStackParams } from '../../pages/Group/FeedStack';
 import { RootStackParams } from '../../../App';
 
 export interface GroupProps {
+  admin: string;
+  groupIdx: number;
+  groupImage: string;
+  memberCount: number;
   name: string;
-  members: number;
-  leader: string;
-  since: string;
-  recent: number;
-  rep_pic: string;
+  recentUpdate: string;
+  startYear: string;
 }
 
-const GroupItem = ({
-  name,
-  members,
-  leader,
-  since,
-  recent,
-  rep_pic,
-}: GroupProps) => {
+const GroupItem = ({ group }: {group: GroupProps}) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const {
+    admin,
+    groupIdx,
+    groupImage,
+    memberCount,
+    name,
+    recentUpdate,
+    startYear,
+  } = group;
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('GroupTab')}
+      onPress={() => navigation.navigate('GroupTab', { groupIdx: groupIdx })}
       style={{
         width: 320,
         height: 250,
@@ -40,7 +43,7 @@ const GroupItem = ({
         borderRadius: 8,
       }}>
       <ImageBackground
-        source={{ uri: rep_pic }}
+        source={{ uri: groupImage }}
         style={{ width: '100%', height: '100%' }}
         imageStyle={{ borderRadius: 8 }}>
         <View
@@ -55,18 +58,18 @@ const GroupItem = ({
         />
         <View style={{ padding: 15 }}>
           <Body style={{ color: WHITE, textAlign: 'right', fontWeight: '600' }}>
-            Since {since}
+            Since {startYear}
           </Body>
           <View style={{ height: '90%', justifyContent: 'flex-end' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Emphasis style={{ color: WHITE }}>{name}</Emphasis>
-              <Body style={{ color: WHITE }}> | 멤버 {members}명</Body>
+              <Body style={{ color: WHITE }}> | 멤버 {memberCount}명</Body>
             </View>
             <Subtitle style={{ color: WHITE, fontWeight: '500' }}>
-              퍼즐 관리자 {leader}
+              퍼즐 관리자 {admin}
             </Subtitle>
             <Body style={{ color: WHITE, marginBottom: 5, marginTop: 20 }}>
-              최근 추억 퍼즐 완성 {recent}일 전
+              최근 추억 퍼즐 완성 {recentUpdate}일 전
             </Body>
           </View>
         </View>

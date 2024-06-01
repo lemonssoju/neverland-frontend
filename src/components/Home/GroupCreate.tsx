@@ -14,6 +14,7 @@ import {
   Pressable,
   Keyboard,
   ScrollView,
+  Alert,
 } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import { BLACK, GRAY, WHITE } from '../../styles/GlobalColor';
@@ -27,13 +28,17 @@ import CalendarIcon from '../../assets/common/Calendar.svg';
 import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
 import IconButton from '../common/IconButton';
+import Request from '../../services/requests';
+import ShareModal from '../common/ShareModal';
+import { getAccessToken } from '../../services/storage';
+import axios from 'axios';
 
 interface GroupCreateProps {
-  setTmp: Dispatch<SetStateAction<boolean>>;
   setFormVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-const GroupCreate = ({ setTmp, setFormVisible }: GroupCreateProps) => {
+const GroupCreate = ({ setFormVisible }: GroupCreateProps) => {
+  const request = Request();
   const [photo, setPhoto] = useState<Asset[]>([
     {
       fileName: '',
@@ -55,10 +60,52 @@ const GroupCreate = ({ setTmp, setFormVisible }: GroupCreateProps) => {
     (event: any, newDate: any) => {
       const selectedDate = newDate || group.date;
       showPicker(false);
-      setGroup({ ...group, name: '화정동 칠공주', date: selectedDate });
+      setGroup({ ...group, date: selectedDate });
     },
     [group.date, showPicker],
   );
+
+  const [inviteVisible, setInviteVisible] = useState<boolean>(false);
+  const [joinCode, setJoinCode] = useState<number>(0);
+
+  const onCreate = async () => {
+    if (group.name.length * photo[0].uri!.length === 0) {
+      Alert.alert('빈칸을 모두 채워주세요!');
+    }
+    const createGroupRequest = new Blob(
+      [
+        JSON.stringify({
+          name: group.name,
+          startDate: group.date.toISOString().split('T')[0].substring(0, 7),
+        }),
+      ],
+      { type: 'application/json', lastModified: 2 },
+    );
+
+    const formData = new FormData();
+    formData.append('image', {
+      uri: photo[0].uri,
+      name: photo[0].fileName,
+      type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
+    });
+    formData.append('createGroupRequest', createGroupRequest);
+
+    console.log(formData, 'formdata');
+    console.log(createGroupRequest);
+    console.log(group);
+    const response = await request.post('/groups/create', formData, {
+      headers: {
+        'Content-Type': 'multipart/formdata',
+      },
+    });
+    if (response.isSuccess) {
+      setJoinCode(response.result.joinCode);
+      setInviteVisible(true);
+      setFormVisible(false);
+    } else {
+      Alert.alert('그룹 생성에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
 
   const [keyboardOpen, setKeyboardOpen] = useState<boolean>(false);
   useEffect(() => {
@@ -146,12 +193,12 @@ const GroupCreate = ({ setTmp, setFormVisible }: GroupCreateProps) => {
           />
           <IconButton
             onPress={() => showPicker(true)}
-            style={{ position: 'absolute', top: 23, right: 3, zIndex: 1 }}>
+            style={{ position: 'absolute', top: 28, right: 3, zIndex: 1 }}>
             <CalendarIcon />
           </IconButton>
         </View>
         <View style={{ marginTop: 20 }}>
-          <BottomButton label="등록" onPress={() => {setFormVisible(false); setTmp(true)}} />
+          <BottomButton label="등록" onPress={onCreate} />
         </View>
       </KeyboardAvoidingView>
       {show && (
@@ -165,6 +212,12 @@ const GroupCreate = ({ setTmp, setFormVisible }: GroupCreateProps) => {
           />
         </View>
       )}
+      <ShareModal
+        modalVisible={inviteVisible}
+        setModalVisible={setInviteVisible}
+        code={joinCode}
+        setFormVisible={setFormVisible}
+      />
     </SafeAreaView>
   );
 };
