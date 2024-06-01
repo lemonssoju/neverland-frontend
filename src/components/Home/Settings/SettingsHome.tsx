@@ -1,4 +1,4 @@
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Image,
@@ -48,7 +48,7 @@ const Option = ({ label, onPress }: OptionProps) => {
 
 interface UserProps {
   nickname: string;
-  profile: string;
+  profileImage: string | null;
 }
 
 const SettingsHome = ({
@@ -58,7 +58,7 @@ const SettingsHome = ({
     useNavigation<StackNavigationProp<RootStackParams>>();
   const [user, setUser] = useState<UserProps>({
     nickname: '곽서진',
-    profile: '',
+    profileImage: null,
   });
   const textInputRef = useRef<TextInput | null>(null);
   const [editable, setEditable] = useState<boolean>(false);
@@ -71,6 +71,18 @@ const SettingsHome = ({
       uri: '',
     },
   ]);
+
+  const getProfile = async () => {
+    const response = await request.get('/users/myPage');
+    setUser({
+      nickname: response.result.nickname,
+      profileImage: response.result.profileImage,
+    });
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
   const logout = () => {
     const logoutRequest = async () => {
       const accessToken = await getAccessToken();
@@ -111,8 +123,8 @@ const SettingsHome = ({
             source={
               photo[0].uri
                 ? { uri: photo[0].uri }
-                : user.profile
-                ? { uri: user.profile }
+                : user.profileImage
+                ? { uri: user.profileImage }
                 : require('../../../assets/Puzzle.png')
             }
             style={{
@@ -122,7 +134,7 @@ const SettingsHome = ({
               borderWidth: 1.5,
               borderColor: PURPLE,
             }}
-            resizeMode={photo[0].uri || user.profile ? 'cover' : 'contain'}
+            resizeMode={photo[0].uri || user.profileImage ? 'cover' : 'contain'}
           />
           <PhotoAction
             setPhoto={setPhoto}
@@ -130,7 +142,6 @@ const SettingsHome = ({
             <PhotoIcon />
           </PhotoAction>
           <View style={{ flexDirection: 'row', marginTop: 20 }}>
-            {/* <Title style={{ letterSpacing: -0.2 }}>{user.nickname}</Title> */}
             <TextInput
               ref={textInputRef}
               value={user.nickname}
@@ -145,7 +156,7 @@ const SettingsHome = ({
             />
             <Title style={{ letterSpacing: -0.2, fontWeight: '500' }}>님</Title>
             <IconButton
-              style={{ position: 'absolute', left: 80 }}
+              style={{ position: 'absolute', left: 80}}
               onPress={() => {
                 editable
                   ? setEditable(false)
@@ -158,7 +169,7 @@ const SettingsHome = ({
               style={{
                 height: 9,
                 backgroundColor: LIGHTPURPLE,
-                width: 17 * (user.nickname.length + 1),
+                width: user.nickname.length * 15,
                 position: 'absolute',
                 top: 15,
                 zIndex: -1,
