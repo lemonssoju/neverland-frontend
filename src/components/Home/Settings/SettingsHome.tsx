@@ -20,7 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../../App';
 import IconButton from '../../common/IconButton';
 import Request from '../../../services/requests';
-import { getAccessToken } from '../../../services/storage';
+import { getAccessToken, removeAccessToken, removeRefreshToken } from '../../../services/storage';
 
 interface OptionProps {
   label: string;
@@ -59,26 +59,26 @@ const SettingsHome = ({
   const textInputRef = useRef<TextInput | null>(null);
   const [editable, setEditable] = useState<boolean>(false);
   const request = Request();
-  const [photo, setPhoto] = useState<Asset[]>([
-    {
-      fileName: '',
-      width: 0,
-      height: 0,
-      uri: '',
-    },
-  ]);
+  const [photo, setPhoto] = useState<Asset[]>([{
+    fileName: '',
+    width: 0,
+    height: 0,
+    uri: '',
+  }]);
   const logout = () => {
     const logoutRequest = async () => {
       const accessToken = await getAccessToken();
       const response = await request.patch('/users/logout', {
-        Authorization: accessToken
+        Authorization: accessToken,
       });
-      if(response.isSuccess) {
+      if (response.isSuccess) {
+        removeAccessToken();
+        removeRefreshToken();
         navigationToAuth.replace('Auth');
       } else {
         Alert.alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
       }
-    }
+    };
     Alert.alert(
       '알림',
       '로그아웃하시겠습니까?',
