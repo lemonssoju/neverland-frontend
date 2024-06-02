@@ -122,9 +122,10 @@ const DetailSection = ({
   ]);
 
   const [createModal, setCreateModal] = useState<boolean>(false);
+  const [puzzleTextList, setPuzzleTextList] = useState<string[]>([]);
   const onCreate = () => {
     setImageStyleModal(false);
-    // setValue('');
+    setPuzzleTextList([...feed.puzzlePieces, feed.content])
     setCreateModal(true);
   };
 
@@ -279,7 +280,8 @@ const DetailSection = ({
           date={feed.puzzleDate}
           location={feed.location}
           imageUri={feed.puzzleImage!}
-          content={feed.puzzlePieces}
+          content={puzzleTextList}
+          puzzleIdx={feed.puzzleIdx}
           style={value}
           setCreateModal={setCreateModal}
         />

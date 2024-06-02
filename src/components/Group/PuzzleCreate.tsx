@@ -22,58 +22,74 @@ import { TabProps } from '../../../App';
 import generateImages from '../../services/ImageToImage';
 import Request from '../../services/requests';
 import Video from 'react-native-video';
+import { useRecoilState } from 'recoil';
+import { groupState } from '../../recoil/groupState';
 
 interface PuzzleCreateProps {
   date: string;
   location: string;
   imageUri: string;
   content: string[];
+  puzzleIdx: number;
   style?: string;
   setCreateModal: Dispatch<SetStateAction<boolean>>;
 }
-interface GeneratedImages {
-  base64: string;
+
+interface AlbumProps {
+  description: string;
+  albumIdx: number;
+  albumImage: string;
 }
 const PuzzleCreate = ({
   date,
   location,
   imageUri,
   content,
+  puzzleIdx,
   style,
   setCreateModal,
 }: PuzzleCreateProps) => {
   const { width, height } = Dimensions.get('screen');
+  const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const request = Request();
   const navigationToPuzzle = useNavigation<StackNavigationProp<TabProps>>();
   const [realComplete, setRealComplete] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setComplete(true);
-  //   }, 5000);
-  // });
-  // const [text, setText] = useState<string>('');
-  const [generatedImages, setGeneratedImages] = useState<GeneratedImages>({
-    base64: '',
+  const [album, setAlbum] = useState<AlbumProps>({
+    description: '',
+    albumIdx: 0,
+    albumImage: '',
   });
 
   const sendText = async () => {
-    const response = await request.post('', {
-      text: content,
-    });
+    const response = await request.post(
+      `/groups/${groupIdx}/puzzles/${puzzleIdx}`,
+      {
+        puzzleTextList: content,
+      },
+    );
     if (response.isSuccess) {
-      createImage();
+      setAlbum({
+        ...album,
+        description: response.result.description,
+        albumIdx: response.result.albumIdx,
+      });
+      createImage(response.result.prompt);
     }
   };
   // const image = 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg'
-  const text =
-    'I remember the trip to Jeju Island with the three of us last summer. We visited many delicious restaurants and even went swimming in the sea. Especially, waking up early in the morning to watch the sunrise was truly blissful. The memories we shared are so precious.';
-  const createImage = async () => {
+  // const text = 'I remember the trip to Jeju Island with the three of us last summer. We visited many delicious restaurants and even went swimming in the sea. Especially, waking up early in the morning to watch the sunrise was truly blissful. The memories we shared are so precious.';
+  const createImage = async (text: string) => {
     try {
       const images = await generateImages({ imageUri, text, style });
       console.log(images.base64);
-      setGeneratedImages({ base64: images.base64 });
+      const response = await request.post(
+        `/groups/${groupIdx}/albums/${album.albumIdx}/image`,
+        {
+          albumImage: images.base64,
+        },
+      );
+      setAlbum({...album, albumImage: images.base64})
       if (!complete) setRealComplete(true);
     } catch (err) {
       console.error(err);
@@ -89,9 +105,9 @@ const PuzzleCreate = ({
 
     return () => clearTimeout(timeout);
   }, [complete]);
-  // useEffect(() => {
-  //   createImage();
-  // }, []);
+  useEffect(() => {
+    sendText();
+  }, []);
 
   return (
     <View style={{ backgroundColor: '#100125', flex: 1 }}>
@@ -126,7 +142,7 @@ const PuzzleCreate = ({
         </View>
         {realComplete ? (
           <Image
-            source={{ uri: generatedImages.base64 }}
+            source={{ uri: album.albumImage }}
             style={{
               width: 320,
               height: 360,
@@ -166,8 +182,8 @@ const PuzzleCreate = ({
             onPress={() => {
               setCreateModal(false);
               navigationToPuzzle.navigate('Puzzle', {
-                id: 1,
-                rep_pic: generatedImages.base64,
+                id: album.albumIdx,
+                rep_pic: album.albumImage
               });
             }}
           />

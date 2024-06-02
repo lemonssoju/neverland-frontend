@@ -48,7 +48,7 @@ export interface FeedProps {
   puzzleDate: Date;
   location: string;
   content: string;
-  puzzlerList: string[];
+  puzzlerList: number[];
 }
 
 interface PuzzlerProps {
@@ -162,7 +162,6 @@ const FeedUpload = ({
       ],
       { type: 'application/json', lastModified: 2 },
     );
-
     const formData = new FormData();
     formData.append('createPuzzleRequest', createPuzzleRequest);
     formData.append('image', {
@@ -283,12 +282,12 @@ const FeedUpload = ({
             </Caption>
           </View>
           <FlatList
-            data={puzzlerList.slice(0, 1)}
+            data={puzzlerList}
             scrollEnabled={false}
             keyExtractor={item => item.nickname}
             renderItem={({ item, index }) => {
               const { profileImage, nickname, userIdx } = item;
-              const isInvited = feed.puzzlerList.includes(nickname);
+              const isInvited = feed.puzzlerList.includes(userIdx);
               const isLastItem = feed.puzzlerList.length - 1 === index;
               return (
                 <View
@@ -328,12 +327,12 @@ const FeedUpload = ({
                         ? handleInputChange(
                             'puzzlerList',
                             feed.puzzlerList.filter(
-                              member => member !== nickname,
+                              member => member !== userIdx,
                             ),
                           )
                         : handleInputChange('puzzlerList', [
                             ...feed.puzzlerList,
-                            nickname,
+                            userIdx,
                           ]);
                     }}
                     style={{
