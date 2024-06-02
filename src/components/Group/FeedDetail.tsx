@@ -48,39 +48,39 @@ import DropDownPicker, {
 } from 'react-native-dropdown-picker';
 import PuzzleCreate from './PuzzleCreate';
 import ImageStack from '../common/ImageStack';
+import { FeedItemProps } from './FeedItem';
+import Request from '../../services/requests';
+import { useRecoilState } from 'recoil';
+import { groupState } from '../../recoil/groupState';
 
-interface FeedDetailProps extends FeedProps {
-  createdAt: string;
-  writer: string;
-  like: boolean;
+interface FeedDetailProps extends FeedItemProps {
+  content: string;
+  puzzleDate: string;
+  memberImageList: string[];
+  memberCount: number;
+  writeCount: number;
+  isWriter: boolean;
+  hasWrite: boolean;
+  puzzlePieces: any[];
 }
 const { width, height } = Dimensions.get('window');
 const DetailSection = ({
   feed,
   navigation,
-  user,
   setSubfeedModal,
-  subfeedText,
-  tmp
 }: {
   feed: FeedDetailProps;
   navigation: any;
-  user: string;
   setSubfeedModal: Dispatch<SetStateAction<boolean>>;
-  subfeedText: string[];
-  tmp: boolean;
 }) => {
-  const [like, setLike] = useState<boolean>(feed.like);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
-  const isWriter = feed.writer === user;
 
-  let isPuzzleComplete = feed.members.length === subfeedText.length+1;
-  let isAlreadyPuzzled = tmp ? feed.members.length === subfeedText.length+1 : false;
-  let puzzleButtonEnabled = isWriter
+  let isPuzzleComplete = feed.memberCount === feed.writeCount;
+  let puzzleButtonEnabled = feed.isWriter
     ? isPuzzleComplete
       ? true
       : false
-    : isAlreadyPuzzled
+    : feed.hasWrite
     ? false
     : true;
 
@@ -126,7 +126,7 @@ const DetailSection = ({
   return (
     <>
       <ImageBackground
-        source={{ uri: feed.rep_pic }}
+        source={{ uri: feed.puzzleImage }}
         style={{ width: '100%', height: 300 }}
         imageStyle={{ width: '100%', height: 300 }}>
         <View
@@ -147,7 +147,7 @@ const DetailSection = ({
           <IconButton onPress={() => navigation.goBack()}>
             <ArrowIcon color={WHITE} />
           </IconButton>
-          {isWriter && (
+          {feed.isWriter && (
             <IconButton onPress={() => setDotPressed(!dotPressed)}>
               <DotsIcon
                 transform={[{ rotate: dotPressed ? '90deg' : '0deg' }]}
@@ -172,9 +172,7 @@ const DetailSection = ({
             marginTop: 140,
             marginLeft: 10,
           }}>
-          <Title style={{ color: WHITE }}>
-            {moment(feed.date).format('YYYY.MM.DD')}
-          </Title>
+          <Title style={{ color: WHITE }}>{feed.puzzleDate}</Title>
           <Title style={{ color: WHITE }}>{feed.location}</Title>
         </View>
       </ImageBackground>
@@ -185,14 +183,14 @@ const DetailSection = ({
           backgroundColor: LIGHTPURPLE,
         }}>
         <Label style={{ marginBottom: 5 }}>
-          {feed.createdAt} | {feed.writer}
+          {feed.createdDate} | {feed.writer}
         </Label>
-        <ImageStack data={feed.members} />
+        {/* <ImageStack data={feed.memberImageList} /> */}
         <Subtitle style={{ marginBottom: 5 }}>{feed.title}</Subtitle>
         <Body style={{ marginBottom: 15 }}>{feed.content}</Body>
         <TouchableOpacity
           onPress={() => {
-            isWriter ? setImageStyleModal(true) : setSubfeedModal(true);
+            feed.isWriter ? setImageStyleModal(true) : setSubfeedModal(true);
           }}
           disabled={!puzzleButtonEnabled}
           style={{
@@ -208,8 +206,8 @@ const DetailSection = ({
           }}>
           <PuzzleIcon style={{ marginRight: 10 }} />
           <Body style={{ color: WHITE, fontWeight: '600' }}>
-            {isWriter ? '추억 퍼즐 완성하기' : '추억 퍼즐 맞추기'}
-            {` (${tmp ? subfeedText.length+1 : 3}/${feed.members.length})`}
+            {feed.isWriter ? '추억 퍼즐 완성하기' : '추억 퍼즐 맞추기'}
+            {` (${feed.writeCount}/${feed.memberCount})`}
           </Body>
         </TouchableOpacity>
       </View>
@@ -271,10 +269,10 @@ const DetailSection = ({
       </Modal>
       <Modal visible={createModal} animationType="fade">
         <PuzzleCreate
-          date={moment(feed.date).format('YYYY.MM.DD')}
+          date={feed.puzzleDate}
           location={feed.location}
-          imageUri={feed.rep_pic!}
-          content={subfeedText}
+          imageUri={feed.puzzleImage!}
+          content={feed.puzzlePieces}
           style={value}
           setCreateModal={setCreateModal}
         />
@@ -294,39 +292,56 @@ const subfeedData: SubfeedProps[] = [
     writer: '한서연',
     content:
       '맞아 기억난다! 벌써 이게 반년 전이네. 맛집도 완전 많이 가고 바다에 들어가서 수영도 했었지~ 그때 우리 청춘이었다..',
-    profile:
-      'https://ifh.cc/g/1CLCRY.png',
+    profile: 'https://ifh.cc/g/1CLCRY.png',
   },
   {
     writer: '곽서진',
     content:
       '핑크 노을이 환상적이었어 또 가고싶다 올해 여름에도 다같이 여행 가자!!! 휴가 날짜 맞춰보자 ㅎㅎ',
-    profile:
-      'https://ifh.cc/g/06Q0DB.png',
+    profile: 'https://ifh.cc/g/06Q0DB.png',
   },
 ];
 
 const FeedDetail = ({
   navigation,
+  route,
 }: StackScreenProps<FeedStackParams, 'FeedDetail'>) => {
+  const feedIdx = route.params.feedIdx;
   const [feed, setFeed] = useState<FeedDetailProps>({
     title: '작년 여름 제주에서',
-    content:
-      '여름 제주도 낭만 있고 너무 좋았어\n한 여름 밤의 꿈이다...',
-    date: new Date(2023, 7, 21),
-    createdAt: '2024.03.21',
+    content: '여름 제주도 낭만 있고 너무 좋았어\n한 여름 밤의 꿈이다...',
+    puzzleDate: '2023.07.21',
+    createdDate: '2024.03.21',
     writer: '지소민',
     location: '제주 한림읍',
-    rep_pic:
+    puzzleImage:
       'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
-    members: [
+    memberImageList: [
       'https://ifh.cc/g/1CLCRY.png', // 4
       'https://ifh.cc/g/06Q0DB.png', // 3
       'https://ifh.cc/g/5ZL9HY.png', // 2
       'https://ifh.cc/g/2xCPH5.png', // 1
     ],
-    like: true,
+    isWriter: true,
+    hasWrite: false,
+    memberCount: 4,
+    writeCount: 2,
+    puzzleIdx: 1,
+    puzzlePieces: [],
   });
+  const [groupIdx, setGroupIdx] = useRecoilState(groupState);
+  const request = Request();
+  const getFeedDetail = async () => {
+    const response = await request.get(
+      `/groups/${groupIdx}/puzzles/${feedIdx}`,
+    );
+    console.log(response);
+    setFeed(response.result);
+  };
+
+  useEffect(() => {
+    getFeedDetail();
+  }, [feedIdx]);
   const [subfeedModal, setSubfeedModal] = useState<boolean>(false);
   const onDelete = () => {
     Alert.alert(
@@ -336,7 +351,7 @@ const FeedDetail = ({
         {
           text: '예',
           onPress: () => {
-            navigation.replace('FeedDetail', { id: 1 });
+            navigation.replace('FeedDetail', { feedIdx: 1 });
           },
           style: 'destructive',
         },
@@ -349,20 +364,15 @@ const FeedDetail = ({
     );
   };
   const contentArray: string[] = subfeedData.map(item => item.content);
-  const [tmp, setTmp] = useState<boolean>(true);
-console.log(tmp)
   return (
     <>
       <FlatList
-        data={tmp ? subfeedData : subfeedData.slice(0,2)}
+        data={feed.puzzlePieces}
         ListHeaderComponent={
           <DetailSection
             feed={feed}
             navigation={navigation}
-            user={'지소민'}
             setSubfeedModal={setSubfeedModal}
-            subfeedText={contentArray}
-            tmp={tmp}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -373,7 +383,7 @@ console.log(tmp)
           return (
             <SubfeedItem
               background={randomColors[index % 4]}
-              isLast={tmp ? subfeedData.length - 1 === index : subfeedData.slice(0,2).length-1 === index}
+              isLast={feed.puzzlePieces.length - 1 === index}
               user={'곽서진'}
               writer={writer}
               content={content}
@@ -390,7 +400,6 @@ console.log(tmp)
       <Modal visible={subfeedModal} animationType="slide">
         <SubfeedUpload
           setSubfeedModal={setSubfeedModal}
-          setTmp={setTmp}
           writer={'곽서진'}
           profile="https://ifh.cc/g/06Q0DB.png"
         />

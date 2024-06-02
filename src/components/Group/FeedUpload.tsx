@@ -45,7 +45,7 @@ import { useRecoilState } from 'recoil';
 
 export interface FeedProps {
   title: string;
-  date: Date;
+  puzzleDate: Date;
   location: string;
   content: string;
   puzzlerList: string[];
@@ -64,7 +64,7 @@ const FeedUpload = ({
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const [feed, setFeed] = useState<FeedProps>({
     title: '',
-    date: new Date(),
+    puzzleDate: new Date(),
     location: '',
     content: '',
     puzzlerList: [],
@@ -84,7 +84,7 @@ const FeedUpload = ({
   const showPicker = useCallback((value: boolean) => setShow(value), []);
 
   var isDatePicked =
-    moment(feed.date).format('YYYY.MM.DD').toString() !==
+    moment(feed.puzzleDate).format('YYYY.MM.DD').toString() !==
     moment(new Date()).format('YYYY.MM.DD').toString();
 
   const handleInputChange = (key: keyof FeedProps, value: any) => {
@@ -123,7 +123,7 @@ const FeedUpload = ({
       [
         JSON.stringify({
           title: feed.title,
-          puzzleDate: feed.date.toISOString().split('T')[0].substring(0, 10),
+          puzzleDate: feed.puzzleDate.toISOString().split('T')[0].substring(0, 10),
           content: feed.content,
           location: feed.location,
           puzzlerList: feed.puzzlerList,
@@ -131,13 +131,6 @@ const FeedUpload = ({
       ],
       { type: 'application/json', lastModified: 2 },
     );
-    console.log(JSON.stringify({
-      title: feed.title,
-      puzzleDate: feed.date.toISOString().split('T')[0].substring(0, 10),
-      content: feed.content,
-      location: feed.location,
-      puzzlerList: feed.puzzlerList,
-    }))
 
     const formData = new FormData();
     formData.append('createPuzzleRequest', createPuzzleRequest);
@@ -201,7 +194,7 @@ const FeedUpload = ({
             <Input
               value={
                 isDatePicked
-                  ? moment(feed.date).format('YYYY년 MM월 DD일').toString()
+                  ? moment(feed.puzzleDate).format('YYYY년 MM월 DD일').toString()
                   : undefined
               }
               placeholder="추억 날짜를 입력해주세요."
@@ -341,10 +334,10 @@ const FeedUpload = ({
         open={show}
         onConfirm={date => {
           setShow(false);
-          handleInputChange('date', date);
+          handleInputChange('puzzleDate', date);
         }}
         onCancel={() => setShow(false)}
-        date={feed.date}
+        date={feed.puzzleDate}
         mode="date"
         minimumDate={new Date(1970, 1)}
         maximumDate={new Date()}
