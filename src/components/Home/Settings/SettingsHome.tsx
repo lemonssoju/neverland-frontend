@@ -46,7 +46,7 @@ const Option = ({ label, onPress }: OptionProps) => {
   );
 };
 
-interface UserProps {
+export interface UserProps {
   nickname: string;
   profileImage: string | null;
 }

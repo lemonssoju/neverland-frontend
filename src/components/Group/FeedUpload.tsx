@@ -39,57 +39,38 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import Postcode from '@actbase/react-daum-postcode';
 import IconButton from '../common/IconButton';
+import Request from '../../services/requests';
+import { groupState } from '../../recoil/groupState';
+import { useRecoilState } from 'recoil';
 
 export interface FeedProps {
   title: string;
-  date: Date;
+  puzzleDate: Date;
   location: string;
   content: string;
-  rep_pic?: string;
-  music?: string;
-  musicUrl?: string;
-  members: string[];
+  puzzlerList: number[];
 }
 
-const data = [
-  {
-    rep_pic: 'https://ifh.cc/g/5ZL9HY.png',
-    nickname: '김중현',
-  },
-  {
-    rep_pic: 'https://ifh.cc/g/06Q0DB.png',
-    nickname: '곽서진',
-  },
-  {
-    rep_pic: 'https://www.econovill.com/news/photo/201603/285365_95988_038.png',
-    nickname: '김예지',
-  },
-  {
-    rep_pic: 'https://ifh.cc/g/1CLCRY.png',
-    nickname: '한서연',
-  },
-  {
-    rep_pic:
-      'https://static.wikia.nocookie.net/pokemon/images/3/3f/%EC%9D%B4%EB%B8%8C%EC%9D%B4_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170405085011&path-prefix=ko',
-    nickname: '이혜인',
-  },
-];
+interface PuzzlerProps {
+  nickname: string;
+  profileImage: string | null;
+  userIdx: number;
+}
 
 const { width, height } = Dimensions.get('window');
 const FeedUpload = ({
   navigation,
+  route,
 }: StackScreenProps<FeedStackParams, 'FeedUpload'>) => {
+  const puzzleIdx = route.params?.puzzleIdx;
+  const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const [feed, setFeed] = useState<FeedProps>({
     title: '',
-    date: new Date(),
+    puzzleDate: new Date(),
     location: '',
     content: '',
-    rep_pic: '',
-    music: '',
-    musicUrl: '',
-    members: [],
+    puzzlerList: [],
   });
-  const [musicVisible, setMusicVisible] = useState<boolean>(false);
   const [photo, setPhoto] = useState<Asset[]>([
     {
       fileName: '',
@@ -100,15 +81,108 @@ const FeedUpload = ({
   ]);
   const [postModal, setPostModal] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
+  const request = Request();
 
   const showPicker = useCallback((value: boolean) => setShow(value), []);
 
   var isDatePicked =
-    moment(feed.date).format('YYYY.MM.DD').toString() !==
+    moment(feed.puzzleDate).format('YYYY.MM.DD').toString() !==
     moment(new Date()).format('YYYY.MM.DD').toString();
 
   const handleInputChange = (key: keyof FeedProps, value: any) => {
     setFeed({ ...feed, [key]: value });
+  };
+
+  const [puzzlerList, setPuzzlerList] = useState<PuzzlerProps[]>([
+    {
+      nickname: '',
+      profileImage: null,
+      userIdx: 0,
+    },
+  ]);
+  const getPuzzler = async () => {
+    const response = await request.get(
+      `/groups/${groupIdx}/puzzles/puzzlerList`,
+    );
+    setPuzzlerList(response.result.puzzlerList);
+  };
+  const getFeedDetail = async () => {
+    const response = await request.get(
+      `/groups/${groupIdx}/puzzles/${puzzleIdx}`,
+    );
+    if (response.isSuccess) {
+      const { title, puzzleDate, location, content, puzzlerList } =
+        response.result;
+      setFeed({
+        title: title,
+        puzzleDate: new Date(puzzleDate),
+        location: location,
+        content: content,
+        puzzlerList: puzzlerList,
+      });
+      if (response.result.puzzleImage)
+        setPhoto([
+          {
+            fileName: 'group-profile',
+            width: 0,
+            height: 0,
+            uri: response.result.puzzleImage,
+          },
+        ]);
+    }
+  };
+
+  useEffect(() => {
+    getPuzzler();
+    if (puzzleIdx) getFeedDetail();
+  }, []);
+
+  const onCreate = async () => {
+    if (
+      feed.title.length *
+        feed.content.length *
+        feed.location.length *
+        feed.puzzlerList.length ===
+      0
+    ) {
+      Alert.alert('빈칸을 모두 채워주세요!');
+    }
+    const createPuzzleRequest = new Blob(
+      [
+        JSON.stringify({
+          title: feed.title,
+          puzzleDate: feed.puzzleDate
+            .toISOString()
+            .split('T')[0]
+            .substring(0, 10),
+          content: feed.content,
+          location: feed.location,
+          puzzlerList: feed.puzzlerList,
+        }),
+      ],
+      { type: 'application/json', lastModified: 2 },
+    );
+    const formData = new FormData();
+    formData.append('createPuzzleRequest', createPuzzleRequest);
+    formData.append('image', {
+      uri: photo[0].uri,
+      name: photo[0].fileName,
+      type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
+    });
+    const response = await request.post(
+      `/groups/${groupIdx}/puzzles`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/formdata',
+        },
+      },
+    );
+    console.log(response);
+    if (response.isSuccess) {
+      navigation.goBack();
+      navigation.navigate('FeedDetail', { feedIdx: 1 });
+    }
   };
 
   return (
@@ -150,7 +224,9 @@ const FeedUpload = ({
             <Input
               value={
                 isDatePicked
-                  ? moment(feed.date).format('YYYY년 MM월 DD일').toString()
+                  ? moment(feed.puzzleDate)
+                      .format('YYYY년 MM월 DD일')
+                      .toString()
                   : undefined
               }
               placeholder="추억 날짜를 입력해주세요."
@@ -206,13 +282,13 @@ const FeedUpload = ({
             </Caption>
           </View>
           <FlatList
-            data={data}
+            data={puzzlerList}
             scrollEnabled={false}
             keyExtractor={item => item.nickname}
             renderItem={({ item, index }) => {
-              const { rep_pic, nickname } = item;
-              const isInvited = feed.members.includes(nickname);
-              const isLastItem = data.length - 1 === index;
+              const { profileImage, nickname, userIdx } = item;
+              const isInvited = feed.puzzlerList.includes(userIdx);
+              const isLastItem = feed.puzzlerList.length - 1 === index;
               return (
                 <View
                   style={{
@@ -236,7 +312,11 @@ const FeedUpload = ({
                   }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
-                      source={{ uri: rep_pic }}
+                      source={
+                        profileImage
+                          ? { uri: profileImage }
+                          : require('../../assets/Puzzle.png')
+                      }
                       style={{ width: 36, height: 36, borderRadius: 180 }}
                     />
                     <Label style={{ marginLeft: 10 }}>{nickname}</Label>
@@ -245,12 +325,14 @@ const FeedUpload = ({
                     onPress={() => {
                       isInvited
                         ? handleInputChange(
-                            'members',
-                            feed.members.filter(member => member !== nickname),
+                            'puzzlerList',
+                            feed.puzzlerList.filter(
+                              member => member !== userIdx,
+                            ),
                           )
-                        : handleInputChange('members', [
-                            ...feed.members,
-                            nickname,
+                        : handleInputChange('puzzlerList', [
+                            ...feed.puzzlerList,
+                            userIdx,
                           ]);
                     }}
                     style={{
@@ -273,13 +355,7 @@ const FeedUpload = ({
               );
             }}
             ListFooterComponent={() => (
-              <BottomButton
-                label="등록"
-                onPress={() => {
-                  navigation.goBack();
-                  navigation.navigate('FeedDetail', { feedIdx: 1 });
-                }}
-              />
+              <BottomButton label="등록" onPress={onCreate} />
             )}
             ListFooterComponentStyle={{ marginTop: 20 }}
           />
@@ -290,10 +366,10 @@ const FeedUpload = ({
         open={show}
         onConfirm={date => {
           setShow(false);
-          handleInputChange('date', date);
+          handleInputChange('puzzleDate', date);
         }}
         onCancel={() => setShow(false)}
-        date={feed.date}
+        date={feed.puzzleDate}
         mode="date"
         minimumDate={new Date(1970, 1)}
         maximumDate={new Date()}

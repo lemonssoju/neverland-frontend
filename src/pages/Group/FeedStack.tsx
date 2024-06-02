@@ -12,7 +12,9 @@ export type FeedStackParams = {
   FeedDetail: {
     feedIdx: number;
   };
-  FeedUpload: undefined;
+  FeedUpload: {
+    puzzleIdx?: number;
+  };
 };
 
 const Stack = createNativeStackNavigator<FeedStackParams>();

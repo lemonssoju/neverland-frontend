@@ -13,7 +13,7 @@ import {
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { FeedStackParams } from '../../pages/Group/FeedStack';
 import CustomHeader from '../common/CustomHeader';
-import FeedItem from './FeedItem';
+import FeedItem, { FeedItemProps } from './FeedItem';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import HomeIcon from '../../assets/common/Home.svg';
@@ -39,43 +39,52 @@ import { groupState } from '../../recoil/groupState';
 import { useRecoilState } from 'recoil';
 import Request from '../../services/requests';
 
-const data = [
-  // {
-  //   writer: '지소민',
-  //   title: '작년 여름 제주에서',
-  //   date: '2023.08.21',
-  //   location: '제주시 한림읍',
-  //   rep_pic: require('../../assets/tmp/feed1.jpeg'),
-  // },
-  {
-    writer: '곽서진',
-    title: '유럽 돌려보내줘',
-    date: '2022.06.30',
-    location: '체코 프라하',
-    rep_pic: require('../../assets/tmp/feed2.jpeg'),
-  },
-  {
-    writer: '한서연',
-    title: '깡총깡총 토끼',
-    date: '2023.05.19',
-    location: '전라북도 군산시',
-    rep_pic: require('../../assets/tmp/feed5.png'),
-  },
-  {
-    writer: '김중현',
-    title: '목포가 여긴가',
-    date: '2020.02.16',
-    location: '전라남도 목포시',
-    rep_pic: require('../../assets/tmp/feed3.jpeg'),
-  },
-  {
-    writer: '이혜인',
-    title: '벚꽃엔딩',
-    date: '2017.04.02',
-    location: '서울시 강동구',
-    rep_pic: require('../../assets/tmp/feed4.jpeg'),
-  },
-];
+// const data = [
+//   // {
+//   //   writer: '지소민',
+//   //   title: '작년 여름 제주에서',
+//   //   date: '2023.08.21',
+//   //   location: '제주시 한림읍',
+//   //   rep_pic: require('../../assets/tmp/feed1.jpeg'),
+//   // },
+//   {
+//     writer: '곽서진',
+//     title: '유럽 돌려보내줘',
+//     date: '2022.06.30',
+//     location: '체코 프라하',
+//     rep_pic: require('../../assets/tmp/feed2.jpeg'),
+//   },
+//   {
+//     writer: '한서연',
+//     title: '깡총깡총 토끼',
+//     date: '2023.05.19',
+//     location: '전라북도 군산시',
+//     rep_pic: require('../../assets/tmp/feed5.png'),
+//   },
+//   {
+//     writer: '김중현',
+//     title: '목포가 여긴가',
+//     date: '2020.02.16',
+//     location: '전라남도 목포시',
+//     rep_pic: require('../../assets/tmp/feed3.jpeg'),
+//   },
+//   {
+//     writer: '이혜인',
+//     title: '벚꽃엔딩',
+//     date: '2017.04.02',
+//     location: '서울시 강동구',
+//     rep_pic: require('../../assets/tmp/feed4.jpeg'),
+//   },
+// ];
+
+interface GroupProfileProps {
+  groupName: string;
+  startYear: string;
+  memberImageList: string[];
+  memberCount: number;
+  puzzleCount: number;
+  dayCount: number;
+}
 
 const FeedList = ({
   navigation,
@@ -85,18 +94,10 @@ const FeedList = ({
   const { width, height } = Dimensions.get('window');
   const request = Request();
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
-  console.log('groupidx', groupIdx)
-  const getGroupProfile = async () => {
-    const response = await request.get(`/groups/${groupIdx}/profile`);
-    console.log(response)
-  }
-  useEffect(() => {
-    getGroupProfile();
-  }, [groupIdx])
   const [group, setGroup] = useState({
-    name: '화정동 칠공주',
-    since: 2008,
-    members: [
+    groupName: '화정동 칠공주',
+    startYear: '2008',
+    memberImageList: [
       'https://ifh.cc/g/1CLCRY.png', // 4
       'https://ifh.cc/g/06Q0DB.png', // 3
       'https://ifh.cc/g/5ZL9HY.png', // 2
@@ -105,10 +106,37 @@ const FeedList = ({
       'https://ifh.cc/g/2xCPH5.png', // 1
       'https://ifh.cc/g/2xCPH5.png', // 1
     ],
-    puzzles: 17,
-    during: 16,
-    code: 627693,
+    memberCount: 7,
+    puzzleCount: 17,
+    dayCount: 16,
   });
+  const [groupPostList, setGroupPostList] = useState<FeedItemProps[]>([
+    {
+      puzzleIdx: 0,
+      title: '',
+      puzzleImage: '',
+      writer: '',
+      createdDate: '',
+      location: '',
+    },
+  ]);
+  const getGroupProfile = async () => {
+    const response = await request.get(`/groups/${groupIdx}/profile`);
+    console.log(response);
+    setGroup(response.result);
+  };
+  const getPuzzles = async () => {
+    const response = await request.get(`/groups/${groupIdx}/puzzles`);
+    console.log(response.result.groupPostList);
+    setGroupPostList(response.result.groupPostList);
+  };
+
+  useEffect(() => {
+    if (groupIdx > 0) {
+      getGroupProfile();
+      getPuzzles();
+    }
+  }, [groupIdx]);
   const isManager: boolean = false;
   const [formVisible, setFormVisible] = useState<boolean>(false);
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
@@ -117,13 +145,13 @@ const FeedList = ({
   const onInvite = async () => {
     const response = await request.post(`/groups/${groupIdx}/invite`, {});
     setJoinCode(response.result.joinCode);
-    setInviteVisible(true)
-  }
+    setInviteVisible(true);
+  };
   const onDelete = () => {
     const deleteRequest = async () => {
       const response = await request.patch(`/groups/${groupIdx}/delete`, {});
-      if(response.isSuccess) navigationToHome.navigate('Home');
-    }
+      if (response.isSuccess) navigationToHome.navigate('Home');
+    };
     Alert.alert(
       '알림',
       '정말로 그룹을 삭제하시겠습니까?',
@@ -145,8 +173,8 @@ const FeedList = ({
     const quitRequest = async () => {
       const response = await request.patch(`/groups/${groupIdx}/withdraw`, {});
       console.log(response);
-      if(response.isSuccess) navigationToHome.navigate('Home');
-    }
+      if (response.isSuccess) navigationToHome.navigate('Home');
+    };
     Alert.alert(
       '알림',
       '정말로 그룹을 나가시겠습니까?',
@@ -171,7 +199,7 @@ const FeedList = ({
         <IconButton onPress={() => navigationToHome.navigate('Home')}>
           <HomeIcon />
         </IconButton>
-        <Title>{group.name}</Title>
+        <Title>{group.groupName}</Title>
         <IconButton
           onPress={() => {
             setDotPressed(!dotPressed);
@@ -197,7 +225,7 @@ const FeedList = ({
         ))}
 
       <FlatList
-        data={data}
+        data={groupPostList}
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
         showsVerticalScrollIndicator={false}
@@ -211,7 +239,7 @@ const FeedList = ({
                 }}>
                 <HorizontalText>
                   <Body>Since </Body>
-                  <Body style={{ color: PURPLE }}>{group.since}</Body>
+                  <Body style={{ color: PURPLE }}>{group.startYear}</Body>
                 </HorizontalText>
                 <RoundButton onPress={onInvite}>
                   <Content style={{ fontWeight: '700', color: WHITE }}>
@@ -227,16 +255,16 @@ const FeedList = ({
                 }}>
                 <HorizontalText>
                   <Title>함께한 추억 </Title>
-                  <Title style={{ color: PURPLE }}>{group.puzzles}</Title>
+                  <Title style={{ color: PURPLE }}>{group.puzzleCount}</Title>
                   <Title>개</Title>
                 </HorizontalText>
               </View>
-              <ImageStack data={group.members} />
+              <ImageStack data={group.memberImageList} />
               {
                 <HorizontalText>
                   <Subtitle>우리가 함께한 지 </Subtitle>
                   <Subtitle style={{ color: PURPLE }}>
-                    {group.during}년
+                    {group.dayCount}일
                   </Subtitle>
                   <Subtitle>된 날이에요!</Subtitle>
                 </HorizontalText>
@@ -244,17 +272,8 @@ const FeedList = ({
             </BannerSection>
           );
         }}
-        renderItem={({ item }) => {
-          const { writer, title, location, date, rep_pic } = item;
-          return (
-            <FeedItem
-              writer={writer}
-              title={title}
-              date={date}
-              location={location}
-              rep_pic={rep_pic}
-            />
-          );
+        renderItem={({ item }: any) => {
+          return <FeedItem feed={item} />;
         }}
       />
       <Modal visible={formVisible} animationType="slide">

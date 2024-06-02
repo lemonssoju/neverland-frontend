@@ -17,29 +17,25 @@ import { WHITE } from '../../styles/GlobalColor';
 const { width, height } = Dimensions.get('window');
 
 export interface FeedItemProps {
-  writer: string;
+  puzzleIdx: number;
   title: string;
-  date: string;
+  puzzleImage: string;
+  writer: string;
+  createdDate: string;
   location: string;
-  rep_pic: any;
 }
 
-const FeedItem = ({
-  writer,
-  title,
-  date,
-  location,
-  rep_pic,
-}: FeedItemProps) => {
+const FeedItem = ({ feed }: { feed: FeedItemProps}) => {
   const navigation = useNavigation<StackNavigationProp<FeedStackParams>>();
+  const { puzzleIdx, title, puzzleImage, writer, createdDate, location } = feed;
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('FeedDetail', { id: 1 });
+        navigation.navigate('FeedDetail', { feedIdx: puzzleIdx });
       }}
       style={{ marginLeft: 10, marginBottom: 10, width: width / 2 - 15 }}>
       <ImageBackground
-        source={rep_pic}
+        source={{ uri: puzzleImage}}
         style={{ width: '100%', height: 250 }}
         imageStyle={{ borderRadius: 8 }}>
         <View
@@ -67,7 +63,7 @@ const FeedItem = ({
               {title}
             </Subtitle>
             <Content style={{ color: WHITE }}>
-              {date} | {writer}
+              {createdDate} | {writer}
             </Content>
           </View>
         </View>
