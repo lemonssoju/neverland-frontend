@@ -176,7 +176,6 @@ const GroupTab = (): JSX.Element => {
       setGroupIdx(route.params.groupIdx);
     }
   }, []);
-  console.log(route.params.groupIdx);
   return (
     <Tab.Navigator
       tabBar={props => <CustomTab {...props} />}

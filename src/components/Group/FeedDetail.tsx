@@ -185,7 +185,7 @@ const DetailSection = ({
         <Label style={{ marginBottom: 5 }}>
           {feed.createdDate} | {feed.writer}
         </Label>
-        {/* <ImageStack data={feed.memberImageList} /> */}
+        <ImageStack data={feed.memberImageList} />
         <Subtitle style={{ marginBottom: 5 }}>{feed.title}</Subtitle>
         <Body style={{ marginBottom: 15 }}>{feed.content}</Body>
         <TouchableOpacity
@@ -283,23 +283,33 @@ const DetailSection = ({
 
 const subfeedData: SubfeedProps[] = [
   {
-    writer: '김중현',
-    content:
+    nickname: '김중현',
+    puzzlePieceText:
       '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
-    profile: 'https://ifh.cc/g/5ZL9HY.png',
+    profileImage: 'https://ifh.cc/g/5ZL9HY.png',
+  },{
+    nickname: '김중현',
+    puzzlePieceText:
+      '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
+    profileImage: 'https://ifh.cc/g/5ZL9HY.png',
+  },{
+    nickname: '김중현',
+    puzzlePieceText:
+      '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
+    profileImage: 'https://ifh.cc/g/5ZL9HY.png',
   },
-  {
-    writer: '한서연',
-    content:
-      '맞아 기억난다! 벌써 이게 반년 전이네. 맛집도 완전 많이 가고 바다에 들어가서 수영도 했었지~ 그때 우리 청춘이었다..',
-    profile: 'https://ifh.cc/g/1CLCRY.png',
-  },
-  {
-    writer: '곽서진',
-    content:
-      '핑크 노을이 환상적이었어 또 가고싶다 올해 여름에도 다같이 여행 가자!!! 휴가 날짜 맞춰보자 ㅎㅎ',
-    profile: 'https://ifh.cc/g/06Q0DB.png',
-  },
+  // {
+  //   writer: '한서연',
+  //   content:
+  //     '맞아 기억난다! 벌써 이게 반년 전이네. 맛집도 완전 많이 가고 바다에 들어가서 수영도 했었지~ 그때 우리 청춘이었다..',
+  //   profile: 'https://ifh.cc/g/1CLCRY.png',
+  // },
+  // {
+  //   writer: '곽서진',
+  //   content:
+  //     '핑크 노을이 환상적이었어 또 가고싶다 올해 여름에도 다같이 여행 가자!!! 휴가 날짜 맞춰보자 ㅎㅎ',
+  //   profile: 'https://ifh.cc/g/06Q0DB.png',
+  // },
 ];
 
 const FeedDetail = ({
@@ -336,7 +346,7 @@ const FeedDetail = ({
       `/groups/${groupIdx}/puzzles/${feedIdx}`,
     );
     console.log(response);
-    setFeed(response.result);
+    // setFeed(response.result);
   };
 
   useEffect(() => {
@@ -363,11 +373,11 @@ const FeedDetail = ({
       { cancelable: false },
     );
   };
-  const contentArray: string[] = subfeedData.map(item => item.content);
+  const contentArray: string[] = feed.puzzlePieces.map(item => item.content);
   return (
     <>
       <FlatList
-        data={feed.puzzlePieces}
+        data={subfeedData}
         ListHeaderComponent={
           <DetailSection
             feed={feed}
@@ -378,16 +388,13 @@ const FeedDetail = ({
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }: { item: any; index: number }) => {
-          const { writer, content, profile } = item;
           const randomColors = ['#F5FFF8', '#EEF8FF', '#FFFEEE', '#FFF8F5'];
           return (
             <SubfeedItem
               background={randomColors[index % 4]}
-              isLast={feed.puzzlePieces.length - 1 === index}
+              isLast={subfeedData.length - 1 === index}
               user={'곽서진'}
-              writer={writer}
-              content={content}
-              profile={profile}
+              subfeed={item}
               onEdit={() => {
                 setSubfeedModal(true);
               }}
@@ -399,9 +406,8 @@ const FeedDetail = ({
       />
       <Modal visible={subfeedModal} animationType="slide">
         <SubfeedUpload
+          puzzleIdx={feed.puzzleIdx}
           setSubfeedModal={setSubfeedModal}
-          writer={'곽서진'}
-          profile="https://ifh.cc/g/06Q0DB.png"
         />
       </Modal>
     </>

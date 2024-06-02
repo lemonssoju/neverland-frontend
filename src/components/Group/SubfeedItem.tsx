@@ -12,7 +12,8 @@ import {
 import { SubfeedProps } from './SubfeedUpload';
 import IconButton from '../common/IconButton';
 
-interface SubfeedItemProps extends SubfeedProps {
+interface SubfeedItemProps {
+  subfeed: SubfeedProps;
   onEdit: () => void;
   onDelete: () => void;
   background: string;
@@ -21,9 +22,7 @@ interface SubfeedItemProps extends SubfeedProps {
 }
 
 const SubfeedItem = ({
-  writer,
-  content,
-  profile,
+  subfeed,
   background,
   user,
   onEdit,
@@ -31,14 +30,15 @@ const SubfeedItem = ({
   isLast,
 }: SubfeedItemProps) => {
   const [dotPressed, setDotPressed] = useState<boolean>(false);
+  const { nickname, profileImage, puzzlePieceText } = subfeed;
   return (
     <View style={{ paddingTop: 10, paddingHorizontal: 15 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Image
-          source={{ uri: profile }}
+          source={{ uri: profileImage }}
           style={{ width: 32, height: 32, borderRadius: 180, marginRight: 5 }}
         />
-        <Label>{writer}</Label>
+        <Label>{nickname}</Label>
       </View>
       <View
         style={{
@@ -49,7 +49,7 @@ const SubfeedItem = ({
           paddingVertical: 12,
           paddingHorizontal: 20,
         }}>
-        {user === writer && (
+        {user === nickname && (
           <IconButton
             onPress={() => setDotPressed(!dotPressed)}
             style={{
@@ -79,7 +79,7 @@ const SubfeedItem = ({
             style={{ top: 30, right: 15 }}
           />
         )}
-        <Body>{content}</Body>
+        <Body>{puzzlePieceText}</Body>
       </View>
       {!isLast && (
         <View
