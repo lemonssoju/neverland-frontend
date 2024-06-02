@@ -11,12 +11,14 @@ import { useState } from 'react';
 import BubbleIcon from '../../assets/common/Bubble.svg';
 import ImageStack from '../common/ImageStack';
 
-export interface PuzzleTimeItemProps {
-  date: string;
-  rep_pic: string;
+export interface AlbumTimeProps {
+  albumIdx: number;
   title: string;
   content: string;
-  members: string[];
+  albumImage: string;
+  puzzleDate: string;
+  puzzlerCount: number;
+  puzzlerImageList: string[];
 }
 
 const { width } = Dimensions.get('window');
@@ -26,11 +28,19 @@ export const PuzzleTimeItem = ({
   puzzle,
   isLast,
 }: {
-  puzzle: PuzzleTimeItemProps;
+  puzzle: AlbumTimeProps;
   navigation: any;
   isLast: boolean;
 }) => {
-  const { date, rep_pic, title, content, members } = puzzle;
+  const {
+    albumIdx,
+    title,
+    content,
+    albumImage,
+    puzzleDate,
+    puzzlerCount,
+    puzzlerImageList,
+  } = puzzle;
   return (
     <View
       style={{
@@ -38,7 +48,7 @@ export const PuzzleTimeItem = ({
         padding: 10,
       }}>
       <Content style={{ lineHeight: 14 }}>
-        {date.split('.')[1] + '/' + date.split('.')[2]}
+        {puzzleDate.split('.')[1] + '/' + puzzleDate.split('.')[2]}
       </Content>
       {!isLast && (
         <View
@@ -64,10 +74,12 @@ export const PuzzleTimeItem = ({
         }}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate('PuzzleDetail', { id: 1 })}
+        onPress={() =>
+          navigation.navigate('PuzzleDetail', { albumIdx: albumIdx })
+        }
         style={{ flexDirection: 'row', marginLeft: 20 }}>
         <Image
-          source={{ uri: rep_pic }}
+          source={{ uri: albumImage }}
           width={100}
           height={100}
           style={{ borderTopLeftRadius: 8, borderBottomLeftRadius: 8 }}
@@ -86,7 +98,7 @@ export const PuzzleTimeItem = ({
           </Content>
           <View
             style={{ marginTop: 35, marginLeft: 90, alignItems: 'flex-start' }}>
-            <ImageStack data={members} />
+            <ImageStack data={puzzlerImageList} />
           </View>
         </View>
       </TouchableOpacity>
@@ -94,16 +106,27 @@ export const PuzzleTimeItem = ({
   );
 };
 
+export interface AlbumLocationProps {
+  albumIdx: number;
+  albumImage: string;
+  x: string;
+  y: string;
+}
+
 export const PuzzlePlaceItem = ({
   navigation,
+  albumIdx,
   image,
 }: {
   navigation: any;
+  albumIdx: number;
   image: string;
 }) => {
   return (
     <Pressable
-      onPress={() => navigation.navigate('PuzzleDetail', { id: 1 })}
+      onPress={() =>
+        navigation.navigate('PuzzleDetail', { albumIdx: albumIdx })
+      }
       style={{ width: 100, height: 120 }}>
       <BubbleIcon style={{ position: 'absolute' }} />
       <View

@@ -182,7 +182,7 @@ const PuzzleCreate = ({
             onPress={() => {
               setCreateModal(false);
               navigationToPuzzle.navigate('Puzzle', {
-                id: album.albumIdx,
+                albumIdx: album.albumIdx,
                 rep_pic: album.albumImage
               });
             }}

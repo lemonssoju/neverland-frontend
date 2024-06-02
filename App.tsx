@@ -98,7 +98,7 @@ const RootStack = ({
 export type TabProps = {
   Feed: { feedIdx?: number | undefined };
   Write: any;
-  Puzzle: { id: number | undefined; rep_pic: string };
+  Puzzle: { albumIdx: number | undefined; rep_pic: string };
 };
 
 const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
