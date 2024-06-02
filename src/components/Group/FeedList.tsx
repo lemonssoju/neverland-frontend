@@ -108,20 +108,22 @@ const FeedList = ({
     ],
     memberCount: 7,
     puzzleCount: 17,
-    dayCount: 16
+    dayCount: 16,
   });
-  const [groupPostList, setGroupPostList] = useState<FeedItemProps[]>([{
-    puzzleIdx: 0,
-    title: '',
-    puzzleImage: '',
-    writer: '',
-    createdDate: '',
-    location: ''
-  }])
+  const [groupPostList, setGroupPostList] = useState<FeedItemProps[]>([
+    {
+      puzzleIdx: 0,
+      title: '',
+      puzzleImage: '',
+      writer: '',
+      createdDate: '',
+      location: '',
+    },
+  ]);
   const getGroupProfile = async () => {
     const response = await request.get(`/groups/${groupIdx}/profile`);
     console.log(response);
-    setGroup(response.result)
+    setGroup(response.result);
   };
   const getPuzzles = async () => {
     const response = await request.get(`/groups/${groupIdx}/puzzles`);
@@ -262,7 +264,7 @@ const FeedList = ({
                 <HorizontalText>
                   <Subtitle>우리가 함께한 지 </Subtitle>
                   <Subtitle style={{ color: PURPLE }}>
-                    {group.dayCount}년
+                    {group.dayCount}일
                   </Subtitle>
                   <Subtitle>된 날이에요!</Subtitle>
                 </HorizontalText>
@@ -271,11 +273,7 @@ const FeedList = ({
           );
         }}
         renderItem={({ item }: any) => {
-          return (
-            <FeedItem
-              feed={item}
-            />
-          );
+          return <FeedItem feed={item} />;
         }}
       />
       <Modal visible={formVisible} animationType="slide">

@@ -60,7 +60,9 @@ interface PuzzlerProps {
 const { width, height } = Dimensions.get('window');
 const FeedUpload = ({
   navigation,
+  route,
 }: StackScreenProps<FeedStackParams, 'FeedUpload'>) => {
+  const puzzleIdx = route.params?.puzzleIdx;
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const [feed, setFeed] = useState<FeedProps>({
     title: '',
@@ -104,9 +106,35 @@ const FeedUpload = ({
     );
     setPuzzlerList(response.result.puzzlerList);
   };
+  const getFeedDetail = async () => {
+    const response = await request.get(
+      `/groups/${groupIdx}/puzzles/${puzzleIdx}`,
+    );
+    if (response.isSuccess) {
+      const { title, puzzleDate, location, content, puzzlerList } =
+        response.result;
+      setFeed({
+        title: title,
+        puzzleDate: new Date(puzzleDate),
+        location: location,
+        content: content,
+        puzzlerList: puzzlerList,
+      });
+      if (response.result.puzzleImage)
+        setPhoto([
+          {
+            fileName: 'group-profile',
+            width: 0,
+            height: 0,
+            uri: response.result.puzzleImage,
+          },
+        ]);
+    }
+  };
 
   useEffect(() => {
     getPuzzler();
+    if (puzzleIdx) getFeedDetail();
   }, []);
 
   const onCreate = async () => {
@@ -123,7 +151,10 @@ const FeedUpload = ({
       [
         JSON.stringify({
           title: feed.title,
-          puzzleDate: feed.puzzleDate.toISOString().split('T')[0].substring(0, 10),
+          puzzleDate: feed.puzzleDate
+            .toISOString()
+            .split('T')[0]
+            .substring(0, 10),
           content: feed.content,
           location: feed.location,
           puzzlerList: feed.puzzlerList,
@@ -194,7 +225,9 @@ const FeedUpload = ({
             <Input
               value={
                 isDatePicked
-                  ? moment(feed.puzzleDate).format('YYYY년 MM월 DD일').toString()
+                  ? moment(feed.puzzleDate)
+                      .format('YYYY년 MM월 DD일')
+                      .toString()
                   : undefined
               }
               placeholder="추억 날짜를 입력해주세요."
@@ -250,7 +283,7 @@ const FeedUpload = ({
             </Caption>
           </View>
           <FlatList
-            data={puzzlerList.slice(0,1)}
+            data={puzzlerList.slice(0, 1)}
             scrollEnabled={false}
             keyExtractor={item => item.nickname}
             renderItem={({ item, index }) => {

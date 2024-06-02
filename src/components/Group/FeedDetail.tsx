@@ -83,17 +83,22 @@ const DetailSection = ({
     : feed.hasWrite
     ? false
     : true;
-
+  const request = Request();
   const onDelete = () => {
+    const deleteRequest = async () => {
+      const response = await request.patch(
+        `/puzzles/${feed.puzzleIdx}/delete`,
+        {},
+      );
+      if (response.isSuccess) navigation.replace('FeedList');
+    };
     Alert.alert(
       '알림',
       '추억을 삭제하시겠습니까?',
       [
         {
           text: '예',
-          onPress: () => {
-            navigation.navigate('FeedList');
-          },
+          onPress: deleteRequest,
           style: 'destructive',
         },
         {
@@ -160,7 +165,9 @@ const DetailSection = ({
               editLabel="수정"
               deleteLabel="삭제"
               onEdit={() => {
-                navigation.navigate('FeedUpload');
+                navigation.navigate('FeedUpload', {
+                  puzzleIdx: feed.puzzleIdx,
+                });
               }}
               onDelete={onDelete}
               style={{ top: 40, right: 15 }}
@@ -287,12 +294,14 @@ const subfeedData: SubfeedProps[] = [
     puzzlePieceText:
       '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
     profileImage: 'https://ifh.cc/g/5ZL9HY.png',
-  },{
+  },
+  {
     nickname: '김중현',
     puzzlePieceText:
       '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
     profileImage: 'https://ifh.cc/g/5ZL9HY.png',
-  },{
+  },
+  {
     nickname: '김중현',
     puzzlePieceText:
       '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
