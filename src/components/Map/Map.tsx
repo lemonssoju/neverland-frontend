@@ -1,14 +1,15 @@
 import { View } from 'react-native';
 import MapView, { LatLng, Marker } from 'react-native-maps';
-import { PuzzlePlaceItem } from '../Group/PuzzleItem';
+import { AlbumLocationProps, PuzzlePlaceItem } from '../Group/PuzzleItem';
 import { Key } from 'react';
 
 interface MapProps {
   navigation: any;
-  places: any;
+  places: AlbumLocationProps[];
 }
 
 const Map = ({ navigation, places }: MapProps) => {
+
   return (
     <MapView
       style={{ flex: 1 }}
@@ -20,9 +21,9 @@ const Map = ({ navigation, places }: MapProps) => {
       }}
       zoomEnabled={true}>
       {places.map(
-        (marker: { coor: LatLng; image: string }, index: number) => (
-          <Marker key={index} coordinate={marker.coor}>
-            <PuzzlePlaceItem navigation={navigation} image={marker.image} />
+        (marker: AlbumLocationProps, index: number) => (
+          <Marker key={index} coordinate={{latitude: parseFloat(marker.x), longitude: parseFloat(marker.y)}}>
+            <PuzzlePlaceItem navigation={navigation} image={marker.albumImage} albumIdx={marker.albumIdx} />
           </Marker>
         ),
       )}
