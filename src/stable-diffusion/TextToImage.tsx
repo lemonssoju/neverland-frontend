@@ -1,13 +1,11 @@
 import { STABILITY_API_KEY } from 'react-native-dotenv';
 
 interface generateImagesProps {
-  imageUri: string;
   text: string;
   style?: string;
 }
 
-const generateImages = async ({
-  imageUri,
+export const generateTextToImage = async ({
   text,
   style,
 }: generateImagesProps) => {
@@ -17,29 +15,28 @@ const generateImages = async ({
 
   if (!apiKey) throw new Error('Missing Stability API key.');
 
-  const formData = new FormData();
-  formData.append('init_image', {
-    uri: imageUri,
-    name: 'init_image.png',
-    type: 'image/png',
-  });
-  formData.append('init_image_mode', 'IMAGE_STRENGTH');
-  formData.append('image_strength', 0.35);
-  formData.append('text_prompts[0][text]', text);
-  formData.append('cfg_scale', 7);
-  formData.append('samples', 1);
-  formData.append('steps', 30);
-  style && formData.append('style_preset', style);
+  const requestBody = {
+    text_prompts: [
+      {
+        text: text,
+      },
+    ],
+    cfg_scale: 7,
+    steps: 30,
+    samples: 1,
+    style_preset: style,
+  };
 
   const response = await fetch(
-    `${apiHost}/v1/generation/${engineId}/image-to-image`,
+    `${apiHost}/v1/generation/${engineId}/text-to-image`,
     {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         Accept: 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
-      body: formData,
+      body: JSON.stringify(requestBody),
     },
   );
 
@@ -48,10 +45,9 @@ const generateImages = async ({
   }
 
   const responseJSON = await response.json();
-  const generatedImages = {
+  const generatedImageURL = {
     base64: `data:image/png;base64,${responseJSON.artifacts[0].base64}`,
   };
-  return generatedImages;
-};
 
-export default generateImages;
+  return generatedImageURL;
+};

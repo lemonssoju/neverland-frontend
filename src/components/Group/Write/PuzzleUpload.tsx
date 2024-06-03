@@ -137,16 +137,16 @@ const PuzzleUpload = ({
   }, []);
 
   const onCreate = async () => {
-    if (
-      puzzle.title.length *
-        puzzle.content.length *
-        puzzle.location.length *
-        puzzle.puzzlerList.length ===
-      0
-    ) {
-      Alert.alert('빈칸을 모두 채워주세요!');
-    }
-
+    console.log('request');
+    // if (
+    //   puzzle.title.length *
+    //     puzzle.content.length *
+    //     puzzle.location.length *
+    //     puzzle.puzzlerList.length ===
+    //   0
+    // ) {
+    //   Alert.alert('빈칸을 모두 채워주세요!');
+    // } else {
     const formData = new FormData();
     formData.append('createPuzzleRequest', {
       string: JSON.stringify({
@@ -179,10 +179,14 @@ const PuzzleUpload = ({
         },
       },
     );
+    console.log(response)
     if (response.isSuccess) {
       navigation.goBack();
-      navigation.navigate('PuzzleDetail', { puzzleIdx: response.result.puzzleIdx });
+      navigation.navigate('PuzzleDetail', {
+        puzzleIdx: response.result.puzzleIdx,
+      });
     }
+    // }
   };
 
   return (

@@ -100,7 +100,12 @@ const DetailSection = ({
             <MarkerIcon width={20} height={20} color={BLACK} />
             <Emphasis
               numberOfLines={1}
-              style={{ fontSize: 20, marginLeft: 5, fontWeight: '600', width: '70%' }}>
+              style={{
+                fontSize: 20,
+                marginLeft: 5,
+                fontWeight: '600',
+                width: '70%',
+              }}>
               {album.location}
             </Emphasis>
           </View>
@@ -198,7 +203,9 @@ const DetailSection = ({
           />
           <TouchableOpacity
             onPress={() => {
-              navigationToFeed.navigate('Puzzle', { puzzleIdx: album.puzzleIdx });
+              navigationToFeed.navigate('Puzzle', {
+                puzzleIdx: album.puzzleIdx,
+              });
             }}
             style={{
               flexDirection: 'row',
@@ -244,6 +251,7 @@ const AlbumDetail = ({
 }: StackScreenProps<AlbumStackParams, 'AlbumDetail'>) => {
   const request = Request();
   const albumIdx = route.params.albumIdx;
+  const albumImage = route.params?.albumImage;
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const [album, setAlbum] = useState<AlbumDetailProps>({
     puzzleIdx: 0,
@@ -252,16 +260,14 @@ const AlbumDetail = ({
     location: '',
     memberList: [],
     albumImage: '',
-    description:
-      '',
+    description: '',
     commentList: [
       {
         commentIdx: 0,
         writer: '',
         createdDate: '',
         content: '',
-        profileImage:
-          '',
+        profileImage: '',
       },
     ],
   });
@@ -272,7 +278,7 @@ const AlbumDetail = ({
     const response = await request.get(
       `/groups/${groupIdx}/albums/${albumIdx}`,
     );
-    console.log(response.result)
+    console.log(response.result);
     if (response.isSuccess) {
       setAlbum(response.result);
       setRefreshing(false);
@@ -284,7 +290,7 @@ const AlbumDetail = ({
   }, [refreshing]);
 
   useEffect(() => {
-    if (album.albumImage)
+    if (album.albumImage.length === 0)
       setAlbum({ ...album, albumImage: route.params?.albumImage });
   }, [route.params?.albumImage]);
 
@@ -303,7 +309,6 @@ const AlbumDetail = ({
         setRefreshing(true);
       }
     } else {
-      console.log(albumIdx, comment)
       const response = await request.post('/comments', {
         albumIdx: albumIdx,
         content: comment,

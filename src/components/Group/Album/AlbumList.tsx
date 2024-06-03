@@ -149,7 +149,6 @@ const AlbumList = ({
     const response = await request.get(`/groups/${groupIdx}/albums`, {
       sortType: option,
     });
-    console.warn('res', response.result.albumList);
     if (response.isSuccess) {
       option === 'time'
         ? setAlbumTime(response.result.albumList)
@@ -159,6 +158,7 @@ const AlbumList = ({
 
   useEffect(() => {
     getAlbumList();
+    console.log(albumTime)
   }, [option]);
 
   return (
@@ -219,7 +219,7 @@ const AlbumList = ({
                 year !== albumTime[index + 1].puzzleDate.split('-')[0]);
             return (
               <>
-                {item.albumImage.length == 0 && (
+                {item.albumImage.length > 0 && (
                   <>
                     {(isFirstItem || isYearChanged) && (
                       <Emphasis style={{ marginLeft: 10 }}>{year}</Emphasis>

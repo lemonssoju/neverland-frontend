@@ -30,7 +30,7 @@ const AlbumStack = ({
         albumImage: route.params.albumImage,
       });
     }
-  }, [route.params?.albumImage]);
+  }, [route.params?.albumIdx, route.params?.albumImage]);
 
   return (
     <Stack.Navigator

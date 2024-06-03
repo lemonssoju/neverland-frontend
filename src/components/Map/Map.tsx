@@ -21,18 +21,22 @@ const Map = ({ navigation, places }: MapProps) => {
         const latitude = parseFloat(marker.y);
         const longitude = parseFloat(marker.x);
         return (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude,
-              longitude,
-            }}>
-            <AlbumPlaceItem
-              navigation={navigation}
-              image={'https://ifh.cc/g/9zkq09.jpg'}
-              albumIdx={marker.albumIdx}
-            />
-          </Marker>
+          <>
+            {marker.albumImage.length > 0 && (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude,
+                  longitude,
+                }}>
+                <AlbumPlaceItem
+                  navigation={navigation}
+                  image={marker.albumImage}
+                  albumIdx={marker.albumIdx}
+                />
+              </Marker>
+            )}
+          </>
         );
       })}
     </MapView>
