@@ -57,11 +57,13 @@ const DetailSection = ({
   navigation,
   user,
   setSubfeedModal,
+  subfeedText,
 }: {
   feed: FeedDetailProps;
   navigation: any;
   user: string;
   setSubfeedModal: Dispatch<SetStateAction<boolean>>;
+  subfeedText: string[];
 }) => {
   const [like, setLike] = useState<boolean>(feed.like);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
@@ -117,19 +119,19 @@ const DetailSection = ({
 
   const [imageStyleModal, setImageStyleModal] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<ValueType>('');
+  const [value, setValue] = useState<string>('');
   const [items, setItems] = useState<ItemType<ValueType>[]>([
-    { label: 'Analog Film', value: 'analog-film' },
-    { label: 'Cinematic', value: 'cinematic' },
-    { label: 'Fantasy Art', value: 'fantasy-art' },
-    { label: 'Photographic', value: 'photographic' },
-    { label: 'Line Art', value: 'line-art' },
+    { label: '아날로그 필름', value: 'analog-film' },
+    { label: '시네마틱', value: 'cinematic' },
+    { label: '판타지', value: 'fantasy-art' },
+    { label: '실사 느낌', value: 'photographic' },
+    { label: '라인아트', value: 'line-art' },
   ]);
 
   const [createModal, setCreateModal] = useState<boolean>(false);
   const onCreate = () => {
     setImageStyleModal(false);
-    setValue('');
+    // setValue('');
     setCreateModal(true);
   };
 
@@ -298,6 +300,9 @@ const DetailSection = ({
         <PuzzleCreate
           date={moment(feed.date).format('YYYY.MM.DD')}
           location={feed.location}
+          imageUri={feed.rep_pic!}
+          content={subfeedText}
+          style={value}
           setCreateModal={setCreateModal}
         />
       </Modal>
@@ -366,6 +371,8 @@ const FeedDetail = ({
       { cancelable: false },
     );
   };
+  const contentArray: string[] = subfeedData.map(item => item.content);
+
   return (
     <>
       <FlatList
@@ -376,6 +383,7 @@ const FeedDetail = ({
             navigation={navigation}
             user={'김토끼'}
             setSubfeedModal={setSubfeedModal}
+            subfeedText={contentArray}
           />
         }
         showsVerticalScrollIndicator={false}
