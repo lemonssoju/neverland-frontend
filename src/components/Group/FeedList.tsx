@@ -196,7 +196,11 @@ const FeedList = ({
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <HeaderSection>
-        <IconButton onPress={() => navigationToHome.navigate('Home')}>
+        <IconButton
+          onPress={() => {
+            setGroupIdx(0);
+            navigationToHome.navigate('Home');
+          }}>
           <HomeIcon />
         </IconButton>
         <Title>{group.groupName}</Title>

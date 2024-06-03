@@ -89,7 +89,7 @@ const PuzzleCreate = ({
           albumImage: images.base64,
         },
       );
-      setAlbum({...album, albumImage: images.base64})
+      setAlbum({ ...album, albumImage: images.base64 });
       if (!complete) setRealComplete(true);
     } catch (err) {
       console.error(err);
@@ -182,8 +182,8 @@ const PuzzleCreate = ({
             onPress={() => {
               setCreateModal(false);
               navigationToPuzzle.navigate('Puzzle', {
-                id: album.albumIdx,
-                rep_pic: album.albumImage
+                albumIdx: album.albumIdx,
+                albumImage: album.albumImage,
               });
             }}
           />

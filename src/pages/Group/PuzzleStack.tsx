@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 
 export type PuzzleStackParams = {
   PuzzleList: any;
-  PuzzleDetail: { id: number; rep_pic: string };
+  PuzzleDetail: { albumIdx: number; albumImage: string };
 };
 
 const Stack = createStackNavigator<PuzzleStackParams>();
@@ -23,13 +23,13 @@ const PuzzleStack = ({
   const navigationToPuzzle =
     useNavigation<StackNavigationProp<PuzzleStackParams>>();
   useEffect(() => {
-    if (route.params?.id) {
+    if (route.params?.albumIdx) {
       navigationToPuzzle.push('PuzzleDetail', {
-        id: route.params.id,
-        rep_pic: route.params.rep_pic,
+        albumIdx: route.params.albumIdx,
+        albumImage: route.params.albumImage,
       });
     }
-  }, [route.params?.rep_pic]);
+  }, [route.params?.albumImage]);
 
   return (
     <Stack.Navigator
