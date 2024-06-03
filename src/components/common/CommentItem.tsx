@@ -8,24 +8,24 @@ import IconButton from './IconButton';
 
 export interface CommentProps {
   writer: string;
-  date: string;
+  createdDate: string;
   content: string;
-  profile: string;
+  profileImage: string;
+  commentIdx: number;
 }
 
-interface CommentItemProps extends CommentProps {
+interface CommentItemProps {
+  comment: CommentProps;
   onEdit: () => void;
   onDelete: () => void;
 }
 
 const CommentItem = ({
-  writer,
-  date,
-  content,
-  profile,
+  comment,
   onEdit,
   onDelete,
 }: CommentItemProps) => {
+  const { writer, createdDate, content, profileImage, commentIdx } = comment;
   const [dotPressed, setDotPressed] = useState<boolean>(false);
   return (
     <View
@@ -62,14 +62,14 @@ const CommentItem = ({
       )}
       <View style={{ flexDirection: 'row', padding: 18, alignItems: 'center' }}>
         <Image
-          source={{ uri: profile }}
+          source={{ uri: profileImage }}
           style={{ width: 44, height: 44, borderRadius: 180 }}
         />
         <View style={{ marginLeft: 10 }}>
           <View style={{ flexDirection: 'row' }}>
             <Body style={{fontWeight: '600'}}>{writer}</Body>
             <Caption style={{ color: GRAY, marginLeft: 5 }}>
-              {date}
+              {createdDate}
             </Caption>
           </View>
           <Body style={{ lineHeight: 24 }}>{content}</Body>
