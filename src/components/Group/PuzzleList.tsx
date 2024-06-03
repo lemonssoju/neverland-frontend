@@ -138,10 +138,10 @@ const PuzzleList = ({
   ]);
   const [albumLocation, setAlbumLocation] = useState<AlbumLocationProps[]>([
     {
-      albumIdx: 0,
-      albumImage: '',
-      x: '',
-      y: '',
+      albumIdx: 1,
+      albumImage: 'https://ifh.cc/g/9zkq09.jpg',
+      x: '33.4',
+      y: '126.57',
     },
   ]);
 
