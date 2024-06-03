@@ -13,7 +13,7 @@ import {
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { PuzzleStackParams } from '../../../pages/Group/PuzzleStack';
 import PuzzleItem, { PuzzleItemProps } from './PuzzleItem';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import HomeIcon from '../../../assets/common/Home.svg';
 import DotsIcon from '../../../assets/common/Dots.svg';
@@ -25,7 +25,7 @@ import {
   Content,
 } from '../../../styles/GlobalText';
 import IconButton from '../../common/IconButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../../App';
 import { BLACK, LIGHTPURPLE, PURPLE, WHITE } from '../../../styles/GlobalColor';
 import EditButton from '../../common/EditButton';
@@ -123,12 +123,14 @@ const PuzzleList = ({
     setGroupPostList(response.result.groupPostList);
   };
 
-  useEffect(() => {
-    if (groupIdx > 0) {
-      getGroupProfile();
-      getPuzzles();
-    }
-  }, [groupIdx]);
+  useFocusEffect(
+    useCallback(() => {
+      if (groupIdx > 0) {
+        getGroupProfile();
+        getPuzzles();
+      }
+    }, [groupIdx]),
+  );
   const [user, setUser] = useRecoilState(userState);
   const [formVisible, setFormVisible] = useState<boolean>(false);
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
