@@ -45,7 +45,7 @@ const HeaderSection = ({ navigation }: { navigation: any }) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <LogoText />
+        <LogoText width={200} />
         <IconButton onPress={() => navigation.navigate('Settings')}>
           <UserIcon />
         </IconButton>

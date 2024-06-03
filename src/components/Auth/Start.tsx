@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   Text,
   Dimensions,
+  Image,
 } from 'react-native';
 import { Title } from '../../styles/GlobalText';
 import styled from 'styled-components/native';
@@ -24,8 +25,8 @@ const Start = ({ navigation }: StackScreenProps<AuthStackParams, 'Start'>) => {
         height={height}
       />
       <SafeAreaView style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-        <Logo />
-        <LogoText style={{marginTop: 20, marginBottom: 200}} />
+        <Image source={require('../../assets/Logo.png')} style={{width: 230, height: 230}} />
+        <LogoText style={{marginTop: 50, marginBottom: 180}} />
         <AuthButton onPress={() => navigation.navigate('Login')}>
           <Title style={{ color: WHITE }}>로그인</Title>
         </AuthButton>
