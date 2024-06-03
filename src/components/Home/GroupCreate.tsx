@@ -30,8 +30,6 @@ import moment from 'moment';
 import IconButton from '../common/IconButton';
 import Request from '../../services/requests';
 import ShareModal from '../common/ShareModal';
-import { getAccessToken } from '../../services/storage';
-import axios from 'axios';
 
 interface GroupCreateProps {
   groupIdx?: number;
@@ -68,54 +66,81 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
   const [joinCode, setJoinCode] = useState<number>(0);
 
   const getGroupData = async () => {
-    const response = await request.get(`/groups/${groupIdx}/editView`)
-    console.log(response)
-    if(response.isSuccess) {
-      setGroup({name: response.result.name, date: new Date(response.result.startDate)})
-      setPhoto([{fileName: 'group-profile', width: 0, height: 0, uri: response.result.groupImage}])
+    const response = await request.get(`/groups/${groupIdx}/editView`);
+    if (response.isSuccess) {
+      setGroup({
+        name: response.result.name,
+        date: new Date(response.result.startDate),
+      });
+      setPhoto([
+        {
+          fileName: 'group-profile',
+          width: 0,
+          height: 0,
+          uri: response.result.groupImage,
+        },
+      ]);
     }
-  }
+  };
 
   useEffect(() => {
-    if(groupIdx) getGroupData();
-  }, [groupIdx])
-
-  const onEdit = async () => {
-
-  }
+    if (groupIdx) getGroupData();
+  }, [groupIdx]);
 
   const onCreate = async () => {
     if (group.name.length * photo[0].uri!.length === 0) {
       Alert.alert('빈칸을 모두 채워주세요!');
     }
-    const createGroupRequest = new Blob(
-      [
-        JSON.stringify({
-          name: group.name,
-          startDate: group.date.toISOString().split('T')[0].substring(0, 7),
-        }),
-      ],
-      { type: 'application/json', lastModified: 2 },
-    );
-
     const formData = new FormData();
     formData.append('image', {
       uri: photo[0].uri,
       name: photo[0].fileName,
       type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
     });
-    formData.append('createGroupRequest', createGroupRequest);
-    const response = await request.post('/groups/create', formData, {
-      headers: {
-        'Content-Type': 'multipart/formdata',
-      },
+    formData.append('createGroupRequest', {
+      string: JSON.stringify({
+        name: group.name,
+        startDate: group.date.toISOString().split('T')[0].substring(0, 7),
+      }),
+      type: 'application/json',
     });
-    if (response.isSuccess) {
-      setJoinCode(response.result.joinCode);
-      setInviteVisible(true);
-      setFormVisible(false);
+    if (groupIdx) {
+      const response = await request.patch(
+        `/groups/${groupIdx}/edit`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/formdata; boundary="boundary"',
+          },
+          transformRequest: () => {
+            return formData;
+          },
+        },
+      );
+      if (response.isSuccess) {
+        setJoinCode(response.result.joinCode);
+        setInviteVisible(true);
+        setFormVisible(false);
+      } else {
+        Alert.alert('그룹 수정에 실패했습니다. 다시 시도해주세요.');
+      }
     } else {
-      Alert.alert('그룹 생성에 실패했습니다. 다시 시도해주세요.');
+      const response = await request.post('/groups/create', formData, {
+        headers: {
+          'Content-Type': 'multipart/formdata; boundary="boundary"',
+        },
+        transformRequest: () => {
+          return formData;
+        },
+      });
+      console.log(response);
+      if (response.isSuccess) {
+        setJoinCode(response.result.joinCode);
+        setInviteVisible(true);
+        setFormVisible(false);
+      } else {
+        Alert.alert('그룹 생성에 실패했습니다. 다시 시도해주세요.');
+      }
     }
   };
 
@@ -210,7 +235,7 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
           </IconButton>
         </View>
         <View style={{ marginTop: 20 }}>
-          <BottomButton label="등록" onPress={groupIdx ? onEdit : onCreate} />
+          <BottomButton label="등록" onPress={onCreate} />
         </View>
       </KeyboardAvoidingView>
       {show && (

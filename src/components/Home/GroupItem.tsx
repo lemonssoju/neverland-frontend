@@ -69,7 +69,7 @@ const GroupItem = ({ group }: { group: GroupProps }) => {
             </Subtitle>
             <Body style={{ color: WHITE, marginBottom: 5, marginTop: 20 }}>
               {recentUpdate
-                ? `최근 추억 퍼즐 완성 ${recentUpdate}일 전`
+                ? `최근 추억 퍼즐 완성 ${recentUpdate}`
                 : `완성된 퍼즐이 없습니다`}
             </Body>
           </View>
