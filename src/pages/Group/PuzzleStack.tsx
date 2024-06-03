@@ -1,6 +1,6 @@
 import PuzzleList from '../../components/Group/Puzzle/PuzzleList';
 import PuzzleDetail from '../../components/Group/Puzzle/PuzzleDetail';
-import PuzzleUpload from '../../components/Group/Puzzle/PuzzleUpload';
+import PuzzleUpload from '../../components/Group/Write/PuzzleUpload';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { TabProps } from '../../../App';

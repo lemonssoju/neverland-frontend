@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import EditButton from './EditButton';
 import { BLACK, GRAY, LIGHTPURPLE } from '../../styles/GlobalColor';
 import DotsIcon from '../../assets/common/Dots.svg';
 import { Label, Body, Content, Caption } from '../../styles/GlobalText';
 import IconButton from './IconButton';
+import { UserProps } from '../Home/Settings/SettingsHome';
+import Request from '../../services/requests';
 
 export interface CommentProps {
   writer: string;
@@ -20,12 +22,20 @@ interface CommentItemProps {
   onDelete: () => void;
 }
 
-const CommentItem = ({
-  comment,
-  onEdit,
-  onDelete,
-}: CommentItemProps) => {
+const CommentItem = ({ comment, onEdit, onDelete }: CommentItemProps) => {
   const { writer, createdDate, content, profileImage, commentIdx } = comment;
+  const request = Request();
+  const [user, setUser] = useState<UserProps>({
+    nickname: '',
+    profileImage: null,
+  });
+  const getMyProfile = async () => {
+    const response = await request.get('/users/myPage');
+    setUser(response.result);
+  };
+  useEffect(() => {
+    getMyProfile();
+  }, []);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
   return (
     <View
@@ -35,7 +45,7 @@ const CommentItem = ({
         marginHorizontal: 20,
         marginTop: 10,
       }}>
-      {
+      {user.nickname === writer && (
         <IconButton
           onPress={() => setDotPressed(!dotPressed)}
           style={{
@@ -48,13 +58,18 @@ const CommentItem = ({
             justifyContent: 'center',
             zIndex: 1,
           }}>
-          <DotsIcon color={BLACK} width={15} height={30} transform={[{ rotate: '90deg' }]} />
+          <DotsIcon
+            color={BLACK}
+            width={15}
+            height={30}
+            transform={[{ rotate: '90deg' }]}
+          />
         </IconButton>
-      }
+      )}
       {dotPressed && (
         <EditButton
-          editLabel='수정'
-          deleteLabel='삭제'
+          editLabel="수정"
+          deleteLabel="삭제"
           onEdit={onEdit}
           onDelete={onDelete}
           style={{ top: 20, right: 15 }}
@@ -67,7 +82,7 @@ const CommentItem = ({
         />
         <View style={{ marginLeft: 10 }}>
           <View style={{ flexDirection: 'row' }}>
-            <Body style={{fontWeight: '600'}}>{writer}</Body>
+            <Body style={{ fontWeight: '600' }}>{writer}</Body>
             <Caption style={{ color: GRAY, marginLeft: 5 }}>
               {createdDate}
             </Caption>

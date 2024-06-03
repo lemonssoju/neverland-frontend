@@ -20,7 +20,7 @@ import {
   Image,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { PuzzleProps } from './PuzzleUpload';
+import { PuzzleProps } from '../Write/PuzzleUpload';
 import EditButton from '../../common/EditButton';
 import {
   Title,
@@ -203,7 +203,9 @@ const DetailSection = ({
         <Body style={{ marginBottom: 15 }}>{puzzle.content}</Body>
         <TouchableOpacity
           onPress={() => {
-            puzzle.isWriter ? setImageStyleModal(true) : setPuzzlePieceModal(true);
+            puzzle.isWriter
+              ? setImageStyleModal(true)
+              : setPuzzlePieceModal(true);
           }}
           disabled={!puzzleButtonEnabled}
           style={{
@@ -314,18 +316,18 @@ const DetailSection = ({
 //       '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
 //     profileImage: 'https://ifh.cc/g/5ZL9HY.png',
 //   },
-  // {
-  //   writer: '한서연',
-  //   content:
-  //     '맞아 기억난다! 벌써 이게 반년 전이네. 맛집도 완전 많이 가고 바다에 들어가서 수영도 했었지~ 그때 우리 청춘이었다..',
-  //   profile: 'https://ifh.cc/g/1CLCRY.png',
-  // },
-  // {
-  //   writer: '곽서진',
-  //   content:
-  //     '핑크 노을이 환상적이었어 또 가고싶다 올해 여름에도 다같이 여행 가자!!! 휴가 날짜 맞춰보자 ㅎㅎ',
-  //   profile: 'https://ifh.cc/g/06Q0DB.png',
-  // },
+// {
+//   writer: '한서연',
+//   content:
+//     '맞아 기억난다! 벌써 이게 반년 전이네. 맛집도 완전 많이 가고 바다에 들어가서 수영도 했었지~ 그때 우리 청춘이었다..',
+//   profile: 'https://ifh.cc/g/1CLCRY.png',
+// },
+// {
+//   writer: '곽서진',
+//   content:
+//     '핑크 노을이 환상적이었어 또 가고싶다 올해 여름에도 다같이 여행 가자!!! 휴가 날짜 맞춰보자 ㅎㅎ',
+//   profile: 'https://ifh.cc/g/06Q0DB.png',
+// },
 // ];
 
 const PuzzleDetail = ({
