@@ -1,17 +1,21 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import { FlatList, SafeAreaView, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { PuzzleStackParams } from '../../pages/Group/PuzzleStack';
+import { AlbumStackParams } from '../../../pages/Group/AlbumStack';
 import styled from 'styled-components/native';
-import { LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
+import { LIGHTPURPLE, PURPLE, WHITE } from '../../../styles/GlobalColor';
 import { useEffect, useState } from 'react';
-import { Body, Emphasis } from '../../styles/GlobalText';
-import Map from '../Map/Map';
-import { AlbumLocationProps, AlbumTimeProps, PuzzleTimeItem,  } from './PuzzleItem';
+import { Body, Emphasis } from '../../../styles/GlobalText';
+import Map from '../../Map/Map';
+import {
+  AlbumLocationProps,
+  AlbumTimeProps,
+  AlbumTimeItem,
+} from './AlbumItem';
 import { LatLng } from 'react-native-maps';
 import { useRecoilState } from 'recoil';
-import { groupState } from '../../recoil/groupState';
-import Request from '../../services/requests';
+import { groupState } from '../../../recoil/groupState';
+import Request from '../../../services/requests';
 
 // const data: PuzzleTimeItemProps[] = [
 //   {
@@ -117,10 +121,10 @@ const places: { image: string; coor: LatLng }[] = [
   },
 ];
 
-const PuzzleList = ({
+const AlbumList = ({
   navigation,
   route,
-}: StackScreenProps<PuzzleStackParams, 'PuzzleList'>) => {
+}: StackScreenProps<AlbumStackParams, 'AlbumList'>) => {
   const [option, setOption] = useState<string>('time');
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const request = Request();
@@ -149,16 +153,18 @@ const PuzzleList = ({
     const response = await request.get(`/groups/${groupIdx}/albums`, {
       sortType: option,
     });
-    console.log(response)
+    console.log(response);
     if (response.isSuccess) {
-      option === 'time' ? setAlbumTime(response.result.albumList) : setAlbumLocation(response.result.albumList)
+      option === 'time'
+        ? setAlbumTime(response.result.albumList)
+        : setAlbumLocation(response.result.albumList);
     }
   };
 
   useEffect(() => {
-    getAlbumList()
-  }, [])
-  
+    getAlbumList();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <OptionContainer>
@@ -205,7 +211,10 @@ const PuzzleList = ({
             const isFirstItem = index === 0;
             var isYearChanged = false;
             var year = item.puzzleDate.split('.')[0];
-            if (!isFirstItem && year !== albumTime[index - 1].puzzleDate.split('.')[0]) {
+            if (
+              !isFirstItem &&
+              year !== albumTime[index - 1].puzzleDate.split('.')[0]
+            ) {
               isYearChanged = true;
             }
             const isLastItemOfYear =
@@ -217,9 +226,9 @@ const PuzzleList = ({
                 {(isFirstItem || isYearChanged) && (
                   <Emphasis style={{ marginLeft: 10 }}>{year}</Emphasis>
                 )}
-                <PuzzleTimeItem
+                <AlbumTimeItem
                   navigation={navigation}
-                  puzzle={item}
+                  album={item}
                   isLast={isLastItemOfYear}
                 />
               </>
@@ -252,4 +261,4 @@ const OptionButton = styled.TouchableOpacity`
   border-radius: 6px;
 `;
 
-export default PuzzleList;
+export default AlbumList;

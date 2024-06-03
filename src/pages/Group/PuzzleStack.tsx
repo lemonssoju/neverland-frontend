@@ -1,20 +1,23 @@
-import {
-  StackNavigationProp,
-  StackScreenProps,
-  createStackNavigator,
-} from '@react-navigation/stack';
-import PuzzleList from '../../components/Group/PuzzleList';
-import PuzzleDetail from '../../components/Group/PuzzleDetail';
+import PuzzleList from '../../components/Group/Puzzle/PuzzleList';
+import PuzzleDetail from '../../components/Group/Puzzle/PuzzleDetail';
+import PuzzleUpload from '../../components/Group/Puzzle/PuzzleUpload';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { TabProps } from '../../../App';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 
 export type PuzzleStackParams = {
-  PuzzleList: any;
-  PuzzleDetail: { albumIdx: number; albumImage: string };
+  PuzzleList: undefined;
+  PuzzleDetail: {
+    puzzleIdx: number;
+  };
+  PuzzleUpload: {
+    puzzleIdx?: number;
+  };
 };
 
-const Stack = createStackNavigator<PuzzleStackParams>();
+const Stack = createNativeStackNavigator<PuzzleStackParams>();
 
 const PuzzleStack = ({
   navigation,
@@ -23,14 +26,12 @@ const PuzzleStack = ({
   const navigationToPuzzle =
     useNavigation<StackNavigationProp<PuzzleStackParams>>();
   useEffect(() => {
-    if (route.params?.albumIdx) {
+    if (route.params?.puzzleIdx) {
       navigationToPuzzle.push('PuzzleDetail', {
-        albumIdx: route.params.albumIdx,
-        albumImage: route.params.albumImage,
+        puzzleIdx: route.params.puzzleIdx,
       });
     }
-  }, [route.params?.albumImage]);
-
+  }, [route.params?.puzzleIdx]);
   return (
     <Stack.Navigator
       initialRouteName="PuzzleList"
@@ -39,6 +40,11 @@ const PuzzleStack = ({
       }}>
       <Stack.Screen name="PuzzleList" component={PuzzleList} />
       <Stack.Screen name="PuzzleDetail" component={PuzzleDetail} />
+      <Stack.Screen
+        name="PuzzleUpload"
+        component={PuzzleUpload}
+        options={{ presentation: 'transparentModal' }}
+      />
     </Stack.Navigator>
   );
 };

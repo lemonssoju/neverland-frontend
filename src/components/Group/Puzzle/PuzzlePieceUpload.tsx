@@ -8,28 +8,31 @@ import {
   Pressable,
   Keyboard,
 } from 'react-native';
-import CustomHeader from '../common/CustomHeader';
+import CustomHeader from '../../common/CustomHeader';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { BLACK, GRAY, LIGHTGRAY } from '../../styles/GlobalColor';
-import { Body, Label } from '../../styles/GlobalText';
-import BottomButton from '../common/BottomButton';
-import Request from '../../services/requests';
+import { BLACK, GRAY, LIGHTGRAY } from '../../../styles/GlobalColor';
+import { Body, Label } from '../../../styles/GlobalText';
+import BottomButton from '../../common/BottomButton';
+import Request from '../../../services/requests';
 import { useRecoilState } from 'recoil';
-import { groupState } from '../../recoil/groupState';
-import { UserProps } from '../Home/Settings/SettingsHome';
+import { groupState } from '../../../recoil/groupState';
+import { UserProps } from '../../Home/Settings/SettingsHome';
 
-export interface SubfeedProps {
+export interface PuzzlePieceProps {
   nickname: string;
   puzzlePieceText: string;
   profileImage: string;
 }
 
-interface SubfeedUploadProps {
+interface PuzzlePieceUploadProps {
   puzzleIdx: number;
-  setSubfeedModal: Dispatch<SetStateAction<boolean>>;
+  setPuzzlePieceModal: Dispatch<SetStateAction<boolean>>;
 }
-const SubfeedUpload = ({ puzzleIdx, setSubfeedModal }: SubfeedUploadProps) => {
-  const [subfeed, setSubfeed] = useState<string>('');
+const SubfeedUpload = ({
+  puzzleIdx,
+  setPuzzlePieceModal,
+}: PuzzlePieceUploadProps) => {
+  const [puzzlePiece, setPuzzlePiece] = useState<string>('');
   const request = Request();
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const [user, setUser] = useState<UserProps>({
@@ -47,17 +50,17 @@ const SubfeedUpload = ({ puzzleIdx, setSubfeedModal }: SubfeedUploadProps) => {
     const response = await request.post(
       `/groups/${groupIdx}/puzzles/${puzzleIdx}/puzzlePiece`,
       {
-        content: subfeed,
+        content: puzzlePiece,
       },
     );
-    if (response.isSuccess) setSubfeedModal(false);
+    if (response.isSuccess) setPuzzlePieceModal(false);
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader
         label="추억 퍼즐 맞추기"
         onClose={() => {
-          setSubfeedModal(false);
+          setPuzzlePieceModal(false);
         }}
       />
       <KeyboardAvoidingView
@@ -81,16 +84,16 @@ const SubfeedUpload = ({ puzzleIdx, setSubfeedModal }: SubfeedUploadProps) => {
             source={
               user.profileImage
                 ? { uri: user.profileImage }
-                : require('../../assets/Puzzle.png')
+                : require('../../../assets/Puzzle.png')
             }
             style={{ width: 32, height: 32, borderRadius: 180, marginRight: 5 }}
           />
           <Label>{user.nickname}</Label>
         </View>
         <TextInput
-          value={subfeed}
+          value={puzzlePiece}
           onChangeText={(content: string) => {
-            setSubfeed(content);
+            setPuzzlePiece(content);
           }}
           placeholder={
             '추억 퍼즐 내용을 작성해 주세요.\n\n해당 퍼즐 내용을 모아 추억 퍼즐이 완성되니 신중하게 적어주세요.'
@@ -110,7 +113,7 @@ const SubfeedUpload = ({ puzzleIdx, setSubfeedModal }: SubfeedUploadProps) => {
           autoFocus
           maxLength={2000}
         />
-        {subfeed.length === 0 && (
+        {puzzlePiece.length === 0 && (
           <Body
             style={{
               color: GRAY,
@@ -131,7 +134,7 @@ const SubfeedUpload = ({ puzzleIdx, setSubfeedModal }: SubfeedUploadProps) => {
             marginRight: 5,
             marginVertical: 5,
           }}>
-          {subfeed.length} / 100
+          {puzzlePiece.length} / 100
         </Body>
         <BottomButton label="등록" onPress={onCreate} />
       </KeyboardAvoidingView>

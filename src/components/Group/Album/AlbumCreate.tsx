@@ -8,22 +8,22 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import { Emphasis } from '../../styles/GlobalText';
+import { Emphasis } from '../../../styles/GlobalText';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import { FeedStackParams } from '../../pages/Group/FeedStack';
-import IconButton from '../common/IconButton';
-import ArrowIcon from '../../assets/common/Arrow.svg';
-import { WHITE } from '../../styles/GlobalColor';
+import { PuzzleStackParams } from '../../../pages/Group/PuzzleStack';
+import IconButton from '../../common/IconButton';
+import ArrowIcon from '../../../assets/common/Arrow.svg';
+import { WHITE } from '../../../styles/GlobalColor';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
-import BottomButton from '../common/BottomButton';
-import { TabProps } from '../../../App';
-import generateImages from '../../services/ImageToImage';
-import Request from '../../services/requests';
+import BottomButton from '../../common/BottomButton';
+import { TabProps } from '../../../../App';
+import generateImages from '../../../services/ImageToImage';
+import Request from '../../../services/requests';
 import Video from 'react-native-video';
 import { useRecoilState } from 'recoil';
-import { groupState } from '../../recoil/groupState';
+import { groupState } from '../../../recoil/groupState';
 
 interface PuzzleCreateProps {
   date: string;
@@ -52,7 +52,7 @@ const PuzzleCreate = ({
   const { width, height } = Dimensions.get('screen');
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const request = Request();
-  const navigationToPuzzle = useNavigation<StackNavigationProp<TabProps>>();
+  const navigationToAlbum = useNavigation<StackNavigationProp<TabProps>>();
   const [realComplete, setRealComplete] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
   const [album, setAlbum] = useState<AlbumProps>({
@@ -89,6 +89,7 @@ const PuzzleCreate = ({
           albumImage: images.base64,
         },
       );
+      console.log(response);
       setAlbum({ ...album, albumImage: images.base64 });
       if (!complete) setRealComplete(true);
     } catch (err) {
@@ -105,6 +106,7 @@ const PuzzleCreate = ({
 
     return () => clearTimeout(timeout);
   }, [complete]);
+
   useEffect(() => {
     sendText();
   }, []);
@@ -152,7 +154,7 @@ const PuzzleCreate = ({
           />
         ) : complete ? (
           <Image
-            source={require('../../assets/tmp/Puzzlejeju.png')}
+            source={require('../../../assets/tmp/Puzzlejeju.png')}
             style={{
               width: 320,
               height: 360,
@@ -162,7 +164,7 @@ const PuzzleCreate = ({
           />
         ) : (
           <Video
-            source={require('../../assets/PuzzleAnimation.mp4')}
+            source={require('../../../assets/PuzzleAnimation.mp4')}
             style={{
               width: 280,
               height: 360,
@@ -181,7 +183,7 @@ const PuzzleCreate = ({
             label="구경하러 가기"
             onPress={() => {
               setCreateModal(false);
-              navigationToPuzzle.navigate('Puzzle', {
+              navigationToAlbum.navigate('Album', {
                 albumIdx: album.albumIdx,
                 albumImage: album.albumImage,
               });

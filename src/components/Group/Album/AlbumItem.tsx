@@ -5,11 +5,11 @@ import {
   Pressable,
   Dimensions,
 } from 'react-native';
-import { LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
-import { Body, Caption, Content, Subtitle } from '../../styles/GlobalText';
+import { LIGHTPURPLE, PURPLE, WHITE } from '../../../styles/GlobalColor';
+import { Body, Caption, Content, Subtitle } from '../../../styles/GlobalText';
 import { useState } from 'react';
-import BubbleIcon from '../../assets/common/Bubble.svg';
-import ImageStack from '../common/ImageStack';
+import BubbleIcon from '../../../assets/common/Bubble.svg';
+import ImageStack from '../../common/ImageStack';
 
 export interface AlbumTimeProps {
   albumIdx: number;
@@ -23,12 +23,12 @@ export interface AlbumTimeProps {
 
 const { width } = Dimensions.get('window');
 
-export const PuzzleTimeItem = ({
+export const AlbumTimeItem = ({
   navigation,
-  puzzle,
+  album,
   isLast,
 }: {
-  puzzle: AlbumTimeProps;
+  album: AlbumTimeProps;
   navigation: any;
   isLast: boolean;
 }) => {
@@ -40,7 +40,7 @@ export const PuzzleTimeItem = ({
     puzzleDate,
     puzzlerCount,
     puzzlerImageList,
-  } = puzzle;
+  } = album;
   return (
     <View
       style={{
@@ -113,7 +113,7 @@ export interface AlbumLocationProps {
   y: string;
 }
 
-export const PuzzlePlaceItem = ({
+export const AlbumPlaceItem = ({
   navigation,
   albumIdx,
   image,
@@ -125,7 +125,7 @@ export const PuzzlePlaceItem = ({
   return (
     <Pressable
       onPress={() =>
-        navigation.navigate('PuzzleDetail', { albumIdx: albumIdx })
+        navigation.navigate('AlbumDetail', { albumIdx: albumIdx })
       }
       style={{ width: 100, height: 120 }}>
       <BubbleIcon style={{ position: 'absolute' }} />

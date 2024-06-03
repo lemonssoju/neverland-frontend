@@ -14,15 +14,15 @@ import {
   Alert,
 } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import CommentInput from '../common/CommentInput';
-import CommentItem, { CommentProps } from '../common/CommentItem';
+import CommentInput from '../../common/CommentInput';
+import CommentItem, { CommentProps } from '../../common/CommentItem';
 import {
   Emphasis,
   Caption,
   Label,
   Body,
   Content,
-} from '../../styles/GlobalText';
+} from '../../../styles/GlobalText';
 import {
   BLACK,
   LIGHTGRAY,
@@ -30,20 +30,19 @@ import {
   MIDPURPLE,
   PURPLE,
   WHITE,
-} from '../../styles/GlobalColor';
-import TimeIcon from '../../assets/common/Time.svg';
-import MarkerIcon from '../../assets/common/Marker.svg';
-import ArrowIcon from '../../assets/common/ArrowSmall.svg';
-import { PuzzleStackParams } from '../../pages/Group/PuzzleStack';
-import CustomHeader from '../common/CustomHeader';
-import moment from 'moment';
+} from '../../../styles/GlobalColor';
+import TimeIcon from '../../../assets/common/Time.svg';
+import MarkerIcon from '../../../assets/common/Marker.svg';
+import ArrowIcon from '../../../assets/common/ArrowSmall.svg';
+import { AlbumStackParams } from '../../../pages/Group/AlbumStack';
+import CustomHeader from '../../common/CustomHeader';
 import { useNavigation } from '@react-navigation/native';
-import { TabProps } from '../../../App';
-import Request from '../../services/requests';
+import { TabProps } from '../../../../App';
+import Request from '../../../services/requests';
 import { useRecoilState } from 'recoil';
-import { groupState } from '../../recoil/groupState';
+import { groupState } from '../../../recoil/groupState';
 
-interface PuzzleDetailProps {
+interface AlbumDetailProps {
   title: string;
   puzzleDate: string;
   location: string;
@@ -55,10 +54,10 @@ interface PuzzleDetailProps {
 }
 
 const DetailSection = ({
-  puzzle,
+  album,
   navigation,
 }: {
-  puzzle: PuzzleDetailProps;
+  album: AlbumDetailProps;
   navigation: any;
 }) => {
   const navigationToFeed = useNavigation<StackNavigationProp<TabProps>>();
@@ -72,12 +71,12 @@ const DetailSection = ({
         }}
       />
       <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
-        <Emphasis style={{ fontSize: 32 }}>{puzzle.title}</Emphasis>
+        <Emphasis style={{ fontSize: 32 }}>{album.title}</Emphasis>
         <View
           style={{
             height: 9,
             backgroundColor: MIDPURPLE,
-            width: 18 * (puzzle.title.length + 1),
+            width: 18 * (album.title.length + 1),
             position: 'absolute',
             top: 45,
             left: 20,
@@ -89,7 +88,7 @@ const DetailSection = ({
             <TimeIcon />
             <Emphasis
               style={{ fontSize: 20, marginLeft: 5, fontWeight: '600' }}>
-              {puzzle.puzzleDate}
+              {album.puzzleDate}
             </Emphasis>
           </View>
           <View
@@ -101,12 +100,12 @@ const DetailSection = ({
             <MarkerIcon width={20} height={20} color={BLACK} />
             <Emphasis
               style={{ fontSize: 20, marginLeft: 5, fontWeight: '600' }}>
-              {puzzle.location}
+              {album.location}
             </Emphasis>
           </View>
         </View>
         <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-          {puzzle.memberList.slice(0, 4).map((item, index) => {
+          {album.memberList.slice(0, 4).map((item, index) => {
             return (
               <View
                 key={index}
@@ -128,7 +127,7 @@ const DetailSection = ({
               </View>
             );
           })}
-          {puzzle.memberList.length > 4 && (
+          {album.memberList.length > 4 && (
             <TouchableOpacity
               onPress={() => setShowAll(!showAll)}
               style={{
@@ -146,7 +145,7 @@ const DetailSection = ({
           )}
         </View>
         {showAll &&
-          puzzle.memberList.slice(4).map((item, index) => {
+          album.memberList.slice(4).map((item, index) => {
             return (
               <View
                 key={index}
@@ -173,9 +172,9 @@ const DetailSection = ({
         <View style={{ height: 10 }} />
         <Image
           source={
-            puzzle.albumImage && puzzle.albumImage.length > 0
-              ? { uri: puzzle.albumImage }
-              : require('../../assets/tmp/Puzzlejeju.png')
+            album.albumImage && album.albumImage.length > 0
+              ? { uri: album.albumImage }
+              : require('../../../assets/tmp/Puzzlejeju.png')
           }
           style={{ width: '100%', height: 360, borderRadius: 8 }}
         />
@@ -188,7 +187,7 @@ const DetailSection = ({
             paddingVertical: 10,
             marginTop: 15,
           }}>
-          <Body>{puzzle.description}</Body>
+          <Body>{album.description}</Body>
           <View
             style={{
               height: 1,
@@ -198,7 +197,7 @@ const DetailSection = ({
           />
           <TouchableOpacity
             onPress={() => {
-              navigationToFeed.navigate('Feed', { feedIdx: puzzle.puzzleIdx });
+              navigationToFeed.navigate('Puzzle', { puzzleIdx: album.puzzleIdx });
             }}
             style={{
               flexDirection: 'row',
@@ -238,14 +237,14 @@ const commentData = [
   },
 ];
 
-const PuzzleDetail = ({
+const AlbumDetail = ({
   navigation,
   route,
-}: StackScreenProps<PuzzleStackParams, 'PuzzleDetail'>) => {
+}: StackScreenProps<AlbumStackParams, 'AlbumDetail'>) => {
   const request = Request();
   const albumIdx = route.params.albumIdx;
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
-  const [puzzle, setPuzzle] = useState<PuzzleDetailProps>({
+  const [album, setAlbum] = useState<AlbumDetailProps>({
     puzzleIdx: 1,
     title: '작년 여름 제주에서',
     puzzleDate: '2023.08.21',
@@ -268,23 +267,23 @@ const PuzzleDetail = ({
   const [comment, setComment] = useState<string>('');
   const [refreshing, setRefresing] = useState<boolean>(false);
 
-  const getPuzzleDetail = async () => {
+  const getAlbumDetail = async () => {
     const response = await request.get(
       `/groups/${groupIdx}/albums/${albumIdx}`,
     );
     if (response.isSuccess) {
-      setPuzzle(response.result);
+      setAlbum(response.result);
       setRefresing(false);
     }
   };
 
   useEffect(() => {
-    // getPuzzleDetail();
+    // getAlbumDetail();
   }, [refreshing]);
 
   useEffect(() => {
-    if (puzzle.albumImage)
-      setPuzzle({ ...puzzle, albumImage: route.params?.albumImage });
+    if (album.albumImage)
+      setAlbum({ ...album, albumImage: route.params?.albumImage });
   }, [route.params?.albumImage]);
 
   const [commentIdx, setCommentIdx] = useState<number>(0);
@@ -352,12 +351,12 @@ const PuzzleDetail = ({
         }}>
         <ScrollView>
           <FlatList
-            data={puzzle.commentList}
+            data={album.commentList}
             scrollEnabled={false}
             refreshing={refreshing}
             ListHeaderComponent={() => (
               <>
-                <DetailSection puzzle={puzzle} navigation={navigation} />
+                <DetailSection album={album} navigation={navigation} />
                 <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
                   <Label
                     style={{ color: PURPLE, marginBottom: 10, fontSize: 16 }}>
@@ -393,4 +392,4 @@ const PuzzleDetail = ({
   );
 };
 
-export default PuzzleDetail;
+export default AlbumDetail;
