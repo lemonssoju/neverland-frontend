@@ -288,6 +288,8 @@ const PuzzleDetail = ({
   }, [route.params?.albumImage]);
 
   const [commentIdx, setCommentIdx] = useState<number>(0);
+  const [focusInput, setFocusInput] = useState<boolean>(false);
+
   const onComment = async () => {
     if (commentIdx > 0) {
       const response = await request.patch(`/comments/${commentIdx}`, {
@@ -365,6 +367,7 @@ const PuzzleDetail = ({
                     comment={comment}
                     setComment={setComment}
                     onPress={onComment}
+                    onFocus={() => setFocusInput(true)}
                   />
                 </View>
               </>
@@ -376,6 +379,7 @@ const PuzzleDetail = ({
                   onEdit={() => {
                     setComment(item.content);
                     setCommentIdx(item.commentIdx);
+                    setFocusInput(true);
                   }}
                   onDelete={() => onCommentDelete(item.commentIdx)}
                 />

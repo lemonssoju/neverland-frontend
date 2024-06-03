@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import SendIcon from '../../assets/common/Send.svg';
 import { GRAY, LIGHTPURPLE, MIDPURPLE } from '../../styles/GlobalColor';
@@ -8,9 +14,21 @@ interface CommentInputProps {
   comment: string;
   setComment: Dispatch<SetStateAction<string>>;
   onPress: () => void;
+  onFocus?: () => void;
 }
 
-const CommentInput = ({ comment, setComment, onPress }: CommentInputProps) => {
+const CommentInput = ({
+  comment,
+  setComment,
+  onPress,
+  onFocus,
+}: CommentInputProps) => {
+  const inputRef = useRef<TextInput>(null);
+  useEffect(() => {
+    if (onFocus) {
+      inputRef.current?.focus();
+    }
+  }, [onFocus]);
   return (
     <View
       style={{
@@ -20,6 +38,7 @@ const CommentInput = ({ comment, setComment, onPress }: CommentInputProps) => {
       }}>
       <TextInput
         value={comment}
+        ref={inputRef}
         onChangeText={(text: string) => {
           setComment(text);
         }}
