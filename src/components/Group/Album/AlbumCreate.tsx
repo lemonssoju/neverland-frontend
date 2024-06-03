@@ -56,12 +56,8 @@ const PuzzleCreate = ({
   const navigationToAlbum = useNavigation<StackNavigationProp<TabProps>>();
   const [realComplete, setRealComplete] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
-  const [album, setAlbum] = useState<AlbumProps>({
-    description: '',
-    albumIdx: 0,
-    albumImage: '',
-  });
-
+  const [albumIdx, setAlbumIdx] = useState<number>(0)
+  const [generatedImage, setGeneratedImage] = useState<string>('')
 
   const sendText = async () => {
     const response = await request.post(
@@ -80,38 +76,42 @@ const PuzzleCreate = ({
       const nonEnglishSentences = response.result.description
         .replace(regex, '')
         .trim();
-      setAlbum({
-        ...album,
-        description: nonEnglishSentences,
-        albumIdx: response.result.albumIdx,
-      });
+      setAlbumIdx(response.result.albumIdx)
       // console.log('ressss', response.result)
       // console.log('album', album)
       createImage(
         response.result.prompt.length > 0
           ? response.result.prompt
           : englishSentences,
-        response.result.albumIdx
+        response.result.albumIdx,
       );
     }
   };
 
-
-
   const createImage = async (text: string, albumIdx: number) => {
     try {
       const images = await generateImages({ imageUri, text, style });
-      console.log(images.base64);
+      setGeneratedImage(images.base64)
       if (images) {
+        const formData = new FormData();
+        formData.append('image',  {
+          uri: images.base64,
+          name: 'albumImage',
+          type: 'image/png',
+        });
         const response = await request.post(
           `/groups/${groupIdx}/albums/${albumIdx}/image`,
+          formData,
           {
-            albumImage: images.base64,
+            headers: { 'Content-Type': 'multipart/formdata' },
+            transformRequest: () => {
+              return formData;
+            },
           },
         );
+        
         console.log('res', response, albumIdx);
-        setAlbum({ ...album, albumImage: images.base64 });
-        if (!complete) setRealComplete(true);
+        // if (!complete) setRealComplete(true);
         setRealComplete(true);
       }
     } catch (err) {
@@ -119,15 +119,15 @@ const PuzzleCreate = ({
     }
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (!complete) {
-        setComplete(true);
-      }
-    }, 10000);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     if (!complete) {
+  //       setComplete(true);
+  //     }
+  //   }, 10000);
 
-    return () => clearTimeout(timeout);
-  }, [complete]);
+  //   return () => clearTimeout(timeout);
+  // }, [complete]);
 
   useEffect(() => {
     sendText();
@@ -166,7 +166,7 @@ const PuzzleCreate = ({
         </View>
         {realComplete ? (
           <Image
-            source={{ uri: album.albumImage }}
+            source={{ uri: generatedImage }}
             style={{
               width: 320,
               height: 360,
@@ -206,8 +206,8 @@ const PuzzleCreate = ({
             onPress={() => {
               setCreateModal(false);
               navigationToAlbum.navigate('Album', {
-                albumIdx: album.albumIdx,
-                albumImage: album.albumImage,
+                albumIdx: albumIdx,
+                albumImage: generatedImage,
               });
             }}
           />

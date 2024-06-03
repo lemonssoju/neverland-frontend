@@ -140,41 +140,14 @@ const DetailSection = ({
   const [puzzleTextList, setPuzzleTextList] = useState<string[]>([]);
   const resizeImage = async (imageUri: string) => {
     try {
-      // 이미지의 현재 차원을 가져옵니다.
-      const originalWidth = 300; // 예제의 값입니다. 실제 값으로 교체해야 합니다.
-      const originalHeight = 225; // 예제의 값입니다. 실제 값으로 교체해야 합니다.
-
-      // 원하는 크기를 계산합니다.
-      let newWidth = originalWidth;
-      let newHeight = originalHeight;
-
-      if (newWidth < 320) {
-        newHeight = (320 / newWidth) * newHeight;
-        newWidth = 320;
-      }
-      if (newHeight < 320) {
-        newWidth = (320 / newHeight) * newWidth;
-        newHeight = 320;
-      }
-      if (newWidth > 1536) {
-        newHeight = (1536 / newWidth) * newHeight;
-        newWidth = 1536;
-      }
-      if (newHeight > 1536) {
-        newWidth = (1536 / newHeight) * newWidth;
-        newHeight = 1536;
-      }
-
-      // 이미지를 리사이즈합니다.
       const resizedImageUri = await ImageResizer.createResizedImage(
         imageUri,
-        newWidth,
-        newHeight,
+        600,
+        600,
         'PNG',
         100,
       );
 
-      // 리사이즈된 이미지의 URI를 반환합니다.
       return resizedImageUri.uri;
     } catch (err) {
       console.error(err);
@@ -186,6 +159,7 @@ const DetailSection = ({
   const handleResizeImage = async () => {
     const resizedUri = await resizeImage(puzzle.puzzleImage);
     if (resizedUri) {
+      console.log('image resized successfully');
       setImageUri(resizedUri);
     } else {
       console.error('Failed to resize image');
