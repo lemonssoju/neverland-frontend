@@ -79,7 +79,7 @@ const GroupList = ({
   const [formVisible, setFormVisible] = useState<boolean>(false);
   const { width, height } = Dimensions.get('window');
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
-  const [groupCode, setGroupCode] = useState<string>('');
+  const [joinCode, setJoinCode] = useState<string>('');
   const [group, setGroup] = useState<GroupProps[]>([
     {
       admin: '',
@@ -104,15 +104,16 @@ const GroupList = ({
     getMyProfile();
   }, []);
   const onJoin = async () => {
-    if (groupCode.length === 0) {
+    if (joinCode.length === 0) {
       Alert.alert('빈칸을 채워주세요!');
     } else {
       const response = await request.post('/groups/join', {
-        joinCode: groupCode,
+        joinCode: joinCode,
       });
       if (response.isSuccess) {
         setInviteVisible(false);
         console.log(response.result);
+        setJoinCode('');
         navigationToTab.navigate('GroupTab', {
           groupIdx: response.result.groupIdx,
         });
@@ -129,7 +130,7 @@ const GroupList = ({
 
   useEffect(() => {
     getGroupList();
-  }, []);
+  }, [inviteVisible]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -174,7 +175,10 @@ const GroupList = ({
       <Modal visible={inviteVisible} transparent>
         <Pressable
           style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
-          onPress={() => setInviteVisible(false)}
+          onPress={() => {
+            setInviteVisible(false);
+            setJoinCode('');
+          }}
         />
         <View
           style={{
@@ -195,8 +199,8 @@ const GroupList = ({
             label="그룹 코드"
             isRequired
             keyboardType="numeric"
-            value={groupCode}
-            onChangeText={code => setGroupCode(code)}
+            value={joinCode}
+            onChangeText={code => setJoinCode(code)}
             placeholder="그룹 코드를 입력하세요"
           />
           <BottomButton label="입장하기" onPress={onJoin} />
