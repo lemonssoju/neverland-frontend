@@ -75,7 +75,7 @@ export const AlbumTimeItem = ({
       />
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('PuzzleDetail', { albumIdx: albumIdx })
+          navigation.navigate('AlbumDetail', { albumIdx: albumIdx })
         }
         style={{ flexDirection: 'row', marginLeft: 20 }}>
         <Image
