@@ -21,9 +21,9 @@ import { PURPLE, WHITE, BLACK, LIGHTGRAY } from './src/styles/GlobalColor';
 import AuthStack from './src/pages/AuthStack';
 import HomeStack from './src/pages/HomeStack';
 // Tab
-import FeedStack from './src/pages/Group/FeedStack';
+import FeedStack from './src/pages/Group/PuzzleStack';
 import WriteStack from './src/pages/Group/WriteStack';
-import PuzzleStack from './src/pages/Group/PuzzleStack';
+import PuzzleStack from './src/pages/Group/AlbumStack';
 
 import FeedIcon from './src/assets/navbar/Feed.svg';
 import WriteIcon from './src/assets/navbar/Write.svg';
@@ -96,9 +96,9 @@ const RootStack = ({
 };
 
 export type TabProps = {
-  Feed: { feedIdx?: number | undefined };
+  Puzzle: { puzzleIdx?: number | undefined };
   Write: any;
-  Puzzle: { albumIdx: number | undefined; albumImage: string };
+  Album: { albumIdx: number | undefined; albumImage: string };
 };
 
 const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
@@ -118,15 +118,15 @@ const CustomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
         const onPress = () => {
-          if (route.name === 'Feed') {
+          if (route.name === 'Puzzle') {
             if (isFocused)
               navigation.reset({
                 routes: [{ name: route.name, params: { id: undefined } }],
               });
             else navigation.navigate(route.name, { id: undefined });
           } else if (route.name === 'Write') {
-            navigation.navigate('Feed', { screen: 'FeedUpload' });
-          } else if (route.name === 'Puzzle') {
+            navigation.navigate('Puzzle', { screen: 'PuzzleUpload' });
+          } else if (route.name === 'Album') {
             if (isFocused)
               navigation.reset({
                 routes: [
@@ -179,11 +179,11 @@ const GroupTab = (): JSX.Element => {
   return (
     <Tab.Navigator
       tabBar={props => <CustomTab {...props} />}
-      initialRouteName="Feed"
+      initialRouteName="Puzzle"
       screenOptions={() => ({
         headerShown: false,
       })}>
-      <Tab.Screen name={'Feed'} component={FeedStack} />
+      <Tab.Screen name={'Puzzle'} component={FeedStack} />
       <Tab.Screen
         name={'Write'}
         component={WriteStack}
@@ -193,7 +193,7 @@ const GroupTab = (): JSX.Element => {
           },
         })}
       />
-      <Tab.Screen name={'Puzzle'} component={PuzzleStack} />
+      <Tab.Screen name={'Album'} component={PuzzleStack} />
     </Tab.Navigator>
   );
 };

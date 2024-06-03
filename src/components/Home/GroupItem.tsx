@@ -5,7 +5,6 @@ import { BLACK, WHITE } from '../../styles/GlobalColor';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParams } from '../../pages/Group/FeedStack';
 import { RootStackParams } from '../../../App';
 
 export interface GroupProps {
@@ -18,7 +17,7 @@ export interface GroupProps {
   startYear: string;
 }
 
-const GroupItem = ({ group }: {group: GroupProps}) => {
+const GroupItem = ({ group }: { group: GroupProps }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const {
     admin,
@@ -69,7 +68,9 @@ const GroupItem = ({ group }: {group: GroupProps}) => {
               퍼즐 관리자 {admin}
             </Subtitle>
             <Body style={{ color: WHITE, marginBottom: 5, marginTop: 20 }}>
-              {recentUpdate ? `최근 추억 퍼즐 완성 ${recentUpdate}일 전` : `완성된 퍼즐이 없습니다`}
+              {recentUpdate
+                ? `최근 추억 퍼즐 완성 ${recentUpdate}일 전`
+                : `완성된 퍼즐이 없습니다`}
             </Body>
           </View>
         </View>

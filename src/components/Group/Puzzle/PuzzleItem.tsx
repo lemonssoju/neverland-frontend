@@ -8,15 +8,15 @@ import {
   StyleSheet,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParams } from '../../pages/Group/FeedStack';
+import { PuzzleStackParams } from '../../../pages/Group/PuzzleStack';
 import { useNavigation } from '@react-navigation/native';
-import { Content, Subtitle } from '../../styles/GlobalText';
-import MarkerIcon from '../../assets/common/Marker.svg';
-import { WHITE } from '../../styles/GlobalColor';
+import { Content, Subtitle } from '../../../styles/GlobalText';
+import MarkerIcon from '../../../assets/common/Marker.svg';
+import { WHITE } from '../../../styles/GlobalColor';
 
 const { width, height } = Dimensions.get('window');
 
-export interface FeedItemProps {
+export interface PuzzleItemProps {
   puzzleIdx: number;
   title: string;
   puzzleImage: string;
@@ -25,17 +25,17 @@ export interface FeedItemProps {
   location: string;
 }
 
-const FeedItem = ({ feed }: { feed: FeedItemProps}) => {
-  const navigation = useNavigation<StackNavigationProp<FeedStackParams>>();
-  const { puzzleIdx, title, puzzleImage, writer, createdDate, location } = feed;
+const PuzzleItem = ({ puzzle }: { puzzle: PuzzleItemProps }) => {
+  const navigation = useNavigation<StackNavigationProp<PuzzleStackParams>>();
+  const { puzzleIdx, title, puzzleImage, writer, createdDate, location } = puzzle;
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('FeedDetail', { feedIdx: puzzleIdx });
+        navigation.navigate('PuzzleDetail', { puzzleIdx: puzzleIdx });
       }}
       style={{ marginLeft: 10, marginBottom: 10, width: width / 2 - 15 }}>
       <ImageBackground
-        source={{ uri: puzzleImage}}
+        source={{ uri: puzzleImage }}
         style={{ width: '100%', height: 250 }}
         imageStyle={{ borderRadius: 8 }}>
         <View
@@ -72,4 +72,4 @@ const FeedItem = ({ feed }: { feed: FeedItemProps}) => {
   );
 };
 
-export default FeedItem;
+export default PuzzleItem;

@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
-import EditButton from '../common/EditButton';
-import { BLACK, GRAY, LIGHTGRAY, LIGHTPURPLE } from '../../styles/GlobalColor';
-import DotsIcon from '../../assets/common/Dots.svg';
+import EditButton from '../../common/EditButton';
 import {
-  Label,
-  Content,
-  Caption,
-  Body,
-} from '../../styles/GlobalText';
-import { SubfeedProps } from './SubfeedUpload';
-import IconButton from '../common/IconButton';
+  BLACK,
+  GRAY,
+  LIGHTGRAY,
+  LIGHTPURPLE,
+} from '../../../styles/GlobalColor';
+import DotsIcon from '../../../assets/common/Dots.svg';
+import { Label, Content, Caption, Body } from '../../../styles/GlobalText';
+import { PuzzlePieceProps } from './PuzzlePieceUpload';
+import IconButton from '../../common/IconButton';
 
-interface SubfeedItemProps {
-  subfeed: SubfeedProps;
+interface PuzzlePieceItemProps {
+  puzzlePiece: PuzzlePieceProps;
   onEdit: () => void;
   onDelete: () => void;
   background: string;
@@ -21,16 +21,16 @@ interface SubfeedItemProps {
   user: string;
 }
 
-const SubfeedItem = ({
-  subfeed,
+const PuzzlePieceItem = ({
+  puzzlePiece,
   background,
   user,
   onEdit,
   onDelete,
   isLast,
-}: SubfeedItemProps) => {
+}: PuzzlePieceItemProps) => {
   const [dotPressed, setDotPressed] = useState<boolean>(false);
-  const { nickname, profileImage, puzzlePieceText } = subfeed;
+  const { nickname, profileImage, puzzlePieceText } = puzzlePiece;
   return (
     <View style={{ paddingTop: 10, paddingHorizontal: 15 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -97,4 +97,4 @@ const SubfeedItem = ({
   );
 };
 
-export default SubfeedItem;
+export default PuzzlePieceItem;

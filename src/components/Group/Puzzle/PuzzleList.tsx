@@ -11,33 +11,30 @@ import {
   Share,
 } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import { FeedStackParams } from '../../pages/Group/FeedStack';
-import CustomHeader from '../common/CustomHeader';
-import FeedItem, { FeedItemProps } from './FeedItem';
+import { PuzzleStackParams } from '../../../pages/Group/PuzzleStack';
+import PuzzleItem, { PuzzleItemProps } from './PuzzleItem';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import HomeIcon from '../../assets/common/Home.svg';
-import DotsIcon from '../../assets/common/Dots.svg';
-import ArrowIcon from '../../assets/common/Arrow.svg';
+import HomeIcon from '../../../assets/common/Home.svg';
+import DotsIcon from '../../../assets/common/Dots.svg';
 import {
   Body,
   Caption,
   Subtitle,
   Title,
   Content,
-} from '../../styles/GlobalText';
-import IconButton from '../common/IconButton';
+} from '../../../styles/GlobalText';
+import IconButton from '../../common/IconButton';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParams } from '../../../App';
-import { BLACK, LIGHTPURPLE, PURPLE, WHITE } from '../../styles/GlobalColor';
-import EditButton from '../common/EditButton';
-import GroupCreate from '../Home/GroupCreate';
-import BottomButton from '../common/BottomButton';
-import ShareModal from '../common/ShareModal';
-import ImageStack from '../common/ImageStack';
-import { groupState } from '../../recoil/groupState';
+import { RootStackParams } from '../../../../App';
+import { BLACK, LIGHTPURPLE, PURPLE, WHITE } from '../../../styles/GlobalColor';
+import EditButton from '../../common/EditButton';
+import GroupCreate from '../../Home/GroupCreate';
+import ShareModal from '../../common/ShareModal';
+import ImageStack from '../../common/ImageStack';
+import { groupState } from '../../../recoil/groupState';
 import { useRecoilState } from 'recoil';
-import Request from '../../services/requests';
+import Request from '../../../services/requests';
 
 // const data = [
 //   // {
@@ -86,15 +83,15 @@ interface GroupProfileProps {
   dayCount: number;
 }
 
-const FeedList = ({
+const PuzzleList = ({
   navigation,
-}: StackScreenProps<FeedStackParams, 'FeedList'>) => {
+}: StackScreenProps<PuzzleStackParams, 'PuzzleList'>) => {
   const navigationToHome =
     useNavigation<StackNavigationProp<RootStackParams>>();
   const { width, height } = Dimensions.get('window');
   const request = Request();
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
-  const [group, setGroup] = useState({
+  const [group, setGroup] = useState<GroupProfileProps>({
     groupName: '화정동 칠공주',
     startYear: '2008',
     memberImageList: [
@@ -110,7 +107,7 @@ const FeedList = ({
     puzzleCount: 17,
     dayCount: 16,
   });
-  const [groupPostList, setGroupPostList] = useState<FeedItemProps[]>([
+  const [groupPostList, setGroupPostList] = useState<PuzzleItemProps[]>([
     {
       puzzleIdx: 0,
       title: '',
@@ -277,7 +274,7 @@ const FeedList = ({
           );
         }}
         renderItem={({ item }: any) => {
-          return <FeedItem feed={item} />;
+          return <PuzzleItem puzzle={item} />;
         }}
       />
       <Modal visible={formVisible} animationType="slide">
@@ -315,4 +312,4 @@ const RoundButton = styled.TouchableOpacity`
   padding: 2px 18px;
 `;
 
-export default FeedList;
+export default PuzzleList;

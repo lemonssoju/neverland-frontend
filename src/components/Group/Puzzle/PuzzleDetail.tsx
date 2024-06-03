@@ -20,9 +20,15 @@ import {
   Image,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { FeedProps } from './FeedUpload';
-import EditButton from '../common/EditButton';
-import { Title, Label, Subtitle, Body, Caption } from '../../styles/GlobalText';
+import { PuzzleProps } from './PuzzleUpload';
+import EditButton from '../../common/EditButton';
+import {
+  Title,
+  Label,
+  Subtitle,
+  Body,
+  Caption,
+} from '../../../styles/GlobalText';
 import {
   BLACK,
   GRAY,
@@ -30,30 +36,29 @@ import {
   LIGHTPURPLE,
   PURPLE,
   WHITE,
-} from '../../styles/GlobalColor';
+} from '../../../styles/GlobalColor';
 import moment from 'moment';
-import PuzzleIcon from '../../assets/common/Puzzle.svg';
+import PuzzleIcon from '../../../assets/common/Puzzle.svg';
 
-import DotsIcon from '../../assets/common/Dots.svg';
-import IconButton from '../common/IconButton';
-import ArrowIcon from '../../assets/common/Arrow.svg';
-import MarkerIcon from '../../assets/common/Marker.svg';
-import { FeedStackParams } from '../../pages/Group/FeedStack';
-import SubfeedItem from './SubfeedItem';
-import SubfeedUpload, { SubfeedProps } from './SubfeedUpload';
-import BottomButton from '../common/BottomButton';
+import DotsIcon from '../../../assets/common/Dots.svg';
+import IconButton from '../../common/IconButton';
+import ArrowIcon from '../../../assets/common/Arrow.svg';
+import { PuzzleStackParams } from '../../../pages/Group/PuzzleStack';
+import PuzzlePieceItem from './PuzzlePieceItem';
+import PuzzlePieceUpload, { PuzzlePieceProps } from './PuzzlePieceUpload';
+import BottomButton from '../../common/BottomButton';
 import DropDownPicker, {
   ItemType,
   ValueType,
 } from 'react-native-dropdown-picker';
-import PuzzleCreate from './PuzzleCreate';
-import ImageStack from '../common/ImageStack';
-import { FeedItemProps } from './FeedItem';
-import Request from '../../services/requests';
+import PuzzleCreate from '../Album/AlbumCreate';
+import ImageStack from '../../common/ImageStack';
+import { PuzzleItemProps } from './PuzzleItem';
+import Request from '../../../services/requests';
 import { useRecoilState } from 'recoil';
-import { groupState } from '../../recoil/groupState';
+import { groupState } from '../../../recoil/groupState';
 
-interface FeedDetailProps extends FeedItemProps {
+interface PuzzleDetailProps extends PuzzleItemProps {
   content: string;
   puzzleDate: string;
   memberImageList: string[];
@@ -65,32 +70,32 @@ interface FeedDetailProps extends FeedItemProps {
 }
 const { width, height } = Dimensions.get('window');
 const DetailSection = ({
-  feed,
+  puzzle,
   navigation,
-  setSubfeedModal,
+  setPuzzlePieceModal,
 }: {
-  feed: FeedDetailProps;
+  puzzle: PuzzleDetailProps;
   navigation: any;
-  setSubfeedModal: Dispatch<SetStateAction<boolean>>;
+  setPuzzlePieceModal: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [dotPressed, setDotPressed] = useState<boolean>(false);
 
-  let isPuzzleComplete = feed.memberCount === feed.writeCount;
-  let puzzleButtonEnabled = feed.isWriter
+  let isPuzzleComplete = puzzle.memberCount === puzzle.writeCount;
+  let puzzleButtonEnabled = puzzle.isWriter
     ? isPuzzleComplete
       ? true
       : false
-    : feed.hasWrite
+    : puzzle.hasWrite
     ? false
     : true;
   const request = Request();
   const onDelete = () => {
     const deleteRequest = async () => {
       const response = await request.patch(
-        `/puzzles/${feed.puzzleIdx}/delete`,
+        `/puzzles/${puzzle.puzzleIdx}/delete`,
         {},
       );
-      if (response.isSuccess) navigation.replace('FeedList');
+      if (response.isSuccess) navigation.replace('PuzzleList');
     };
     Alert.alert(
       '알림',
@@ -125,14 +130,14 @@ const DetailSection = ({
   const [puzzleTextList, setPuzzleTextList] = useState<string[]>([]);
   const onCreate = () => {
     setImageStyleModal(false);
-    setPuzzleTextList([...feed.puzzlePieces, feed.content])
+    setPuzzleTextList([...puzzle.puzzlePieces, puzzle.content]);
     setCreateModal(true);
   };
 
   return (
     <>
       <ImageBackground
-        source={{ uri: feed.puzzleImage }}
+        source={{ uri: puzzle.puzzleImage }}
         style={{ width: '100%', height: 300 }}
         imageStyle={{ width: '100%', height: 300 }}>
         <View
@@ -153,7 +158,7 @@ const DetailSection = ({
           <IconButton onPress={() => navigation.goBack()}>
             <ArrowIcon color={WHITE} />
           </IconButton>
-          {feed.isWriter && (
+          {puzzle.isWriter && (
             <IconButton onPress={() => setDotPressed(!dotPressed)}>
               <DotsIcon
                 transform={[{ rotate: dotPressed ? '90deg' : '0deg' }]}
@@ -166,8 +171,8 @@ const DetailSection = ({
               editLabel="수정"
               deleteLabel="삭제"
               onEdit={() => {
-                navigation.navigate('FeedUpload', {
-                  puzzleIdx: feed.puzzleIdx,
+                navigation.navigate('PuzzleUpload', {
+                  puzzleIdx: puzzle.puzzleIdx,
                 });
               }}
               onDelete={onDelete}
@@ -180,8 +185,8 @@ const DetailSection = ({
             marginTop: 140,
             marginLeft: 10,
           }}>
-          <Title style={{ color: WHITE }}>{feed.puzzleDate}</Title>
-          <Title style={{ color: WHITE }}>{feed.location}</Title>
+          <Title style={{ color: WHITE }}>{puzzle.puzzleDate}</Title>
+          <Title style={{ color: WHITE }}>{puzzle.location}</Title>
         </View>
       </ImageBackground>
       <View
@@ -191,14 +196,14 @@ const DetailSection = ({
           backgroundColor: LIGHTPURPLE,
         }}>
         <Label style={{ marginBottom: 5 }}>
-          {feed.createdDate} | {feed.writer}
+          {puzzle.createdDate} | {puzzle.writer}
         </Label>
-        <ImageStack data={feed.memberImageList} />
-        <Subtitle style={{ marginBottom: 5 }}>{feed.title}</Subtitle>
-        <Body style={{ marginBottom: 15 }}>{feed.content}</Body>
+        <ImageStack data={puzzle.memberImageList} />
+        <Subtitle style={{ marginBottom: 5 }}>{puzzle.title}</Subtitle>
+        <Body style={{ marginBottom: 15 }}>{puzzle.content}</Body>
         <TouchableOpacity
           onPress={() => {
-            feed.isWriter ? setImageStyleModal(true) : setSubfeedModal(true);
+            puzzle.isWriter ? setImageStyleModal(true) : setPuzzlePieceModal(true);
           }}
           disabled={!puzzleButtonEnabled}
           style={{
@@ -214,8 +219,8 @@ const DetailSection = ({
           }}>
           <PuzzleIcon style={{ marginRight: 10 }} />
           <Body style={{ color: WHITE, fontWeight: '600' }}>
-            {feed.isWriter ? '추억 퍼즐 완성하기' : '추억 퍼즐 맞추기'}
-            {` (${feed.writeCount}/${feed.memberCount})`}
+            {puzzle.isWriter ? '추억 퍼즐 완성하기' : '추억 퍼즐 맞추기'}
+            {` (${puzzle.writeCount}/${puzzle.memberCount})`}
           </Body>
         </TouchableOpacity>
       </View>
@@ -277,11 +282,11 @@ const DetailSection = ({
       </Modal>
       <Modal visible={createModal} animationType="fade">
         <PuzzleCreate
-          date={feed.puzzleDate}
-          location={feed.location}
-          imageUri={feed.puzzleImage!}
+          date={puzzle.puzzleDate}
+          location={puzzle.location}
+          imageUri={puzzle.puzzleImage!}
           content={puzzleTextList}
-          puzzleIdx={feed.puzzleIdx}
+          puzzleIdx={puzzle.puzzleIdx}
           style={value}
           setCreateModal={setCreateModal}
         />
@@ -290,25 +295,25 @@ const DetailSection = ({
   );
 };
 
-const subfeedData: SubfeedProps[] = [
-  {
-    nickname: '김중현',
-    puzzlePieceText:
-      '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
-    profileImage: 'https://ifh.cc/g/5ZL9HY.png',
-  },
-  {
-    nickname: '김중현',
-    puzzlePieceText:
-      '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
-    profileImage: 'https://ifh.cc/g/5ZL9HY.png',
-  },
-  {
-    nickname: '김중현',
-    puzzlePieceText:
-      '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
-    profileImage: 'https://ifh.cc/g/5ZL9HY.png',
-  },
+// const subfeedData: SubfeedProps[] = [
+//   {
+//     nickname: '김중현',
+//     puzzlePieceText:
+//       '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
+//     profileImage: 'https://ifh.cc/g/5ZL9HY.png',
+//   },
+//   {
+//     nickname: '김중현',
+//     puzzlePieceText:
+//       '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
+//     profileImage: 'https://ifh.cc/g/5ZL9HY.png',
+//   },
+//   {
+//     nickname: '김중현',
+//     puzzlePieceText:
+//       '완전 행복했었는데! 우리 저녁에 한림 해수욕장 근처 산책하다가 노을도 봤었잖아. 노을이 핑크색이라서 너무 예뻤어.',
+//     profileImage: 'https://ifh.cc/g/5ZL9HY.png',
+//   },
   // {
   //   writer: '한서연',
   //   content:
@@ -321,14 +326,14 @@ const subfeedData: SubfeedProps[] = [
   //     '핑크 노을이 환상적이었어 또 가고싶다 올해 여름에도 다같이 여행 가자!!! 휴가 날짜 맞춰보자 ㅎㅎ',
   //   profile: 'https://ifh.cc/g/06Q0DB.png',
   // },
-];
+// ];
 
-const FeedDetail = ({
+const PuzzleDetail = ({
   navigation,
   route,
-}: StackScreenProps<FeedStackParams, 'FeedDetail'>) => {
-  const feedIdx = route.params.feedIdx;
-  const [feed, setFeed] = useState<FeedDetailProps>({
+}: StackScreenProps<PuzzleStackParams, 'PuzzleDetail'>) => {
+  const puzzleIdx = route.params.puzzleIdx;
+  const [puzzle, setPuzzle] = useState<PuzzleDetailProps>({
     title: '작년 여름 제주에서',
     content: '여름 제주도 낭만 있고 너무 좋았어\n한 여름 밤의 꿈이다...',
     puzzleDate: '2023.07.21',
@@ -352,18 +357,18 @@ const FeedDetail = ({
   });
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const request = Request();
-  const getFeedDetail = async () => {
+  const getPuzzleDetail = async () => {
     const response = await request.get(
-      `/groups/${groupIdx}/puzzles/${feedIdx}`,
+      `/groups/${groupIdx}/puzzles/${puzzleIdx}`,
     );
     console.log(response);
-    // setFeed(response.result);
+    // setPuzzle(response.result);
   };
 
   useEffect(() => {
-    getFeedDetail();
-  }, [feedIdx]);
-  const [subfeedModal, setSubfeedModal] = useState<boolean>(false);
+    getPuzzleDetail();
+  }, [puzzleIdx]);
+  const [puzzlePieceModal, setPuzzlePieceModal] = useState<boolean>(false);
   const onDelete = () => {
     Alert.alert(
       '알림',
@@ -372,7 +377,7 @@ const FeedDetail = ({
         {
           text: '예',
           onPress: () => {
-            navigation.replace('FeedDetail', { feedIdx: 1 });
+            navigation.replace('PuzzleDetail', { puzzleIdx: 1 });
           },
           style: 'destructive',
         },
@@ -384,16 +389,16 @@ const FeedDetail = ({
       { cancelable: false },
     );
   };
-  const contentArray: string[] = feed.puzzlePieces.map(item => item.content);
+  // const contentArray: string[] = puzzle.puzzlePieces.map(item => item.content);
   return (
     <>
       <FlatList
-        data={subfeedData}
+        data={puzzle.puzzlePieces}
         ListHeaderComponent={
           <DetailSection
-            feed={feed}
+            puzzle={puzzle}
             navigation={navigation}
-            setSubfeedModal={setSubfeedModal}
+            setPuzzlePieceModal={setPuzzlePieceModal}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -401,13 +406,13 @@ const FeedDetail = ({
         renderItem={({ item, index }: { item: any; index: number }) => {
           const randomColors = ['#F5FFF8', '#EEF8FF', '#FFFEEE', '#FFF8F5'];
           return (
-            <SubfeedItem
+            <PuzzlePieceItem
               background={randomColors[index % 4]}
-              isLast={subfeedData.length - 1 === index}
+              isLast={puzzle.puzzlePieces.length - 1 === index}
               user={'곽서진'}
-              subfeed={item}
+              puzzlePiece={item}
               onEdit={() => {
-                setSubfeedModal(true);
+                setPuzzlePieceModal(true);
               }}
               onDelete={onDelete}
             />
@@ -415,14 +420,14 @@ const FeedDetail = ({
         }}
         ListFooterComponent={<View style={{ height: 10 }} />}
       />
-      <Modal visible={subfeedModal} animationType="slide">
-        <SubfeedUpload
-          puzzleIdx={feed.puzzleIdx}
-          setSubfeedModal={setSubfeedModal}
+      <Modal visible={puzzlePieceModal} animationType="slide">
+        <PuzzlePieceUpload
+          puzzleIdx={puzzle.puzzleIdx}
+          setPuzzlePieceModal={setPuzzlePieceModal}
         />
       </Modal>
     </>
   );
 };
 
-export default FeedDetail;
+export default PuzzleDetail;
