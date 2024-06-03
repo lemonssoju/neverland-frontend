@@ -13,7 +13,7 @@ const ImageStack = ({ data }: ImageStackProps) => {
         return (
           <Image
             key={index}
-            source={{ uri: item }}
+            source={{ uri: item || 'https://ifh.cc/g/wKYSNB.png'}}
             style={{
               width: 35,
               height: 35,
@@ -24,6 +24,7 @@ const ImageStack = ({ data }: ImageStackProps) => {
               top: -30,
               right: data.length > 3 ? index * 20 + 15 : index * 20,
             }}
+            resizeMode={item ? 'cover' : 'contain'}
           />
         );
       })}

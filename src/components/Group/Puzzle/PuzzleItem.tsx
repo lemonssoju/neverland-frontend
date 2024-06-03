@@ -51,7 +51,7 @@ const PuzzleItem = ({ puzzle }: { puzzle: PuzzleItemProps }) => {
         <View style={{ paddingHorizontal: 10, paddingVertical: 5, flex: 1 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MarkerIcon color={WHITE} />
-            <Content style={{ fontWeight: '600', color: WHITE }}>
+            <Content numberOfLines={1} style={{ fontWeight: '600', color: WHITE, width: '90%' }}>
               {' '}
               {location}
             </Content>

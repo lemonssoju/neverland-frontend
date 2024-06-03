@@ -11,6 +11,8 @@ import DotsIcon from '../../../assets/common/Dots.svg';
 import { Label, Content, Caption, Body } from '../../../styles/GlobalText';
 import { PuzzlePieceProps } from './PuzzlePieceUpload';
 import IconButton from '../../common/IconButton';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../../recoil/userState';
 
 interface PuzzlePieceItemProps {
   puzzlePiece: PuzzlePieceProps;
@@ -18,25 +20,25 @@ interface PuzzlePieceItemProps {
   onDelete: () => void;
   background: string;
   isLast: boolean;
-  user: string;
 }
 
 const PuzzlePieceItem = ({
   puzzlePiece,
   background,
-  user,
   onEdit,
   onDelete,
   isLast,
 }: PuzzlePieceItemProps) => {
+  const [user, setUser] = useRecoilState(userState);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
   const { nickname, profileImage, puzzlePieceText } = puzzlePiece;
   return (
     <View style={{ paddingTop: 10, paddingHorizontal: 15 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Image
-          source={{ uri: profileImage }}
+          source={{ uri: profileImage || 'https://ifh.cc/g/wKYSNB.png'}}
           style={{ width: 32, height: 32, borderRadius: 180, marginRight: 5 }}
+          resizeMode={profileImage ? 'cover' : 'contain'}
         />
         <Label>{nickname}</Label>
       </View>
@@ -49,7 +51,7 @@ const PuzzlePieceItem = ({
           paddingVertical: 12,
           paddingHorizontal: 20,
         }}>
-        {user === nickname && (
+        {user.nickname === nickname && (
           <IconButton
             onPress={() => setDotPressed(!dotPressed)}
             style={{
