@@ -24,8 +24,8 @@ import Video from 'react-native-video';
 import { useRecoilState } from 'recoil';
 import { groupState } from '../../../recoil/groupState';
 import ImageResizer from 'react-native-image-resizer';
-import { generateImageToImage } from '../../../services/ImageToImage';
-import { generateTextToImage } from '../../../services/TextToImage';
+import { generateImageToImage } from '../../../stable-diffusion/ImageToImage';
+import { generateTextToImage } from '../../../stable-diffusion/TextToImage';
 
 interface PuzzleCreateProps {
   date: string;
