@@ -146,41 +146,42 @@ const PuzzleUpload = ({
     ) {
       Alert.alert('빈칸을 모두 채워주세요!');
     }
-    const createPuzzleRequest = new Blob(
-      [
-        JSON.stringify({
-          title: puzzle.title,
-          puzzleDate: puzzle.puzzleDate
-            .toISOString()
-            .split('T')[0]
-            .substring(0, 10),
-          content: puzzle.content,
-          location: puzzle.location,
-          puzzlerList: puzzle.puzzlerList,
-        }),
-      ],
-      { type: 'application/json', lastModified: 2 },
-    );
+
     const formData = new FormData();
-    formData.append('createPuzzleRequest', createPuzzleRequest);
-    formData.append('image', {
+    formData.append('createPuzzleRequest', {
+      string: JSON.stringify({
+        title: puzzle.title,
+        puzzleDate: puzzle.puzzleDate
+          .toISOString()
+          .split('T')[0]
+          .substring(0, 10),
+        content: puzzle.content,
+        location: puzzle.location,
+        puzzlerList: puzzle.puzzlerList,
+      }),
+      type: 'application/json',
+    });
+    const image = {
       uri: photo[0].uri,
       name: photo[0].fileName,
       type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
-    });
+    };
+    formData.append('image', image);
     const response = await request.post(
       `/groups/${groupIdx}/puzzles`,
       formData,
       {
         headers: {
-          'Content-Type': 'multipart/formdata',
+          'Content-Type': 'multipart/formdata; boundary="boundary"',
+        },
+        transformRequest: () => {
+          return formData;
         },
       },
     );
-    console.log(response);
     if (response.isSuccess) {
       navigation.goBack();
-      navigation.navigate('PuzzleDetail', { puzzleIdx: 1 });
+      navigation.navigate('PuzzleDetail', { puzzleIdx: response.result.puzzleIdx });
     }
   };
 
@@ -286,7 +287,7 @@ const PuzzleUpload = ({
             keyExtractor={item => item.nickname}
             renderItem={({ item, index }) => {
               const { profileImage, nickname, userIdx } = item;
-              const isInvited = puzzle.puzzlerList.includes(userIdx);
+              const isInvited = puzzle.puzzlerList!.includes(userIdx);
               const isLastItem = puzzle.puzzlerList.length - 1 === index;
               return (
                 <View
@@ -311,12 +312,11 @@ const PuzzleUpload = ({
                   }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
-                      source={
-                        profileImage
-                          ? { uri: profileImage }
-                          : require('../../../assets/Puzzle.png')
-                      }
+                      source={{
+                        uri: profileImage || 'https://ifh.cc/g/wKYSNB.png',
+                      }}
                       style={{ width: 36, height: 36, borderRadius: 180 }}
+                      resizeMode={profileImage ? 'cover' : 'contain'}
                     />
                     <Label style={{ marginLeft: 10 }}>{nickname}</Label>
                   </View>

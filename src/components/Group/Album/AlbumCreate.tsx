@@ -24,6 +24,7 @@ import Request from '../../../services/requests';
 import Video from 'react-native-video';
 import { useRecoilState } from 'recoil';
 import { groupState } from '../../../recoil/groupState';
+import ImageResizer from 'react-native-image-resizer';
 
 interface PuzzleCreateProps {
   date: string;
@@ -61,6 +62,7 @@ const PuzzleCreate = ({
     albumImage: '',
   });
 
+
   const sendText = async () => {
     const response = await request.post(
       `/groups/${groupIdx}/puzzles/${puzzleIdx}`,
@@ -68,30 +70,50 @@ const PuzzleCreate = ({
         puzzleTextList: content,
       },
     );
+    console.log('gpt', response);
     if (response.isSuccess) {
+      const regex = /([a-zA-Z ,!'?.]+)/g;
+      const englishSentences = response.result.description
+        .match(regex)
+        .join(' ')
+        .trim();
+      const nonEnglishSentences = response.result.description
+        .replace(regex, '')
+        .trim();
       setAlbum({
         ...album,
-        description: response.result.description,
+        description: nonEnglishSentences,
         albumIdx: response.result.albumIdx,
       });
-      createImage(response.result.prompt);
+      // console.log('ressss', response.result)
+      // console.log('album', album)
+      createImage(
+        response.result.prompt.length > 0
+          ? response.result.prompt
+          : englishSentences,
+        response.result.albumIdx
+      );
     }
   };
-  // const image = 'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg'
-  // const text = 'I remember the trip to Jeju Island with the three of us last summer. We visited many delicious restaurants and even went swimming in the sea. Especially, waking up early in the morning to watch the sunrise was truly blissful. The memories we shared are so precious.';
-  const createImage = async (text: string) => {
+
+
+
+  const createImage = async (text: string, albumIdx: number) => {
     try {
       const images = await generateImages({ imageUri, text, style });
       console.log(images.base64);
-      const response = await request.post(
-        `/groups/${groupIdx}/albums/${album.albumIdx}/image`,
-        {
-          albumImage: images.base64,
-        },
-      );
-      console.log(response);
-      setAlbum({ ...album, albumImage: images.base64 });
-      if (!complete) setRealComplete(true);
+      if (images) {
+        const response = await request.post(
+          `/groups/${groupIdx}/albums/${albumIdx}/image`,
+          {
+            albumImage: images.base64,
+          },
+        );
+        console.log('res', response, albumIdx);
+        setAlbum({ ...album, albumImage: images.base64 });
+        if (!complete) setRealComplete(true);
+        setRealComplete(true);
+      }
     } catch (err) {
       console.error(err);
     }

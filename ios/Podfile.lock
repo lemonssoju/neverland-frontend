@@ -379,6 +379,8 @@ PODS:
     - React-Core
   - react-native-image-picker (7.0.3):
     - React-Core
+  - react-native-image-resizer (1.4.5):
+    - React-Core
   - react-native-maps (1.14.0):
     - React-Core
   - react-native-month-year-picker (1.9.0):
@@ -596,6 +598,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-month-year-picker (from `../node_modules/react-native-month-year-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -691,6 +694,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-date-picker"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-month-year-picker:
@@ -786,6 +791,7 @@ SPEC CHECKSUMS:
   React-logger: 8edc785c47c8686c7962199a307015e2ce9a0e4f
   react-native-date-picker: 90687f1dbd374ff0265dca99d949998364c22fa9
   react-native-image-picker: 2381c008bbb09e72395a2d043c147b11bd1523d9
+  react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
   react-native-maps: cbf2f03bfeebfd7ec45966b066db13a075fd2af3
   react-native-month-year-picker: 948797e981ca502427024a34b17f545eb321bbff
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
