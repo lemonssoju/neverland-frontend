@@ -51,7 +51,7 @@ const PuzzlePieceItem = ({
           paddingVertical: 12,
           paddingHorizontal: 20,
         }}>
-        {user.nickname === nickname && (
+        {/* {user.nickname === nickname && (
           <IconButton
             onPress={() => setDotPressed(!dotPressed)}
             style={{
@@ -80,7 +80,7 @@ const PuzzlePieceItem = ({
             onDelete={onDelete}
             style={{ top: 30, right: 15 }}
           />
-        )}
+        )} */}
         <Body>{puzzlePieceText}</Body>
       </View>
       {!isLast && (

@@ -20,7 +20,6 @@ import {
   Image,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { PuzzleProps } from '../Write/PuzzleUpload';
 import EditButton from '../../common/EditButton';
 import {
   Title,
@@ -57,16 +56,20 @@ import { PuzzleItemProps } from './PuzzleItem';
 import Request from '../../../services/requests';
 import { useRecoilState } from 'recoil';
 import { groupState } from '../../../recoil/groupState';
+import { userState } from '../../../recoil/userState';
+import { UserProps } from '../../Home/Settings/SettingsHome';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface PuzzleDetailProps extends PuzzleItemProps {
   content: string;
   puzzleDate: string;
+  memberNicknameList: string[];
   memberImageList: string[];
   memberCount: number;
   writeCount: number;
   isWriter: boolean;
   hasWrite: boolean;
-  puzzlePieces: any[];
+  puzzlePieces: PuzzlePieceProps[];
 }
 const { width, height } = Dimensions.get('window');
 const DetailSection = ({
@@ -79,15 +82,18 @@ const DetailSection = ({
   setPuzzlePieceModal: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [dotPressed, setDotPressed] = useState<boolean>(false);
+  const [user, setUser] = useRecoilState<UserProps>(userState);
 
-  let isPuzzleComplete = puzzle.memberCount === puzzle.writeCount;
+  let isPuzzleComplete = puzzle.memberCount + 1 === puzzle.writeCount;
   let puzzleButtonEnabled = puzzle.isWriter
     ? isPuzzleComplete
       ? true
       : false
-    : puzzle.hasWrite
-    ? false
-    : true;
+    : puzzle.memberNicknameList.includes(user.nickname)
+    ? puzzle.hasWrite
+      ? false
+      : true
+    : false;
   const request = Request();
   const onDelete = () => {
     const deleteRequest = async () => {
@@ -129,8 +135,12 @@ const DetailSection = ({
   const [createModal, setCreateModal] = useState<boolean>(false);
   const [puzzleTextList, setPuzzleTextList] = useState<string[]>([]);
   const onCreate = () => {
+    const contentArray: string[] = puzzle.puzzlePieces.map(
+      item => item.puzzlePieceText,
+    );
     setImageStyleModal(false);
-    setPuzzleTextList([...puzzle.puzzlePieces, puzzle.content]);
+    setPuzzleTextList([...contentArray, puzzle.content]);
+    // console.log(puzzleTextList);
     setCreateModal(true);
   };
 
@@ -222,7 +232,7 @@ const DetailSection = ({
           <PuzzleIcon style={{ marginRight: 10 }} />
           <Body style={{ color: WHITE, fontWeight: '600' }}>
             {puzzle.isWriter ? '추억 퍼즐 완성하기' : '추억 퍼즐 맞추기'}
-            {` (${puzzle.writeCount}/${puzzle.memberCount})`}
+            {` (${puzzle.writeCount}/${puzzle.memberCount + 1})`}
           </Body>
         </TouchableOpacity>
       </View>
@@ -336,26 +346,21 @@ const PuzzleDetail = ({
 }: StackScreenProps<PuzzleStackParams, 'PuzzleDetail'>) => {
   const puzzleIdx = route.params.puzzleIdx;
   const [puzzle, setPuzzle] = useState<PuzzleDetailProps>({
-    title: '작년 여름 제주에서',
-    content: '여름 제주도 낭만 있고 너무 좋았어\n한 여름 밤의 꿈이다...',
-    puzzleDate: '2023.07.21',
-    createdDate: '2024.03.21',
-    writer: '지소민',
-    location: '제주 한림읍',
-    puzzleImage:
-      'https://img.allurekorea.com/allure/2022/07/style_62d0cac69cbce-563x700.jpeg',
-    memberImageList: [
-      'https://ifh.cc/g/1CLCRY.png', // 4
-      'https://ifh.cc/g/06Q0DB.png', // 3
-      'https://ifh.cc/g/5ZL9HY.png', // 2
-      'https://ifh.cc/g/2xCPH5.png', // 1
-    ],
-    isWriter: true,
+    title: '',
+    content: '',
+    puzzleDate: '',
+    createdDate: '',
+    writer: '',
+    location: '',
+    puzzleImage: '',
+    memberImageList: [],
+    isWriter: false,
     hasWrite: false,
-    memberCount: 4,
-    writeCount: 2,
-    puzzleIdx: 1,
+    memberCount: 0,
+    writeCount: 0,
+    puzzleIdx: 0,
     puzzlePieces: [],
+    memberNicknameList: [],
   });
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const request = Request();
@@ -363,14 +368,16 @@ const PuzzleDetail = ({
     const response = await request.get(
       `/groups/${groupIdx}/puzzles/${puzzleIdx}`,
     );
-    console.log(response);
-    // setPuzzle(response.result);
+    if (response.isSuccess)
+      setPuzzle({ ...response.result, puzzleIdx: puzzleIdx });
   };
-
-  useEffect(() => {
-    getPuzzleDetail();
-  }, [puzzleIdx]);
   const [puzzlePieceModal, setPuzzlePieceModal] = useState<boolean>(false);
+  useFocusEffect(
+    useCallback(() => {
+      getPuzzleDetail();
+    }, [puzzleIdx, puzzlePieceModal]),
+  );
+
   const onDelete = () => {
     Alert.alert(
       '알림',
@@ -391,7 +398,6 @@ const PuzzleDetail = ({
       { cancelable: false },
     );
   };
-  // const contentArray: string[] = puzzle.puzzlePieces.map(item => item.content);
   return (
     <>
       <FlatList
@@ -411,7 +417,6 @@ const PuzzleDetail = ({
             <PuzzlePieceItem
               background={randomColors[index % 4]}
               isLast={puzzle.puzzlePieces.length - 1 === index}
-              user={'곽서진'}
               puzzlePiece={item}
               onEdit={() => {
                 setPuzzlePieceModal(true);
@@ -424,7 +429,7 @@ const PuzzleDetail = ({
       />
       <Modal visible={puzzlePieceModal} animationType="slide">
         <PuzzlePieceUpload
-          puzzleIdx={puzzle.puzzleIdx}
+          puzzleIdx={puzzleIdx}
           setPuzzlePieceModal={setPuzzlePieceModal}
         />
       </Modal>
