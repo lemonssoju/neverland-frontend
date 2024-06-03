@@ -20,7 +20,7 @@
     "@types/react-native-snap-carousel": "^3.8.11",
     "@types/styled-components": "^5.1.34",
     "@types/styled-components-react-native": "^5.2.5",
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "moment": "^2.30.1",
     "react": "18.2.0",
     "react-native": "0.72.7",
