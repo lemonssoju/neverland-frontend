@@ -11,6 +11,12 @@ import { HomeStackParams } from '../../../pages/HomeStack';
 import { RootStackParams } from '../../../../App';
 import { Emphasis } from '../../../styles/GlobalText';
 import Request from '../../../services/requests';
+import {
+  removeAccessToken,
+  removeRefreshToken,
+} from '../../../services/storage';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../../recoil/userState';
 
 interface FormTypes {
   password: string;
@@ -23,6 +29,7 @@ const Withdraw = ({
   const navigationToAuth =
     useNavigation<StackNavigationProp<RootStackParams>>();
   const request = Request();
+  const [user, setUser] = useRecoilState(userState);
   const [form, setForm] = useState<FormTypes>({
     password: '',
     passwordCheck: '',
@@ -31,13 +38,19 @@ const Withdraw = ({
   useEffect(() => {
     if (form.password === form.passwordCheck) {
       setCheck(true);
-      console.log(form.password, form.passwordCheck, check);
     }
   }, [form.passwordCheck]);
-  const withdrawConfirmAlert = () => {
-    const withdraw = async () => {
-      const response = await request.patch('/users/signout', {});
-      if (response.isSuccess) navigationToAuth.replace('Auth');
+  const withdraw = () => {
+    const withdrawRequest = async () => {
+      const response = await request.patch('/users/signout', {
+        password: form.password,
+      });
+      if (response.isSuccess) {
+        navigationToAuth.replace('Auth');
+        removeAccessToken();
+        removeRefreshToken();
+        setUser({ nickname: '', profileImage: '' });
+      }
     };
     Alert.alert(
       '알림',
@@ -45,7 +58,7 @@ const Withdraw = ({
       [
         {
           text: '예',
-          onPress: withdraw,
+          onPress: withdrawRequest,
           style: 'destructive',
         },
         {
@@ -78,16 +91,17 @@ const Withdraw = ({
           isRequired
           value={form.passwordCheck}
           secureTextEntry
-          onChangeText={password =>
-            setForm({ ...form, passwordCheck: password })
-          }
+          onChangeText={password => {
+            setForm({ ...form, passwordCheck: password });
+            setCheck(false);
+          }}
           placeholder="비밀번호를 한 번 더 입력해주세요."
-          isAlert={check}
+          isAlert={!check}
           alert="비밀번호가 일치하지 않습니다."
         />
       </View>
       <View style={{ paddingHorizontal: 20 }}>
-        <BottomButton label="회원 탈퇴" onPress={withdrawConfirmAlert} />
+        <BottomButton label="회원 탈퇴" onPress={withdraw} />
       </View>
     </SafeAreaView>
   );

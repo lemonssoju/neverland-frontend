@@ -61,6 +61,7 @@ const SettingsHome = ({
   const [user, setUser] = useRecoilState<UserProps>(userState);
   const textInputRef = useRef<TextInput | null>(null);
   const [editable, setEditable] = useState<boolean>(false);
+  const [nickname, setNickname] = useState<string>('');
   const request = Request();
   const [photo, setPhoto] = useState<Asset[]>([
     {
@@ -71,6 +72,41 @@ const SettingsHome = ({
     },
   ]);
 
+  const onNicknameEdit = async () => {
+    const response = await request.patch('/users/modifyNickname', {
+      nickname: nickname,
+    });
+    if (response.isSuccess) {
+      Alert.alert('닉네임이 성공적으로 변경되었습니다.');
+      setUser({ ...user, nickname: nickname });
+      setEditable(false);
+    }
+  };
+
+  const onProfileImageEdit = async () => {
+    const formData = new FormData();
+    formData.append('newImage', {
+      uri: photo[0].uri,
+      name: photo[0].fileName,
+      type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
+    });
+    const response = await request.patch('/users/profileImage', formData, {
+      headers: {
+        'Content-Type': 'multipart/formdata; boundary="boundary"',
+      },
+      transformRequest: () => {
+        return formData;
+      },
+    });
+    if (response.isSuccess) {
+      Alert.alert('프로필 이미지가 성공적으로 변경되었습니다.');
+      setUser({ ...user, profileImage: photo[0].uri! });
+    }
+  };
+  useEffect(() => {
+    photo[0].uri && onProfileImageEdit();
+  }, [photo[0].uri]);
+
   const logout = () => {
     const logoutRequest = async () => {
       const accessToken = await getAccessToken();
@@ -80,6 +116,7 @@ const SettingsHome = ({
       if (response.isSuccess) {
         removeAccessToken();
         removeRefreshToken();
+        setUser({ nickname: '', profileImage: '' });
         navigationToAuth.replace('Auth');
       } else {
         Alert.alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
@@ -126,8 +163,8 @@ const SettingsHome = ({
           <View style={{ flexDirection: 'row', marginTop: 20 }}>
             <TextInput
               ref={textInputRef}
-              value={user.nickname}
-              onChangeText={text => setUser({ ...user, nickname: text })}
+              value={nickname || user.nickname}
+              onChangeText={text => setNickname(text)}
               style={{
                 fontFamily: 'Pretendard Variable',
                 fontWeight: '700',
@@ -141,7 +178,7 @@ const SettingsHome = ({
               style={{ position: 'absolute', left: 80 }}
               onPress={() => {
                 editable
-                  ? setEditable(false)
+                  ? onNicknameEdit()
                   : (setEditable(true),
                     setTimeout(() => textInputRef.current?.focus(), 0));
               }}>
