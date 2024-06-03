@@ -26,7 +26,6 @@ interface CommentItemProps {
 
 const CommentItem = ({ comment, onEdit, onDelete }: CommentItemProps) => {
   const { writer, createdDate, content, profileImage, commentIdx } = comment;
-  const request = Request();
   const [user, setUser] = useRecoilState<UserProps>(userState);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
   return (
@@ -69,7 +68,8 @@ const CommentItem = ({ comment, onEdit, onDelete }: CommentItemProps) => {
       )}
       <View style={{ flexDirection: 'row', padding: 18, alignItems: 'center' }}>
         <Image
-          source={{ uri: profileImage }}
+          source={{ uri: profileImage || 'https://ifh.cc/g/wKYSNB.png' }}
+          resizeMode={profileImage ? 'cover' : 'contain'}
           style={{ width: 44, height: 44, borderRadius: 180 }}
         />
         <View style={{ marginLeft: 10 }}>
