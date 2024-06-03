@@ -29,6 +29,9 @@ import { RootStackParams } from '../../../App';
 import Input from '../common/Input';
 import IconButton from '../common/IconButton';
 import Request from '../../services/requests';
+import { UserProps } from './Settings/SettingsHome';
+import { userState } from '../../recoil/userState';
+import { useRecoilState } from 'recoil';
 
 const HeaderSection = ({ navigation }: { navigation: any }) => {
   return (
@@ -86,6 +89,14 @@ const GroupList = ({
     recentUpdate: '',
     startYear: '',
   }]);
+  const [user, setUser] = useRecoilState<UserProps>(userState);
+  const getMyProfile = async () => {
+    const response = await request.get('/users/myPage');
+    setUser(response.result);
+  };
+  useEffect(() => {
+    getMyProfile();
+  }, []);
   const onJoin = async () => {
     if (groupCode.length === 0) {
       Alert.alert('빈칸을 채워주세요!');
