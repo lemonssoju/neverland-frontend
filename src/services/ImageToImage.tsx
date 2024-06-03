@@ -6,7 +6,7 @@ interface generateImagesProps {
   style?: string;
 }
 
-const generateImages = async ({
+export const generateImageToImage = async ({
   imageUri,
   text,
   style,
@@ -53,5 +53,3 @@ const generateImages = async ({
   };
   return generatedImages;
 };
-
-export default generateImages;

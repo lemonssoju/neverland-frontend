@@ -19,12 +19,13 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import BottomButton from '../../common/BottomButton';
 import { TabProps } from '../../../../App';
-import generateImages from '../../../services/ImageToImage';
 import Request from '../../../services/requests';
 import Video from 'react-native-video';
 import { useRecoilState } from 'recoil';
 import { groupState } from '../../../recoil/groupState';
 import ImageResizer from 'react-native-image-resizer';
+import { generateImageToImage } from '../../../services/ImageToImage';
+import { generateTextToImage } from '../../../services/TextToImage';
 
 interface PuzzleCreateProps {
   date: string;
@@ -56,8 +57,8 @@ const PuzzleCreate = ({
   const navigationToAlbum = useNavigation<StackNavigationProp<TabProps>>();
   const [realComplete, setRealComplete] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
-  const [albumIdx, setAlbumIdx] = useState<number>(0)
-  const [generatedImage, setGeneratedImage] = useState<string>('')
+  const [albumIdx, setAlbumIdx] = useState<number>(0);
+  const [generatedImage, setGeneratedImage] = useState<string>('');
 
   const sendText = async () => {
     const response = await request.post(
@@ -73,12 +74,7 @@ const PuzzleCreate = ({
         .match(regex)
         .join(' ')
         .trim();
-      const nonEnglishSentences = response.result.description
-        .replace(regex, '')
-        .trim();
-      setAlbumIdx(response.result.albumIdx)
-      // console.log('ressss', response.result)
-      // console.log('album', album)
+      setAlbumIdx(response.result.albumIdx);
       createImage(
         response.result.prompt.length > 0
           ? response.result.prompt
@@ -90,11 +86,13 @@ const PuzzleCreate = ({
 
   const createImage = async (text: string, albumIdx: number) => {
     try {
-      const images = await generateImages({ imageUri, text, style });
-      setGeneratedImage(images.base64)
+      const images = imageUri
+        ? await generateImageToImage({ imageUri, text, style })
+        : await generateTextToImage({ text, style });
+      setGeneratedImage(images.base64);
       if (images) {
         const formData = new FormData();
-        formData.append('image',  {
+        formData.append('image', {
           uri: images.base64,
           name: 'albumImage',
           type: 'image/png',
@@ -109,7 +107,7 @@ const PuzzleCreate = ({
             },
           },
         );
-        
+
         console.log('res', response, albumIdx);
         // if (!complete) setRealComplete(true);
         setRealComplete(true);
@@ -124,7 +122,7 @@ const PuzzleCreate = ({
   //     if (!complete) {
   //       setComplete(true);
   //     }
-  //   }, 10000);
+  //   }, 15000);
 
   //   return () => clearTimeout(timeout);
   // }, [complete]);

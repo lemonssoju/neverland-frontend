@@ -2,10 +2,13 @@ import { STABILITY_API_KEY } from 'react-native-dotenv';
 
 interface generateImagesProps {
   text: string;
-  style?: string; 
+  style?: string;
 }
 
-const generateImages = async ({ text, style }: generateImagesProps) => {
+export const generateTextToImage = async ({
+  text,
+  style,
+}: generateImagesProps) => {
   const engineId = 'stable-diffusion-v1-6';
   const apiHost = 'https://api.stability.ai';
   const apiKey = STABILITY_API_KEY;
@@ -21,7 +24,7 @@ const generateImages = async ({ text, style }: generateImagesProps) => {
     cfg_scale: 7,
     steps: 30,
     samples: 1,
-    style_preset: style
+    style_preset: style,
   };
 
   const response = await fetch(
@@ -34,19 +37,17 @@ const generateImages = async ({ text, style }: generateImagesProps) => {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify(requestBody),
-    }
+    },
   );
 
   if (!response.ok) {
     throw new Error(`Non-200 response: ${await response.text()}`);
   }
 
- const responseJSON = await response.json();
-
-  const generatedImageBase64 = responseJSON.artifacts[0].base64;
-  const generatedImageURL = `data:image/png;base64,${generatedImageBase64}`;
+  const responseJSON = await response.json();
+  const generatedImageURL = {
+    base64: `data:image/png;base64,${responseJSON.artifacts[0].base64}`,
+  };
 
   return generatedImageURL;
 };
-
-export default generateImages;

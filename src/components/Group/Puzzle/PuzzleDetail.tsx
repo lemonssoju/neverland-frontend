@@ -170,7 +170,7 @@ const DetailSection = ({
     const contentArray: string[] = puzzle.puzzlePieces.map(
       item => item.puzzlePieceText,
     );
-    handleResizeImage();
+    puzzle.puzzleImage && handleResizeImage();
     setImageStyleModal(false);
     setPuzzleTextList([...contentArray, puzzle.content]);
     setCreateModal(true);
@@ -179,7 +179,7 @@ const DetailSection = ({
   return (
     <>
       <ImageBackground
-        source={{ uri: puzzle.puzzleImage }}
+        source={{ uri: puzzle.puzzleImage || 'https://ifh.cc/g/wKYSNB.png'}}
         style={{ width: '100%', height: 300 }}
         imageStyle={{ width: '100%', height: 300 }}>
         <View
