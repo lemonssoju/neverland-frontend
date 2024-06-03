@@ -25,6 +25,8 @@ import {
   removeAccessToken,
   removeRefreshToken,
 } from '../../../services/storage';
+import { userState } from '../../../recoil/userState';
+import { useRecoilState } from 'recoil';
 
 interface OptionProps {
   label: string;
@@ -56,10 +58,7 @@ const SettingsHome = ({
 }: StackScreenProps<SettingsStackParams, 'SettingsHome'>) => {
   const navigationToAuth =
     useNavigation<StackNavigationProp<RootStackParams>>();
-  const [user, setUser] = useState<UserProps>({
-    nickname: '곽서진',
-    profileImage: null,
-  });
+  const [user, setUser] = useRecoilState<UserProps>(userState);
   const textInputRef = useRef<TextInput | null>(null);
   const [editable, setEditable] = useState<boolean>(false);
   const request = Request();
@@ -72,17 +71,6 @@ const SettingsHome = ({
     },
   ]);
 
-  const getProfile = async () => {
-    const response = await request.get('/users/myPage');
-    setUser({
-      nickname: response.result.nickname,
-      profileImage: response.result.profileImage,
-    });
-  };
-
-  useEffect(() => {
-    getProfile();
-  }, []);
   const logout = () => {
     const logoutRequest = async () => {
       const accessToken = await getAccessToken();

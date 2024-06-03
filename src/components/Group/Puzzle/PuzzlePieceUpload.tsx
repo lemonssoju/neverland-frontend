@@ -17,6 +17,7 @@ import Request from '../../../services/requests';
 import { useRecoilState } from 'recoil';
 import { groupState } from '../../../recoil/groupState';
 import { UserProps } from '../../Home/Settings/SettingsHome';
+import { userState } from '../../../recoil/userState';
 
 export interface PuzzlePieceProps {
   nickname: string;
@@ -35,18 +36,9 @@ const SubfeedUpload = ({
   const [puzzlePiece, setPuzzlePiece] = useState<string>('');
   const request = Request();
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
-  const [user, setUser] = useState<UserProps>({
-    nickname: '',
-    profileImage: null,
-  });
-  const getMyProfile = async () => {
-    const response = await request.get('/users/myPage');
-    setUser(response.result);
-  };
-  useEffect(() => {
-    getMyProfile();
-  }, []);
+  const [user, setUser] = useRecoilState<UserProps>(userState);
   const onCreate = async () => {
+    console.log(puzzlePiece)
     const response = await request.post(
       `/groups/${groupIdx}/puzzles/${puzzleIdx}/puzzlePiece`,
       {

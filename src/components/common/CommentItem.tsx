@@ -7,6 +7,8 @@ import { Label, Body, Content, Caption } from '../../styles/GlobalText';
 import IconButton from './IconButton';
 import { UserProps } from '../Home/Settings/SettingsHome';
 import Request from '../../services/requests';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../recoil/userState';
 
 export interface CommentProps {
   writer: string;
@@ -25,17 +27,7 @@ interface CommentItemProps {
 const CommentItem = ({ comment, onEdit, onDelete }: CommentItemProps) => {
   const { writer, createdDate, content, profileImage, commentIdx } = comment;
   const request = Request();
-  const [user, setUser] = useState<UserProps>({
-    nickname: '',
-    profileImage: null,
-  });
-  const getMyProfile = async () => {
-    const response = await request.get('/users/myPage');
-    setUser(response.result);
-  };
-  useEffect(() => {
-    getMyProfile();
-  }, []);
+  const [user, setUser] = useRecoilState<UserProps>(userState);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
   return (
     <View
