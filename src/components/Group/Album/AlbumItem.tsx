@@ -48,7 +48,7 @@ export const AlbumTimeItem = ({
         padding: 10,
       }}>
       <Content style={{ lineHeight: 14 }}>
-        {puzzleDate.split('.')[1] + '/' + puzzleDate.split('.')[2]}
+        {puzzleDate.split('-')[1] + '/' + puzzleDate.split('-')[2]}
       </Content>
       {!isLast && (
         <View

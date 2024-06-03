@@ -17,20 +17,24 @@ const Map = ({ navigation, places }: MapProps) => {
         longitudeDelta: 4,
       }}
       zoomEnabled={true}>
-      {places.map((marker: AlbumLocationProps, index: number) => (
-        <Marker
-          key={index}
-          coordinate={{
-            latitude: parseFloat(marker.x),
-            longitude: parseFloat(marker.y),
-          }}>
-          <AlbumPlaceItem
-            navigation={navigation}
-            image={marker.albumImage}
-            albumIdx={marker.albumIdx}
-          />
-        </Marker>
-      ))}
+      {places.map((marker: AlbumLocationProps, index: number) => {
+        const latitude = parseFloat(marker.y);
+        const longitude = parseFloat(marker.x);
+        return (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude,
+              longitude,
+            }}>
+            <AlbumPlaceItem
+              navigation={navigation}
+              image={'https://ifh.cc/g/9zkq09.jpg'}
+              albumIdx={marker.albumIdx}
+            />
+          </Marker>
+        );
+      })}
     </MapView>
   );
 };

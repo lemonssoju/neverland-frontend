@@ -14,21 +14,21 @@ interface CommentInputProps {
   comment: string;
   setComment: Dispatch<SetStateAction<string>>;
   onPress: () => void;
-  onFocus?: () => void;
+  focusInput: boolean;
 }
 
 const CommentInput = ({
   comment,
   setComment,
   onPress,
-  onFocus,
+  focusInput,
 }: CommentInputProps) => {
   const inputRef = useRef<TextInput>(null);
   useEffect(() => {
-    if (onFocus) {
+    if (focusInput) {
       inputRef.current?.focus();
     }
-  }, [onFocus]);
+  }, [focusInput]);
   return (
     <View
       style={{

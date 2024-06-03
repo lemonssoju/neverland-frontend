@@ -76,7 +76,7 @@ const DetailSection = ({
           style={{
             height: 9,
             backgroundColor: MIDPURPLE,
-            width: 18 * (album.title.length + 1),
+            width: 22 * (album.title.length + 1),
             position: 'absolute',
             top: 45,
             left: 20,
@@ -99,7 +99,8 @@ const DetailSection = ({
             }}>
             <MarkerIcon width={20} height={20} color={BLACK} />
             <Emphasis
-              style={{ fontSize: 20, marginLeft: 5, fontWeight: '600' }}>
+              numberOfLines={1}
+              style={{ fontSize: 20, marginLeft: 5, fontWeight: '600', width: '70%' }}>
               {album.location}
             </Emphasis>
           </View>
@@ -245,40 +246,41 @@ const AlbumDetail = ({
   const albumIdx = route.params.albumIdx;
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const [album, setAlbum] = useState<AlbumDetailProps>({
-    puzzleIdx: 1,
-    title: '작년 여름 제주에서',
-    puzzleDate: '2023.08.21',
-    location: '제주시 한림읍',
-    memberList: ['지소민', '김중현', '곽서진', '한서연'],
+    puzzleIdx: 0,
+    title: '',
+    puzzleDate: '',
+    location: '',
+    memberList: [],
     albumImage: '',
     description:
-      '작년 여름에 우리 제주도 여행했던 거 기억나? 맛집도 잔뜩 가고 바다에서 수영도 하고! 저녁에 본 핑크 노을은 진짜 예술이었지~ 같이 했던 그 추억들 너무 소중해! 이번 여름에도 같이 여행 가자~',
+      '',
     commentList: [
       {
-        commentIdx: 1,
-        writer: '곽서진',
-        createdDate: '2024.05.24',
-        content: '나 오랜만에 이거 보러 다시 왔잖아',
+        commentIdx: 0,
+        writer: '',
+        createdDate: '',
+        content: '',
         profileImage:
-          'https://dimg.donga.com/wps/NEWS/IMAGE/2023/06/22/119900215.1.jpg',
+          '',
       },
     ],
   });
   const [comment, setComment] = useState<string>('');
-  const [refreshing, setRefresing] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const getAlbumDetail = async () => {
     const response = await request.get(
       `/groups/${groupIdx}/albums/${albumIdx}`,
     );
+    console.log(response.result)
     if (response.isSuccess) {
       setAlbum(response.result);
-      setRefresing(false);
+      setRefreshing(false);
     }
   };
 
   useEffect(() => {
-    // getAlbumDetail();
+    getAlbumDetail();
   }, [refreshing]);
 
   useEffect(() => {
@@ -298,16 +300,18 @@ const AlbumDetail = ({
         Alert.alert('댓글이 수정되었습니다.');
         setCommentIdx(0);
         setComment('');
-        setRefresing(true);
+        setRefreshing(true);
       }
     } else {
+      console.log(albumIdx, comment)
       const response = await request.post('/comments', {
         albumIdx: albumIdx,
         content: comment,
       });
       if (response.isSuccess) {
         Alert.alert('댓글이 등록되었습니다.');
-        setRefresing(true);
+        setComment('');
+        setRefreshing(true);
       }
     }
   };
@@ -320,7 +324,7 @@ const AlbumDetail = ({
       );
       if (response.isSuccess) {
         Alert.alert('댓글이 삭제되었습니다.');
-        setRefresing(true);
+        setRefreshing(true);
       }
     };
     Alert.alert(
@@ -366,7 +370,7 @@ const AlbumDetail = ({
                     comment={comment}
                     setComment={setComment}
                     onPress={onComment}
-                    onFocus={() => setFocusInput(true)}
+                    focusInput={focusInput}
                   />
                 </View>
               </>
