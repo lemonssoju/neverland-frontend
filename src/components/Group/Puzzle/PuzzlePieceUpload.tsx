@@ -38,7 +38,8 @@ const SubfeedUpload = ({
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const [user, setUser] = useRecoilState<UserProps>(userState);
   const onCreate = async () => {
-    console.log(puzzlePiece)
+    console.log(puzzlePiece);
+    console.log(groupIdx, puzzleIdx);
     const response = await request.post(
       `/groups/${groupIdx}/puzzles/${puzzleIdx}/puzzlePiece`,
       {
@@ -73,11 +74,7 @@ const SubfeedUpload = ({
         />
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
-            source={
-              user.profileImage
-                ? { uri: user.profileImage }
-                : require('../../../assets/Puzzle.png')
-            }
+            source={{ uri: user.profileImage! }}
             style={{ width: 32, height: 32, borderRadius: 180, marginRight: 5 }}
           />
           <Label>{user.nickname}</Label>

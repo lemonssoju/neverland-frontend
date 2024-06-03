@@ -80,19 +80,25 @@ const GroupList = ({
   const { width, height } = Dimensions.get('window');
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   const [groupCode, setGroupCode] = useState<string>('');
-  const [group, setGroup] = useState<GroupProps[]>([{
-    admin: '',
-    groupIdx: 0,
-    groupImage: '',
-    memberCount: 0,
-    name: '',
-    recentUpdate: '',
-    startYear: '',
-  }]);
+  const [group, setGroup] = useState<GroupProps[]>([
+    {
+      admin: '',
+      groupIdx: 0,
+      groupImage: '',
+      memberCount: 0,
+      name: '',
+      recentUpdate: '',
+      startYear: '',
+    },
+  ]);
   const [user, setUser] = useRecoilState<UserProps>(userState);
   const getMyProfile = async () => {
     const response = await request.get('/users/myPage');
-    setUser(response.result);
+    setUser({
+      nickname: response.result.nickname,
+      profileImage:
+        response.result.profileImage || 'https://ifh.cc/g/wKYSNB.png',
+    });
   };
   useEffect(() => {
     getMyProfile();
@@ -102,13 +108,14 @@ const GroupList = ({
       Alert.alert('빈칸을 채워주세요!');
     } else {
       const response = await request.post('/groups/join', {
-        joinCode: groupCode
+        joinCode: groupCode,
       });
-      console.log(response, 're')
-      if(response.isSuccess) {
+      if (response.isSuccess) {
         setInviteVisible(false);
-        console.log(response.result)
-        navigationToTab.navigate('GroupTab', { groupIdx: response.result.groupIdx});
+        console.log(response.result);
+        navigationToTab.navigate('GroupTab', {
+          groupIdx: response.result.groupIdx,
+        });
       } else {
         Alert.alert('그룹 입장에 실패했습니다. 코드를 다시 확인해주세요.');
       }

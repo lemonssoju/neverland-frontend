@@ -108,13 +108,7 @@ const SettingsHome = ({
       <View style={{ padding: 20 }}>
         <View style={{ alignItems: 'center', marginBottom: 70 }}>
           <Image
-            source={
-              photo[0].uri
-                ? { uri: photo[0].uri }
-                : user.profileImage
-                ? { uri: user.profileImage }
-                : require('../../../assets/Puzzle.png')
-            }
+            source={{ uri: photo[0].uri || user.profileImage! }}
             style={{
               width: 140,
               height: 140,
@@ -144,7 +138,7 @@ const SettingsHome = ({
             />
             <Title style={{ letterSpacing: -0.2, fontWeight: '500' }}>님</Title>
             <IconButton
-              style={{ position: 'absolute', left: 80}}
+              style={{ position: 'absolute', left: 80 }}
               onPress={() => {
                 editable
                   ? setEditable(false)
