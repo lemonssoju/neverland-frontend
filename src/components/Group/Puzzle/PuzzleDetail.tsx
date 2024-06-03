@@ -59,7 +59,7 @@ import { groupState } from '../../../recoil/groupState';
 import { userState } from '../../../recoil/userState';
 import { UserProps } from '../../Home/Settings/SettingsHome';
 import { useFocusEffect } from '@react-navigation/native';
-import ImageResizer from 'react-native-image-resizer'
+import ImageResizer from 'react-native-image-resizer';
 
 interface PuzzleDetailProps extends PuzzleItemProps {
   content: string;
@@ -70,6 +70,7 @@ interface PuzzleDetailProps extends PuzzleItemProps {
   writeCount: number;
   isWriter: boolean;
   hasWrite: boolean;
+  hasAlbum: boolean;
   puzzlePieces: PuzzlePieceProps[];
 }
 const { width, height } = Dimensions.get('window');
@@ -86,14 +87,16 @@ const DetailSection = ({
   const [user, setUser] = useRecoilState<UserProps>(userState);
 
   let isPuzzleComplete = puzzle.memberCount + 1 === puzzle.writeCount;
-  let puzzleButtonEnabled = puzzle.isWriter
-    ? isPuzzleComplete
-      ? true
+  let puzzleButtonEnabled = !puzzle.hasAlbum
+    ? puzzle.isWriter
+      ? isPuzzleComplete
+        ? true
+        : false
+      : puzzle.memberNicknameList.includes(user.nickname)
+      ? puzzle.hasWrite
+        ? false
+        : true
       : false
-    : puzzle.memberNicknameList.includes(user.nickname)
-    ? puzzle.hasWrite
-      ? false
-      : true
     : false;
   const request = Request();
   const onDelete = () => {
@@ -411,6 +414,7 @@ const PuzzleDetail = ({
     memberImageList: [],
     isWriter: false,
     hasWrite: false,
+    hasAlbum: false,
     memberCount: 0,
     writeCount: 0,
     puzzleIdx: 0,
