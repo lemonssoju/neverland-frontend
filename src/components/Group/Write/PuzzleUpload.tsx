@@ -287,7 +287,7 @@ const PuzzleUpload = ({
             keyExtractor={item => item.nickname}
             renderItem={({ item, index }) => {
               const { profileImage, nickname, userIdx } = item;
-              const isInvited = puzzle.puzzlerList.includes(userIdx);
+              const isInvited = puzzle.puzzlerList!.includes(userIdx);
               const isLastItem = puzzle.puzzlerList.length - 1 === index;
               return (
                 <View

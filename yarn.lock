@@ -7046,6 +7046,11 @@ react-native-image-picker@^7.0.3:
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-7.0.3.tgz#3d0ab6965a6150e724e3c66cac8fe397097e26e7"
   integrity sha512-mFbu8AzZ8tysO7xHsQ+TmxYYJYaBCL66s4AujjgCBEAyTufm2nhjhVOw2uq1zvMDVtGoyekzCJfH3JqVmXK/3w==
 
+react-native-image-resizer@^1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/react-native-image-resizer/-/react-native-image-resizer-1.4.5.tgz#5a520aa8baa07638b1894a1d87d4d9a0945c8d58"
+  integrity sha512-33EgL3C9pyvjKpullAB6fWyD5QhoYEpNNB9rxNvUsrpAnL2mHBW7PTrUCCZudJeB6Weg7nbweKrSw1nnto5aqg==
+
 react-native-keychain@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-8.2.0.tgz#aea82df37aacbb04f8b567a8e0e6d7292025610a"

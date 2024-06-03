@@ -18,7 +18,7 @@ const createInstance = async (): Promise<AxiosInstance> => {
   const instance = axios.create({
     baseURL: API_URL,
     withCredentials: true,
-    timeout: 2000,
+    timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -68,7 +68,7 @@ const createInstance = async (): Promise<AxiosInstance> => {
       return response.data;
     },
     (err: unknown) => {
-      console.error(err)
+      console.error(err);
       return Promise.reject(err);
     },
   );
