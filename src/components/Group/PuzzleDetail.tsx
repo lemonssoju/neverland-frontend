@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import CommentInput from '../common/CommentInput';
-import CommentItem from '../common/CommentItem';
+import CommentItem, { CommentProps } from '../common/CommentItem';
 import {
   Emphasis,
   Caption,
@@ -50,7 +50,7 @@ interface PuzzleDetailProps {
   albumImage: string;
   description: string;
   puzzleIdx: number;
-  commentList: string[];
+  commentList: CommentProps[];
 }
 
 const DetailSection = ({
@@ -253,7 +253,13 @@ const PuzzleDetail = ({
     albumImage: '',
     description:
       '작년 여름에 우리 제주도 여행했던 거 기억나? 맛집도 잔뜩 가고 바다에서 수영도 하고! 저녁에 본 핑크 노을은 진짜 예술이었지~ 같이 했던 그 추억들 너무 소중해! 이번 여름에도 같이 여행 가자~',
-    commentList: []
+    commentList: [{
+      commentIdx: 1,
+      writer: '곽서진',
+      createdDate: '2024.05.24',
+      content: '나 오랜만에 이거 보러 다시 왔잖아',
+      profileImage: 'https://dimg.donga.com/wps/NEWS/IMAGE/2023/06/22/119900215.1.jpg'
+    }]
   });
   const [comment, setComment] = useState<string>('');
 
@@ -285,7 +291,7 @@ const PuzzleDetail = ({
           onPress={() => Keyboard.dismiss()}
         /> */}
           <FlatList
-            data={commentData}
+            data={puzzle.commentList}
             scrollEnabled={false}
             ListHeaderComponent={() => (
               <>
@@ -303,14 +309,10 @@ const PuzzleDetail = ({
                 </View>
               </>
             )}
-            renderItem={({ item }: any) => {
-              const { writer, date, content, profile } = item;
+            renderItem={({ item }: {item: CommentProps}) => {
               return (
                 <CommentItem
-                  writer={writer}
-                  date={date}
-                  content={content}
-                  profile={profile}
+                  comment={item}
                   onEdit={() => {}}
                   onDelete={() => {}}
                 />
