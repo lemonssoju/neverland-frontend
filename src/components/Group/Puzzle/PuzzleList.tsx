@@ -35,6 +35,7 @@ import ImageStack from '../../common/ImageStack';
 import { groupState } from '../../../recoil/groupState';
 import { useRecoilState } from 'recoil';
 import Request from '../../../services/requests';
+import { userState } from '../../../recoil/userState';
 
 // const data = [
 //   // {
@@ -75,6 +76,7 @@ import Request from '../../../services/requests';
 // ];
 
 interface GroupProfileProps {
+  admin: string;
   groupName: string;
   startYear: string;
   memberImageList: string[];
@@ -91,21 +93,14 @@ const PuzzleList = ({
   const { width, height } = Dimensions.get('window');
   const request = Request();
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
-  const [group, setGroup] = useState<GroupProfileProps>({
-    groupName: '화정동 칠공주',
-    startYear: '2008',
-    memberImageList: [
-      'https://ifh.cc/g/1CLCRY.png', // 4
-      'https://ifh.cc/g/06Q0DB.png', // 3
-      'https://ifh.cc/g/5ZL9HY.png', // 2
-      'https://ifh.cc/g/2xCPH5.png', // 1
-      'https://ifh.cc/g/2xCPH5.png', // 1
-      'https://ifh.cc/g/2xCPH5.png', // 1
-      'https://ifh.cc/g/2xCPH5.png', // 1
-    ],
-    memberCount: 7,
-    puzzleCount: 17,
-    dayCount: 16,
+  const [groupProfile, setGroupProfile] = useState<GroupProfileProps>({
+    admin: '',
+    groupName: '',
+    startYear: '',
+    memberImageList: [],
+    memberCount: 0,
+    puzzleCount: 0,
+    dayCount: 0,
   });
   const [groupPostList, setGroupPostList] = useState<PuzzleItemProps[]>([
     {
@@ -120,7 +115,7 @@ const PuzzleList = ({
   const getGroupProfile = async () => {
     const response = await request.get(`/groups/${groupIdx}/profile`);
     console.log(response);
-    setGroup(response.result);
+    setGroupProfile(response.result);
   };
   const getPuzzles = async () => {
     const response = await request.get(`/groups/${groupIdx}/puzzles`);
@@ -134,7 +129,7 @@ const PuzzleList = ({
       getPuzzles();
     }
   }, [groupIdx]);
-  const isManager: boolean = false;
+  const [user, setUser] = useRecoilState(userState);
   const [formVisible, setFormVisible] = useState<boolean>(false);
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   const [dotPressed, setDotPressed] = useState<boolean>(false);
@@ -200,7 +195,7 @@ const PuzzleList = ({
           }}>
           <HomeIcon />
         </IconButton>
-        <Title>{group.groupName}</Title>
+        <Title>{groupProfile.groupName}</Title>
         <IconButton
           onPress={() => {
             setDotPressed(!dotPressed);
@@ -209,7 +204,7 @@ const PuzzleList = ({
         </IconButton>
       </HeaderSection>
       {dotPressed &&
-        (isManager ? (
+        (groupProfile.admin === user.nickname ? (
           <EditButton
             editLabel="그룹 수정"
             deleteLabel="그룹 삭제"
@@ -240,7 +235,9 @@ const PuzzleList = ({
                 }}>
                 <HorizontalText>
                   <Body>Since </Body>
-                  <Body style={{ color: PURPLE }}>{group.startYear}</Body>
+                  <Body style={{ color: PURPLE }}>
+                    {groupProfile.startYear}
+                  </Body>
                 </HorizontalText>
                 <RoundButton onPress={onInvite}>
                   <Content style={{ fontWeight: '700', color: WHITE }}>
@@ -256,16 +253,18 @@ const PuzzleList = ({
                 }}>
                 <HorizontalText>
                   <Title>함께한 추억 </Title>
-                  <Title style={{ color: PURPLE }}>{group.puzzleCount}</Title>
+                  <Title style={{ color: PURPLE }}>
+                    {groupProfile.puzzleCount}
+                  </Title>
                   <Title>개</Title>
                 </HorizontalText>
               </View>
-              <ImageStack data={group.memberImageList} />
+              <ImageStack data={groupProfile.memberImageList} />
               {
                 <HorizontalText>
                   <Subtitle>우리가 함께한 지 </Subtitle>
                   <Subtitle style={{ color: PURPLE }}>
-                    {group.dayCount}일
+                    {groupProfile.dayCount}일
                   </Subtitle>
                   <Subtitle>된 날이에요!</Subtitle>
                 </HorizontalText>

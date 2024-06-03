@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import {
   Alert,
   Dimensions,
@@ -24,7 +30,7 @@ import LogoText from '../../assets/LogoText.svg';
 import MagicIcon from '../../assets/common/Magic.svg';
 import RocketIcon from '../../assets/common/Rocket.svg';
 import BottomButton from '../common/BottomButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
 import Input from '../common/Input';
 import IconButton from '../common/IconButton';
@@ -128,9 +134,11 @@ const GroupList = ({
     setGroup(response.result.groupList);
   };
 
-  useEffect(() => {
-    getGroupList();
-  }, [inviteVisible]);
+  useFocusEffect(
+    useCallback(() => {
+      getGroupList();
+    }, [inviteVisible]),
+  );
 
   return (
     <View style={{ flex: 1 }}>
