@@ -76,7 +76,7 @@ const DetailSection = ({
           style={{
             height: 9,
             backgroundColor: MIDPURPLE,
-            width: 18 * (album.title.length + 1),
+            width: 22 * (album.title.length + 1),
             position: 'absolute',
             top: 45,
             left: 20,
@@ -278,7 +278,7 @@ const AlbumDetail = ({
   };
 
   useEffect(() => {
-    // getAlbumDetail();
+    getAlbumDetail();
   }, [refreshing]);
 
   useEffect(() => {
@@ -301,6 +301,7 @@ const AlbumDetail = ({
         setRefresing(true);
       }
     } else {
+      console.log(albumIdx, comment)
       const response = await request.post('/comments', {
         albumIdx: albumIdx,
         content: comment,
@@ -366,7 +367,7 @@ const AlbumDetail = ({
                     comment={comment}
                     setComment={setComment}
                     onPress={onComment}
-                    onFocus={() => setFocusInput(true)}
+                    focusInput={focusInput}
                   />
                 </View>
               </>

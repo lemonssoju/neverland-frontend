@@ -24,6 +24,7 @@ const AlbumStack = ({
     useNavigation<StackNavigationProp<AlbumStackParams>>();
   useEffect(() => {
     if (route.params?.albumIdx) {
+      console.error('rrr', route.params.albumIdx)
       navigationToAlbum.push('AlbumDetail', {
         albumIdx: route.params.albumIdx,
         albumImage: route.params.albumImage,

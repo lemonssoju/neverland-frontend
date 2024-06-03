@@ -7,11 +7,7 @@ import { LIGHTPURPLE, PURPLE, WHITE } from '../../../styles/GlobalColor';
 import { useEffect, useState } from 'react';
 import { Body, Emphasis } from '../../../styles/GlobalText';
 import Map from '../../Map/Map';
-import {
-  AlbumLocationProps,
-  AlbumTimeProps,
-  AlbumTimeItem,
-} from './AlbumItem';
+import { AlbumLocationProps, AlbumTimeProps, AlbumTimeItem } from './AlbumItem';
 import { LatLng } from 'react-native-maps';
 import { useRecoilState } from 'recoil';
 import { groupState } from '../../../recoil/groupState';
@@ -153,7 +149,7 @@ const AlbumList = ({
     const response = await request.get(`/groups/${groupIdx}/albums`, {
       sortType: option,
     });
-    console.log(response);
+    console.warn('res', response.result.albumList);
     if (response.isSuccess) {
       option === 'time'
         ? setAlbumTime(response.result.albumList)
@@ -163,7 +159,7 @@ const AlbumList = ({
 
   useEffect(() => {
     getAlbumList();
-  }, []);
+  }, [option]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -210,27 +206,31 @@ const AlbumList = ({
           }) => {
             const isFirstItem = index === 0;
             var isYearChanged = false;
-            var year = item.puzzleDate.split('.')[0];
+            var year = item.puzzleDate.split('-')[0];
             if (
               !isFirstItem &&
-              year !== albumTime[index - 1].puzzleDate.split('.')[0]
+              year !== albumTime[index - 1].puzzleDate.split('-')[0]
             ) {
               isYearChanged = true;
             }
             const isLastItemOfYear =
               !isYearChanged &&
               (index === albumTime.length - 1 ||
-                year !== albumTime[index + 1].puzzleDate.split('.')[0]);
+                year !== albumTime[index + 1].puzzleDate.split('-')[0]);
             return (
               <>
-                {(isFirstItem || isYearChanged) && (
-                  <Emphasis style={{ marginLeft: 10 }}>{year}</Emphasis>
+                {item.albumImage.length == 0 && (
+                  <>
+                    {(isFirstItem || isYearChanged) && (
+                      <Emphasis style={{ marginLeft: 10 }}>{year}</Emphasis>
+                    )}
+                    <AlbumTimeItem
+                      navigation={navigation}
+                      album={item}
+                      isLast={isLastItemOfYear}
+                    />
+                  </>
                 )}
-                <AlbumTimeItem
-                  navigation={navigation}
-                  album={item}
-                  isLast={isLastItemOfYear}
-                />
               </>
             );
           }}
