@@ -4,12 +4,13 @@ import { Caption } from '../../styles/GlobalText';
 
 interface ImageStackProps {
   data: string[];
+  count: number;
 }
 
-const ImageStack = ({ data }: ImageStackProps) => {
+const ImageStack = ({ data, count }: ImageStackProps) => {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-      {data.slice(0, 3).map((item, index) => {
+      {data.map((item, index) => {
         return (
           <Image
             key={index}
@@ -22,13 +23,13 @@ const ImageStack = ({ data }: ImageStackProps) => {
               borderWidth: 0.7,
               position: 'absolute',
               top: -30,
-              right: data.length > 3 ? index * 20 + 15 : index * 20,
+              right: count > 3 ? index * 20 + 15 : index * 20,
             }}
             resizeMode={item ? 'cover' : 'contain'}
           />
         );
       })}
-      {data.length > 3 && (
+      {count > 3 && (
         <View
           style={{
             width: 25,
@@ -41,10 +42,10 @@ const ImageStack = ({ data }: ImageStackProps) => {
             alignItems: 'center',
             position: 'absolute',
             top: -24,
-            right: 0,
+            right: -10,
           }}>
           <Caption style={{ color: PURPLE, lineHeight: 15 }}>
-            +{data.length - 3}
+            +{count - 3}
           </Caption>
         </View>
       )}

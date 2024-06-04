@@ -114,12 +114,10 @@ const PuzzleList = ({
   ]);
   const getGroupProfile = async () => {
     const response = await request.get(`/groups/${groupIdx}/profile`);
-    console.log(response);
     setGroupProfile(response.result);
   };
   const getPuzzles = async () => {
     const response = await request.get(`/groups/${groupIdx}/puzzles`);
-    console.log(response.result.groupPostList);
     setGroupPostList(response.result.groupPostList);
   };
 
@@ -166,7 +164,6 @@ const PuzzleList = ({
   const onQuit = () => {
     const quitRequest = async () => {
       const response = await request.patch(`/groups/${groupIdx}/withdraw`, {});
-      console.log(response);
       if (response.isSuccess) navigationToHome.navigate('Home');
     };
     Alert.alert(
@@ -261,7 +258,7 @@ const PuzzleList = ({
                   <Title>개</Title>
                 </HorizontalText>
               </View>
-              <ImageStack data={groupProfile.memberImageList} />
+              <ImageStack data={groupProfile.memberImageList} count={groupProfile.memberCount} />
               {
                 <HorizontalText>
                   <Subtitle>우리가 함께한 지 </Subtitle>
