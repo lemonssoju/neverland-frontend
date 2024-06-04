@@ -38,8 +38,6 @@ const SubfeedUpload = ({
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
   const [user, setUser] = useRecoilState<UserProps>(userState);
   const onCreate = async () => {
-    console.log(puzzlePiece);
-    console.log(groupIdx, puzzleIdx);
     const response = await request.post(
       `/groups/${groupIdx}/puzzles/${puzzleIdx}/puzzlePiece`,
       {

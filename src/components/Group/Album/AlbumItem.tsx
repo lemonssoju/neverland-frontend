@@ -98,7 +98,7 @@ export const AlbumTimeItem = ({
           </Content>
           <View
             style={{ marginTop: 35, marginLeft: 90, alignItems: 'flex-start' }}>
-            <ImageStack data={puzzlerImageList} />
+            <ImageStack data={puzzlerImageList} count={puzzlerCount} />
           </View>
         </View>
       </TouchableOpacity>

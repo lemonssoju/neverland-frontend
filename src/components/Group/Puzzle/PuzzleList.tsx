@@ -112,14 +112,17 @@ const PuzzleList = ({
       location: '',
     },
   ]);
+  const [user, setUser] = useRecoilState(userState);
+  const [formVisible, setFormVisible] = useState<boolean>(false);
+  const [inviteVisible, setInviteVisible] = useState<boolean>(false);
+  const [dotPressed, setDotPressed] = useState<boolean>(false);
+  const [joinCode, setJoinCode] = useState<number>(0);
   const getGroupProfile = async () => {
     const response = await request.get(`/groups/${groupIdx}/profile`);
-    console.log(response);
     setGroupProfile(response.result);
   };
   const getPuzzles = async () => {
     const response = await request.get(`/groups/${groupIdx}/puzzles`);
-    console.log(response.result.groupPostList);
     setGroupPostList(response.result.groupPostList);
   };
 
@@ -129,13 +132,8 @@ const PuzzleList = ({
         getGroupProfile();
         getPuzzles();
       }
-    }, [groupIdx]),
+    }, [groupIdx, formVisible]),
   );
-  const [user, setUser] = useRecoilState(userState);
-  const [formVisible, setFormVisible] = useState<boolean>(false);
-  const [inviteVisible, setInviteVisible] = useState<boolean>(false);
-  const [dotPressed, setDotPressed] = useState<boolean>(false);
-  const [joinCode, setJoinCode] = useState<number>(0);
   const onInvite = async () => {
     const response = await request.post(`/groups/${groupIdx}/invite`, {});
     setJoinCode(response.result.joinCode);
@@ -166,7 +164,6 @@ const PuzzleList = ({
   const onQuit = () => {
     const quitRequest = async () => {
       const response = await request.patch(`/groups/${groupIdx}/withdraw`, {});
-      console.log(response);
       if (response.isSuccess) navigationToHome.navigate('Home');
     };
     Alert.alert(
@@ -210,7 +207,10 @@ const PuzzleList = ({
           <EditButton
             editLabel="그룹 수정"
             deleteLabel="그룹 삭제"
-            onEdit={() => setFormVisible(true)}
+            onEdit={() => {
+              setFormVisible(true);
+              setDotPressed(false);
+            }}
             onDelete={onDelete}
             style={{ top: 90, right: 15 }}
           />
@@ -261,7 +261,10 @@ const PuzzleList = ({
                   <Title>개</Title>
                 </HorizontalText>
               </View>
-              <ImageStack data={groupProfile.memberImageList} />
+              <ImageStack
+                data={groupProfile.memberImageList}
+                count={groupProfile.memberCount}
+              />
               {
                 <HorizontalText>
                   <Subtitle>우리가 함께한 지 </Subtitle>

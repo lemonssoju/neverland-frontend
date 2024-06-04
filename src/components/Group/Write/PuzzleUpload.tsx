@@ -14,6 +14,7 @@ import {
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
+  LayoutChangeEvent,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import styled from 'styled-components/native';
@@ -41,6 +42,7 @@ import IconButton from '../../common/IconButton';
 import Request from '../../../services/requests';
 import { groupState } from '../../../recoil/groupState';
 import { useRecoilState } from 'recoil';
+import { userState } from '../../../recoil/userState';
 
 export interface PuzzleProps {
   title: string;
@@ -50,7 +52,7 @@ export interface PuzzleProps {
   puzzlerList: number[];
 }
 
-interface PuzzlerProps {
+export interface PuzzlerProps {
   nickname: string;
   profileImage: string | null;
   userIdx: number;
@@ -63,6 +65,7 @@ const PuzzleUpload = ({
 }: StackScreenProps<PuzzleStackParams, 'PuzzleUpload'>) => {
   const puzzleIdx = route.params?.puzzleIdx;
   const [groupIdx, setGroupIdx] = useRecoilState(groupState);
+  const [user, setUser] = useRecoilState(userState);
   const [puzzle, setPuzzle] = useState<PuzzleProps>({
     title: '',
     puzzleDate: new Date(),
@@ -103,7 +106,11 @@ const PuzzleUpload = ({
     const response = await request.get(
       `/groups/${groupIdx}/puzzles/puzzlerList`,
     );
-    setPuzzlerList(response.result.puzzlerList);
+    setPuzzlerList(
+      response.result.puzzlerList.filter(
+        (puzzler: { nickname: string }) => puzzler.nickname !== user.nickname,
+      ),
+    );
   };
   const getPuzzleDetail = async () => {
     const response = await request.get(
@@ -137,58 +144,56 @@ const PuzzleUpload = ({
   }, []);
 
   const onCreate = async () => {
-    console.log('request');
-    // if (
-    //   puzzle.title.length *
-    //     puzzle.content.length *
-    //     puzzle.location.length *
-    //     puzzle.puzzlerList.length ===
-    //   0
-    // ) {
-    //   Alert.alert('빈칸을 모두 채워주세요!');
-    // } else {
-    const formData = new FormData();
-    formData.append('createPuzzleRequest', {
-      string: JSON.stringify({
-        title: puzzle.title,
-        puzzleDate: puzzle.puzzleDate
-          .toISOString()
-          .split('T')[0]
-          .substring(0, 10),
-        content: puzzle.content,
-        location: puzzle.location,
-        puzzlerList: puzzle.puzzlerList,
-      }),
-      type: 'application/json',
-    });
-    const image = {
-      uri: photo[0].uri,
-      name: photo[0].fileName,
-      type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
-    };
-    formData.append('image', image);
-    const response = await request.post(
-      `/groups/${groupIdx}/puzzles`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/formdata; boundary="boundary"',
-        },
-        transformRequest: () => {
-          return formData;
-        },
-      },
-    );
-    console.log(response)
-    if (response.isSuccess) {
-      navigation.goBack();
-      navigation.navigate('PuzzleDetail', {
-        puzzleIdx: response.result.puzzleIdx,
+    if (
+      puzzle.title.length *
+        puzzle.content.length *
+        puzzle.location.length *
+        puzzle.puzzlerList.length ===
+      0
+    ) {
+      Alert.alert('빈칸을 모두 채워주세요!');
+    } else {
+      const formData = new FormData();
+      formData.append('createPuzzleRequest', {
+        string: JSON.stringify({
+          title: puzzle.title,
+          puzzleDate: puzzle.puzzleDate
+            .toISOString()
+            .split('T')[0]
+            .substring(0, 10),
+          content: puzzle.content,
+          location: puzzle.location,
+          puzzlerList: puzzle.puzzlerList,
+        }),
+        type: 'application/json',
       });
+      const image = {
+        uri: photo[0].uri,
+        name: photo[0].fileName,
+        type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
+      };
+      formData.append('image', image);
+      const response = await request.post(
+        `/groups/${groupIdx}/puzzles`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/formdata; boundary="boundary"',
+          },
+          transformRequest: () => {
+            return formData;
+          },
+        },
+      );
+      if (response.isSuccess) {
+        navigation.goBack();
+        navigation.navigate('PuzzleDetail', {
+          puzzleIdx: response.result.puzzleIdx,
+        });
+      }
     }
-    // }
   };
-
+  const [inputHeight, setInputHeight] = useState<number>(0);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
       <CustomHeader
@@ -224,7 +229,10 @@ const PuzzleUpload = ({
             isRequired
             placeholder="제목을 작성해주세요."
           />
-          <View>
+          <View
+            onLayout={(event: LayoutChangeEvent) => {
+              setInputHeight(event.nativeEvent.layout.height);
+            }}>
             <Input
               value={
                 isDatePicked
@@ -242,7 +250,7 @@ const PuzzleUpload = ({
               onPress={() => showPicker(true)}
               style={{
                 position: 'absolute',
-                top: 27,
+                top: inputHeight / 2 - 15,
                 right: 3,
                 zIndex: 1,
               }}>
@@ -289,28 +297,24 @@ const PuzzleUpload = ({
             data={puzzlerList}
             scrollEnabled={false}
             keyExtractor={item => item.nickname}
+            style={{
+              borderWidth: 1,
+              borderRadius: 2,
+              borderColor: GRAY,
+              marginBottom: 20,
+            }}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 1, backgroundColor: GRAY }} />
+            )}
             renderItem={({ item, index }) => {
               const { profileImage, nickname, userIdx } = item;
               const isInvited = puzzle.puzzlerList!.includes(userIdx);
-              const isLastItem = puzzle.puzzlerList.length - 1 === index;
               return (
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    borderTopWidth: 1,
-                    borderStartColor: GRAY,
-                    borderStartWidth: 1,
-                    borderEndWidth: 1,
-                    borderEndColor: GRAY,
-                    borderColor: GRAY,
-                    borderBottomColor: GRAY,
-                    borderBottomWidth: isLastItem ? 1 : 0,
-                    borderTopLeftRadius: index === 0 ? 2 : 0,
-                    borderTopRightRadius: index === 0 ? 2 : 0,
-                    borderBottomLeftRadius: isLastItem ? 2 : 0,
-                    borderBottomRightRadius: isLastItem ? 2 : 0,
                     paddingHorizontal: 10,
                     paddingVertical: 5,
                   }}>
@@ -357,11 +361,8 @@ const PuzzleUpload = ({
                 </View>
               );
             }}
-            ListFooterComponent={() => (
-              <BottomButton label="등록" onPress={onCreate} />
-            )}
-            ListFooterComponentStyle={{ marginTop: 20 }}
           />
+          <BottomButton label="등록" onPress={onCreate} />
         </ScrollView>
       </KeyboardAvoidingView>
       <DatePicker

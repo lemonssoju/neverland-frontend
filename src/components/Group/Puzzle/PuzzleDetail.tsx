@@ -240,7 +240,7 @@ const DetailSection = ({
         <Label style={{ marginBottom: 5 }}>
           {puzzle.createdDate} | {puzzle.writer}
         </Label>
-        <ImageStack data={puzzle.memberImageList} />
+        <ImageStack data={puzzle.memberImageList} count={puzzle.memberCount} />
         <Subtitle style={{ marginBottom: 5 }}>{puzzle.title}</Subtitle>
         <Body style={{ marginBottom: 15 }}>{puzzle.content}</Body>
         <TouchableOpacity
