@@ -15,6 +15,8 @@ import {
   Keyboard,
   ScrollView,
   Alert,
+  Dimensions,
+  LayoutChangeEvent,
 } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import { BLACK, GRAY, WHITE } from '../../styles/GlobalColor';
@@ -36,7 +38,13 @@ interface GroupCreateProps {
   setFormVisible: Dispatch<SetStateAction<boolean>>;
 }
 
+interface GroupProps {
+  name: string;
+  date: Date;
+}
+
 const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
+  const { width, height } = Dimensions.get('screen');
   const request = Request();
   const [photo, setPhoto] = useState<Asset[]>([
     {
@@ -53,20 +61,18 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
   const [show, setShow] = useState<boolean>(false);
   const showPicker = useCallback((value: boolean) => setShow(value), []);
 
-  const onValueChange = useCallback(
-    (event: any, newDate: any) => {
-      const selectedDate = newDate || group.date;
-      showPicker(false);
-      setGroup({ ...group, date: selectedDate });
-    },
-    [group.date, showPicker],
-  );
+  const onValueChange = (event: any, newDate: any) => {
+    const selectedDate = newDate || group.date;
+    showPicker(false);
+    setGroup({...group, date:selectedDate})
+  }
 
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   const [joinCode, setJoinCode] = useState<number>(0);
 
   const getGroupData = async () => {
     const response = await request.get(`/groups/${groupIdx}/editView`);
+    console.log(response)
     if (response.isSuccess) {
       setGroup({
         name: response.result.name,
@@ -133,7 +139,6 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
           return formData;
         },
       });
-      console.log(response);
       if (response.isSuccess) {
         setJoinCode(response.result.joinCode);
         setInviteVisible(true);
@@ -165,11 +170,10 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
     };
   }, []);
 
-  // console.log(group.date.toISOString().split('T')[0]);
   var isDatePicked =
     moment(group.date).format('YYYY.MM.DD').toString() !==
     moment(new Date()).format('YYYY.MM.DD').toString();
-
+  const [inputHeight, setInputHeight] = useState<number>(0);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
       <CustomHeader label="그룹 만들기" onClose={() => setFormVisible(false)} />
@@ -181,10 +185,6 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
           flex: 1,
           justifyContent: 'space-between',
         }}>
-        <Pressable
-          style={{ width: '100%', height: '100%', position: 'absolute' }}
-          onPress={() => Keyboard.dismiss()}
-        />
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{ marginVertical: 10 }}
@@ -215,8 +215,12 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
           }}
           isRequired
           placeholder="그룹명을 입력해주세요."
+          onSubmitEditing={() => Keyboard.dismiss()}
         />
-        <View>
+        <View
+          onLayout={(event: LayoutChangeEvent) => {
+            setInputHeight(event.nativeEvent.layout.height);
+          }}>
           <Input
             value={
               isDatePicked
@@ -230,7 +234,12 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
           />
           <IconButton
             onPress={() => showPicker(true)}
-            style={{ position: 'absolute', top: 28, right: 3, zIndex: 1 }}>
+            style={{
+              position: 'absolute',
+              right: 5,
+              top: inputHeight / 2 - 15,
+              zIndex: 1,
+            }}>
             <CalendarIcon />
           </IconButton>
         </View>
@@ -242,6 +251,7 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
         <View style={{ alignItems: 'center' }}>
           <MonthPicker
             onChange={onValueChange}
+            // onChange={() => handleInputChange('date', date);}
             value={group.date}
             minimumDate={new Date(1970, 1)}
             maximumDate={new Date()}
