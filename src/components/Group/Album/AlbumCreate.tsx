@@ -107,25 +107,23 @@ const PuzzleCreate = ({
             },
           },
         );
-
-        console.log('res', response, albumIdx);
-        // if (!complete) setRealComplete(true);
-        setRealComplete(true);
+        console.log('sd upload', response);
+        if (!complete) setRealComplete(true);
       }
     } catch (err) {
       console.error(err);
     }
   };
 
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     if (!complete) {
-  //       setComplete(true);
-  //     }
-  //   }, 15000);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!complete) {
+        setComplete(true);
+      }
+    }, 15000);
 
-  //   return () => clearTimeout(timeout);
-  // }, [complete]);
+    return () => clearTimeout(timeout);
+  }, [complete]);
 
   useEffect(() => {
     sendText();
@@ -205,7 +203,7 @@ const PuzzleCreate = ({
               setCreateModal(false);
               navigationToAlbum.navigate('Album', {
                 albumIdx: albumIdx,
-                albumImage: generatedImage,
+                albumImage: realComplete ? generatedImage : 'https://ifh.cc/g/r1jL05.jpg',
               });
             }}
           />
