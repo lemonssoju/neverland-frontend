@@ -118,7 +118,6 @@ const GroupList = ({
       });
       if (response.isSuccess) {
         setInviteVisible(false);
-        console.log(response.result);
         setJoinCode('');
         navigationToTab.navigate('GroupTab', {
           groupIdx: response.result.groupIdx,
@@ -137,7 +136,7 @@ const GroupList = ({
   useFocusEffect(
     useCallback(() => {
       getGroupList();
-    }, [inviteVisible]),
+    }, [formVisible, inviteVisible]),
   );
 
   return (

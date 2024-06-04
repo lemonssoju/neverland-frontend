@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { AlbumStackParams } from '../../../pages/Group/AlbumStack';
 import styled from 'styled-components/native';
 import { LIGHTPURPLE, PURPLE, WHITE } from '../../../styles/GlobalColor';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Body, Emphasis } from '../../../styles/GlobalText';
 import Map from '../../Map/Map';
 import { AlbumLocationProps, AlbumTimeProps, AlbumTimeItem } from './AlbumItem';
@@ -12,6 +12,7 @@ import { LatLng } from 'react-native-maps';
 import { useRecoilState } from 'recoil';
 import { groupState } from '../../../recoil/groupState';
 import Request from '../../../services/requests';
+import { useFocusEffect } from '@react-navigation/native';
 
 // const data: PuzzleTimeItemProps[] = [
 //   {
@@ -100,10 +101,10 @@ const AlbumList = ({
   ]);
   const [albumLocation, setAlbumLocation] = useState<AlbumLocationProps[]>([
     {
-      albumIdx: 1,
-      albumImage: 'https://ifh.cc/g/9zkq09.jpg',
-      x: '33.4',
-      y: '126.57',
+      albumIdx: 0,
+      albumImage: '',
+      x: '',
+      y: '',
     },
   ]);
 
@@ -126,9 +127,11 @@ const AlbumList = ({
     }
   };
 
-  useEffect(() => {
-    getAlbumList();
-  }, [option]);
+  useFocusEffect(
+    useCallback(() => {
+      getAlbumList();
+    }, [option]),
+  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

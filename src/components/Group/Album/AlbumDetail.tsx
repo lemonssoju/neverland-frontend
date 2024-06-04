@@ -278,7 +278,6 @@ const AlbumDetail = ({
     const response = await request.get(
       `/groups/${groupIdx}/albums/${albumIdx}`,
     );
-    console.log(response.result);
     if (response.isSuccess) {
       setAlbum(response.result);
       setRefreshing(false);
