@@ -79,44 +79,6 @@ import Request from '../../../services/requests';
 //   },
 // ];
 
-const places: { image: string; coor: LatLng }[] = [
-  {
-    image: 'https://ifh.cc/g/GmnoTr.png', // 서울 근방
-    coor: {
-      latitude: 37.6,
-      longitude: 127.36,
-    },
-  },
-  {
-    image: 'https://ifh.cc/g/9zkq09.jpg', // 제주도
-    coor: {
-      latitude: 33.4,
-      longitude: 126.57,
-    },
-  },
-  {
-    image: 'https://ifh.cc/g/jBnKwl.png', // 충청도
-    coor: {
-      latitude: 36.4,
-      longitude: 126.9,
-    },
-  },
-  {
-    image: 'https://ifh.cc/g/PokONo.png', // 동해
-    coor: {
-      latitude: 37,
-      longitude: 129,
-    },
-  },
-  {
-    image: 'https://ifh.cc/g/hasNGY.png', // 남해
-    coor: {
-      latitude: 35.5,
-      longitude: 128.3,
-    },
-  },
-];
-
 const AlbumList = ({
   navigation,
   route,
@@ -151,14 +113,21 @@ const AlbumList = ({
     });
     if (response.isSuccess) {
       option === 'time'
-        ? setAlbumTime(response.result.albumList)
-        : setAlbumLocation(response.result.albumList);
+        ? setAlbumTime(
+            response.result.albumList.filter(
+              (album: { albumImage: string }) => album.albumImage.length > 0,
+            ),
+          )
+        : setAlbumLocation(
+            response.result.albumList.filter(
+              (album: { albumImage: string }) => album.albumImage.length > 0,
+            ),
+          );
     }
   };
 
   useEffect(() => {
     getAlbumList();
-    console.log(albumTime)
   }, [option]);
 
   return (
@@ -219,18 +188,14 @@ const AlbumList = ({
                 year !== albumTime[index + 1].puzzleDate.split('-')[0]);
             return (
               <>
-                {item.albumImage.length > 0 && (
-                  <>
-                    {(isFirstItem || isYearChanged) && (
-                      <Emphasis style={{ marginLeft: 10 }}>{year}</Emphasis>
-                    )}
-                    <AlbumTimeItem
-                      navigation={navigation}
-                      album={item}
-                      isLast={isLastItemOfYear}
-                    />
-                  </>
+                {(isFirstItem || isYearChanged) && (
+                  <Emphasis style={{ marginLeft: 10 }}>{year}</Emphasis>
                 )}
+                <AlbumTimeItem
+                  navigation={navigation}
+                  album={item}
+                  isLast={isLastItemOfYear}
+                />
               </>
             );
           }}
