@@ -52,7 +52,7 @@ export interface PuzzleProps {
   puzzlerList: number[];
 }
 
-interface PuzzlerProps {
+export interface PuzzlerProps {
   nickname: string;
   profileImage: string | null;
   userIdx: number;

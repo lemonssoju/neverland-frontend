@@ -32,6 +32,7 @@ import moment from 'moment';
 import IconButton from '../common/IconButton';
 import Request from '../../services/requests';
 import ShareModal from '../common/ShareModal';
+import { PuzzlerProps } from '../Group/Write/PuzzleUpload';
 
 interface GroupCreateProps {
   groupIdx?: number;
@@ -41,6 +42,7 @@ interface GroupCreateProps {
 interface GroupProps {
   name: string;
   date: Date;
+  memberList: PuzzlerProps[];
 }
 
 const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
@@ -54,9 +56,10 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
       uri: '',
     },
   ]);
-  const [group, setGroup] = useState({
+  const [group, setGroup] = useState<GroupProps>({
     name: '',
     date: new Date(),
+    memberList: [],
   });
   const [show, setShow] = useState<boolean>(false);
   const showPicker = useCallback((value: boolean) => setShow(value), []);
@@ -64,17 +67,17 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
   const onValueChange = (event: any, newDate: any) => {
     const selectedDate = newDate || group.date;
     showPicker(false);
-    setGroup({...group, date:selectedDate})
-  }
+    setGroup({ ...group, date: selectedDate });
+  };
 
   const [inviteVisible, setInviteVisible] = useState<boolean>(false);
   const [joinCode, setJoinCode] = useState<number>(0);
 
   const getGroupData = async () => {
     const response = await request.get(`/groups/${groupIdx}/editView`);
-    console.log(response)
     if (response.isSuccess) {
       setGroup({
+        ...group,
         name: response.result.name,
         date: new Date(response.result.startDate),
       });
@@ -89,62 +92,100 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
     }
   };
 
+  const getPuzzler = async () => {
+    const response = await request.get(
+      `/groups/${groupIdx}/puzzles/puzzlerList`,
+    );
+    setGroup({
+      ...group,
+      memberList: response.result.puzzlerList.map(
+        (item: { userIdx: number }) => item.userIdx,
+      ),
+    });
+  };
+
   useEffect(() => {
-    if (groupIdx) getGroupData();
+    if (groupIdx) {
+      getGroupData();
+      getPuzzler();
+    }
   }, [groupIdx]);
 
   const onCreate = async () => {
     if (group.name.length * photo[0].uri!.length === 0) {
       Alert.alert('빈칸을 모두 채워주세요!');
-    }
-    const formData = new FormData();
-    formData.append('image', {
-      uri: photo[0].uri,
-      name: photo[0].fileName,
-      type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
-    });
-    formData.append('createGroupRequest', {
-      string: JSON.stringify({
-        name: group.name,
-        startDate: group.date.toISOString().split('T')[0].substring(0, 7),
-      }),
-      type: 'application/json',
-    });
-    if (groupIdx) {
-      const response = await request.patch(
-        `/groups/${groupIdx}/edit`,
-        formData,
-        {
+    } else {
+      const formData = new FormData();
+      formData.append('image', {
+        uri: photo[0].uri,
+        name: photo[0].fileName,
+        type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
+      });
+      if (groupIdx) {
+        formData.append('editGroupRequest', {
+          string: JSON.stringify({
+            name: group.name,
+            startDate: group.date.toISOString().split('T')[0].substring(0, 7),
+            memberList: group.memberList,
+          }),
+          type: 'application/json',
+        });
+        const data = formData.getParts();
+        console.log(data);
+        const response = await request.patch(
+          `/groups/${groupIdx}/edit`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/formdata; boundary="boundary"',
+            },
+            transformRequest: () => {
+              return formData;
+            },
+          },
+        );
+        if (response.isSuccess) {
+          setInviteVisible(true);
+          setFormVisible(false);
+          setGroup({
+            name: '',
+            date: new Date(),
+            memberList: [],
+          });
+          setPhoto([]);
+        } else {
+          Alert.alert('그룹 수정에 실패했습니다. 다시 시도해주세요.');
+        }
+      } else {
+        formData.append('createGroupRequest', {
+          string: JSON.stringify({
+            name: group.name,
+            startDate: group.date.toISOString().split('T')[0].substring(0, 7),
+            memberList: group.memberList,
+          }),
+          type: 'application/json',
+        });
+        const response = await request.post('/groups/create', formData, {
           headers: {
             'Content-Type': 'multipart/formdata; boundary="boundary"',
           },
           transformRequest: () => {
             return formData;
           },
-        },
-      );
-      if (response.isSuccess) {
-        setJoinCode(response.result.joinCode);
-        setInviteVisible(true);
-        setFormVisible(false);
-      } else {
-        Alert.alert('그룹 수정에 실패했습니다. 다시 시도해주세요.');
-      }
-    } else {
-      const response = await request.post('/groups/create', formData, {
-        headers: {
-          'Content-Type': 'multipart/formdata; boundary="boundary"',
-        },
-        transformRequest: () => {
-          return formData;
-        },
-      });
-      if (response.isSuccess) {
-        setJoinCode(response.result.joinCode);
-        setInviteVisible(true);
-        setFormVisible(false);
-      } else {
-        Alert.alert('그룹 생성에 실패했습니다. 다시 시도해주세요.');
+        });
+        if (response.isSuccess) {
+          setJoinCode(response.result.joinCode);
+          setInviteVisible(true);
+          setFormVisible(false);
+          setGroup({
+            name: '',
+            date: new Date(),
+            memberList: [],
+          });
+          setPhoto([]);
+        } else {
+          Alert.alert('그룹 생성에 실패했습니다. 다시 시도해주세요.');
+        }
       }
     }
   };
@@ -176,7 +217,18 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
   const [inputHeight, setInputHeight] = useState<number>(0);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
-      <CustomHeader label="그룹 만들기" onClose={() => setFormVisible(false)} />
+      <CustomHeader
+        label="그룹 만들기"
+        onClose={() => {
+          setFormVisible(false);
+          setGroup({
+            name: '',
+            date: new Date(),
+            memberList: [],
+          });
+          setPhoto([]);
+        }}
+      />
       <KeyboardAvoidingView
         behavior="padding"
         keyboardVerticalOffset={10}
