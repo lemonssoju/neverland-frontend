@@ -1,5 +1,11 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { View, TextInput, TextStyle, TextInputProps } from 'react-native';
+import {
+  View,
+  TextInput,
+  TextStyle,
+  TextInputProps,
+  Keyboard,
+} from 'react-native';
 import { Caption, Label } from '../../styles/GlobalText';
 import { BLACK, GRAY, PURPLE, WHITE } from '../../styles/GlobalColor';
 
@@ -38,6 +44,8 @@ const Input = ({
         placeholderTextColor={GRAY}
         blurOnSubmit={false}
         autoCapitalize="none"
+        returnKeyType="done"
+        onSubmitEditing={() => Keyboard.dismiss()}
         style={{
           borderColor: GRAY,
           borderWidth: 1,

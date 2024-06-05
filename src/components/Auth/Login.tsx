@@ -78,8 +78,6 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
             value={form.loginId}
             onChangeText={loginId => setForm({ ...form, loginId: loginId })}
             isRequired
-            returnKeyType='done'
-            onSubmitEditing={() => Keyboard.dismiss()}
             placeholder="아이디를 입력해주세요."
           />
           <View style={{ height: 20 }} />
@@ -89,8 +87,6 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
             onChangeText={password => setForm({ ...form, password: password })}
             isRequired
             secureTextEntry
-            returnKeyType='done'
-            onSubmitEditing={() => Keyboard.dismiss()}
             placeholder="비밀번호를 입력해주세요."
           />
         </View>
