@@ -14,7 +14,7 @@ const ImageStack = ({ data, count }: ImageStackProps) => {
         return (
           <Image
             key={index}
-            source={{ uri: item || 'https://ifh.cc/g/wKYSNB.png'}}
+            source={{ uri: item || 'https://ifh.cc/g/Y9zo99.png' }}
             style={{
               width: 35,
               height: 35,
