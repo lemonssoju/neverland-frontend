@@ -58,7 +58,7 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
           justifyContent: 'space-between',
         }}>
         <Pressable
-          style={{ width: '100%', height: '100%', position: 'absolute' }}
+          style={{ width: '100%', height: '100%', position: 'absolute', flex: 1 }}
           onPress={() => Keyboard.dismiss()}
         />
         <View style={{ justifyContent: 'center', marginTop: 30 }}>

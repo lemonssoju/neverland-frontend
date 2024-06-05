@@ -74,13 +74,13 @@ const ChangePassword = ({
         style={{
           paddingHorizontal: 20,
           flex: 1,
-          justifyContent: 'space-between',
+          justifyContent: 'center',
         }}>
         <Pressable
-          style={{ width: '100%', height: '100%', position: 'absolute' }}
+          style={{ width: '100%', height: '100%', position: 'absolute', flex: 1 }}
           onPress={() => Keyboard.dismiss()}
         />
-        <View style={{ justifyContent: 'center', flex: 1 }}>
+        <View style={{ justifyContent: 'space-between'}}>
           <Input
             label="기존 비밀번호 입력"
             isRequired
