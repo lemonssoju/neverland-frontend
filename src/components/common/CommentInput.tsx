@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import { View, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import SendIcon from '../../assets/common/Send.svg';
 import { GRAY, LIGHTPURPLE, MIDPURPLE } from '../../styles/GlobalColor';
 import IconButton from './IconButton';
@@ -26,7 +26,7 @@ const CommentInput = ({
   const inputRef = useRef<TextInput>(null);
   useEffect(() => {
     if (focusInput) {
-      inputRef.current?.focus();
+      setTimeout(() => inputRef.current?.focus(), 0);
     }
   }, [focusInput]);
   return (
@@ -43,6 +43,8 @@ const CommentInput = ({
           setComment(text);
         }}
         blurOnSubmit={false}
+        returnKeyType="done"
+        onSubmitEditing={() => Keyboard.dismiss()}
         placeholder="댓글을 남겨주세요."
         placeholderTextColor={GRAY}
         style={{

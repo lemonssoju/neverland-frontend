@@ -68,7 +68,7 @@ const CommentItem = ({ comment, onEdit, onDelete }: CommentItemProps) => {
       )}
       <View style={{ flexDirection: 'row', padding: 18, alignItems: 'center' }}>
         <Image
-          source={{ uri: profileImage || 'https://ifh.cc/g/wKYSNB.png' }}
+          source={{ uri: profileImage || 'https://ifh.cc/g/Y9zo99.png' }}
           resizeMode={profileImage ? 'cover' : 'contain'}
           style={{ width: 44, height: 44, borderRadius: 180 }}
         />

@@ -2,6 +2,9 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Image,
+  Keyboard,
+  LayoutChangeEvent,
+  Pressable,
   SafeAreaView,
   TextInput,
   TouchableOpacity,
@@ -61,7 +64,7 @@ const SettingsHome = ({
   const [user, setUser] = useRecoilState<UserProps>(userState);
   const textInputRef = useRef<TextInput | null>(null);
   const [editable, setEditable] = useState<boolean>(false);
-  const [nickname, setNickname] = useState<string>('');
+  const [nickname, setNickname] = useState<string>(user.nickname);
   const request = Request();
   const [photo, setPhoto] = useState<Asset[]>([
     {
@@ -73,13 +76,18 @@ const SettingsHome = ({
   ]);
 
   const onNicknameEdit = async () => {
-    const response = await request.patch('/users/modifyNickname', {
-      nickname: nickname,
-    });
-    if (response.isSuccess) {
-      Alert.alert('닉네임이 성공적으로 변경되었습니다.');
-      setUser({ ...user, nickname: nickname });
+    if (nickname === user.nickname) {
       setEditable(false);
+      setTimeout(() => textInputRef.current?.focus(), 0);
+    } else {
+      const response = await request.patch('/users/modifyNickname', {
+        nickname: nickname,
+      });
+      if (response.isSuccess) {
+        Alert.alert('닉네임이 성공적으로 변경되었습니다.');
+        setUser({ ...user, nickname: nickname });
+        setEditable(false);
+      }
     }
   };
 
@@ -139,6 +147,7 @@ const SettingsHome = ({
       { cancelable: false },
     );
   };
+  const [textWidth, setTextWidth] = useState<number>(0);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader label="마이페이지" onBack={() => navigation.goBack()} />
@@ -172,10 +181,13 @@ const SettingsHome = ({
               }}
               editable={editable}
               autoFocus={editable}
+              onLayout={(event: LayoutChangeEvent) => {
+                setTextWidth(event.nativeEvent.layout.width);
+              }}
             />
             <Title style={{ letterSpacing: -0.2, fontWeight: '500' }}>님</Title>
             <IconButton
-              style={{ position: 'absolute', left: 80 }}
+              style={{ position: 'absolute', left: textWidth + 20, top: -5 }}
               onPress={() => {
                 editable
                   ? onNicknameEdit()
@@ -188,7 +200,7 @@ const SettingsHome = ({
               style={{
                 height: 9,
                 backgroundColor: LIGHTPURPLE,
-                width: user.nickname.length * 15,
+                width: textWidth + 15,
                 position: 'absolute',
                 top: 15,
                 zIndex: -1,

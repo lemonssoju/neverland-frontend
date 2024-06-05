@@ -3,6 +3,7 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
+  LayoutChangeEvent,
   Pressable,
   SafeAreaView,
   View,
@@ -113,6 +114,7 @@ const SignUp = ({
       }
     }
   };
+  const [inputHeight, setInputHeight] = useState<number>(0);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -145,9 +147,12 @@ const SignUp = ({
               description={
                 check.loginId && form.loginId ? '사용 가능한 아이디입니다.' : ''
               }
+              onLayout={(event: LayoutChangeEvent) => {
+                setInputHeight(event.nativeEvent.layout.height);
+              }}
             />
             <DuplicateButton
-              style={{ top: 36 }}
+              style={{ top: inputHeight - 5 }}
               onPress={() => duplicateCheck('loginId')}>
               <Caption style={{ color: WHITE, fontWeight: '700' }}>
                 중복 확인
@@ -173,7 +178,7 @@ const SignUp = ({
               }
             />
             <DuplicateButton
-              style={{ top: 36 }}
+              style={{ top: inputHeight - 5 }}
               onPress={() => duplicateCheck('nickname')}>
               <Caption style={{ color: WHITE, fontWeight: '700' }}>
                 중복 확인
@@ -188,7 +193,6 @@ const SignUp = ({
             secureTextEntry
             blurOnSubmit={false}
             placeholder="비밀번호를 입력해주세요."
-            // description="8자 이상의 알파벳 소문자, 숫자를 포함합니다."
             alert="잘못된 형식의 비밀번호입니다."
           />
           <Input

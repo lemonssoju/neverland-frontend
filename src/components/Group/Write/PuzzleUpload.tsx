@@ -321,7 +321,7 @@ const PuzzleUpload = ({
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
                       source={{
-                        uri: profileImage || 'https://ifh.cc/g/wKYSNB.png',
+                        uri: profileImage || 'https://ifh.cc/g/Y9zo99.png',
                       }}
                       style={{ width: 36, height: 36, borderRadius: 180 }}
                       resizeMode={profileImage ? 'cover' : 'contain'}

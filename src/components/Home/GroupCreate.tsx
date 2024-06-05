@@ -176,13 +176,7 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
         if (response.isSuccess) {
           setJoinCode(response.result.joinCode);
           setInviteVisible(true);
-          setFormVisible(false);
-          setGroup({
-            name: '',
-            date: new Date(),
-            memberList: [],
-          });
-          setPhoto([]);
+          // setFormVisible(false);
         } else {
           Alert.alert('그룹 생성에 실패했습니다. 다시 시도해주세요.');
         }
@@ -267,12 +261,8 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
           }}
           isRequired
           placeholder="그룹명을 입력해주세요."
-          onSubmitEditing={() => Keyboard.dismiss()}
         />
-        <View
-          onLayout={(event: LayoutChangeEvent) => {
-            setInputHeight(event.nativeEvent.layout.height);
-          }}>
+        <View>
           <Input
             value={
               isDatePicked
@@ -283,13 +273,16 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
             label="처음 만난 날"
             isRequired
             editable={false}
+            onLayout={(event: LayoutChangeEvent) => {
+              setInputHeight(event.nativeEvent.layout.height);
+            }}
           />
           <IconButton
             onPress={() => showPicker(true)}
             style={{
               position: 'absolute',
               right: 5,
-              top: inputHeight / 2 - 15,
+              top: inputHeight - 15,
               zIndex: 1,
             }}>
             <CalendarIcon />
@@ -315,7 +308,15 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
         modalVisible={inviteVisible}
         setModalVisible={setInviteVisible}
         code={joinCode}
-        setFormVisible={setFormVisible}
+        onPress={() => {
+          setGroup({
+            name: '',
+            date: new Date(),
+            memberList: [],
+          });
+          setPhoto([]);
+          setFormVisible(false);
+        }}
       />
     </SafeAreaView>
   );

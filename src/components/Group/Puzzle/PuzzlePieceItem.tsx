@@ -36,7 +36,7 @@ const PuzzlePieceItem = ({
     <View style={{ paddingTop: 10, paddingHorizontal: 15 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Image
-          source={{ uri: profileImage || 'https://ifh.cc/g/wKYSNB.png'}}
+          source={{ uri: profileImage || 'https://ifh.cc/g/Y9zo99.png' }}
           style={{ width: 32, height: 32, borderRadius: 180, marginRight: 5 }}
           resizeMode={profileImage ? 'cover' : 'contain'}
         />

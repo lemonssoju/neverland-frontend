@@ -18,7 +18,7 @@ const CustomHeader = ({ label, onBack, onClose }: CustomHeaderProps) => {
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingBottom: 10,
+        paddingVertical: 10,
         borderBottomColor: '#E6E6E6',
         borderBottomWidth: 1,
       }}>
