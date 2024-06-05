@@ -50,9 +50,12 @@ const createInstance = async (): Promise<AxiosInstance> => {
 
   instance.interceptors.response.use(
     async (response: AxiosResponse) => {
-      const { config } = response;
-      const originalRequest = config;
-      if (response.status === 401) {
+      return response.data;
+    },
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
         removeAccessToken();
         const tokenResponse = await instance.post('/users/reissue-token', {
           loginId: loginId,
@@ -60,16 +63,10 @@ const createInstance = async (): Promise<AxiosInstance> => {
         });
         setAccessToken(tokenResponse.data.result.accessToken);
         setRefreshToken(tokenResponse.data.result.refreshToken);
-        originalRequest.headers[
-          'authorization'
-        ] = `${tokenResponse.data.result.accessToken}`;
-        return axios(originalRequest);
+        instance.defaults.headers['Authorization'] = `Bearer ${tokenResponse.data.result.accessToken}`;
+        return instance(originalRequest);
       }
-      return response.data;
-    },
-    (err: unknown) => {
-      console.error(err);
-      return Promise.reject(err);
+      return Promise.reject(error);
     },
   );
 
