@@ -12,6 +12,8 @@ import {
   Pressable,
   Keyboard,
   Alert,
+  LayoutChangeEvent,
+  TextLayoutEventData,
 } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import CommentInput from '../../common/CommentInput';
@@ -62,6 +64,7 @@ const DetailSection = ({
 }) => {
   const navigationToFeed = useNavigation<StackNavigationProp<TabProps>>();
   const [showAll, setShowAll] = useState<boolean>(false);
+  const [textWidth, setTextWidth] = useState<number>(0);
   return (
     <>
       <CustomHeader
@@ -71,12 +74,19 @@ const DetailSection = ({
         }}
       />
       <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
-        <Emphasis style={{ fontSize: 32 }}>{album.title}</Emphasis>
+        <Emphasis
+          onTextLayout={(event: TextLayoutEventData) => {
+            event.nativeEvent.lines.length > 0 &&
+              setTextWidth(event.nativeEvent.lines[0].width);
+          }}
+          style={{ fontSize: 32 }}>
+          {album.title}
+        </Emphasis>
         <View
           style={{
             height: 9,
             backgroundColor: MIDPURPLE,
-            width: 22 * (album.title.length + 1),
+            width: textWidth,
             position: 'absolute',
             top: 45,
             left: 20,
@@ -358,27 +368,22 @@ const AlbumDetail = ({
           justifyContent: 'space-between',
         }}>
         <ScrollView>
+          <DetailSection album={album} navigation={navigation} />
+          <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
+            <Label style={{ color: PURPLE, marginBottom: 10, fontSize: 16 }}>
+              댓글
+            </Label>
+            <CommentInput
+              comment={comment}
+              setComment={setComment}
+              onPress={onComment}
+              focusInput={focusInput}
+            />
+          </View>
           <FlatList
             data={album.commentList}
             scrollEnabled={false}
             refreshing={refreshing}
-            ListHeaderComponent={() => (
-              <>
-                <DetailSection album={album} navigation={navigation} />
-                <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
-                  <Label
-                    style={{ color: PURPLE, marginBottom: 10, fontSize: 16 }}>
-                    댓글
-                  </Label>
-                  <CommentInput
-                    comment={comment}
-                    setComment={setComment}
-                    onPress={onComment}
-                    focusInput={focusInput}
-                  />
-                </View>
-              </>
-            )}
             renderItem={({ item }: { item: CommentProps }) => {
               return (
                 <CommentItem
