@@ -103,7 +103,7 @@ const GroupList = ({
     setUser({
       nickname: response.result.nickname,
       profileImage:
-        response.result.profileImage || 'https://ifh.cc/g/Y9zo99.png',
+        response.result.profileImage || 'https://ifh.cc/g/6oVnyL.png',
     });
   };
   useEffect(() => {

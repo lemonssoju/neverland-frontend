@@ -14,7 +14,7 @@ const ImageStack = ({ data, count }: ImageStackProps) => {
         return (
           <Image
             key={index}
-            source={{ uri: item || 'https://ifh.cc/g/Y9zo99.png' }}
+            source={{ uri: item || 'https://ifh.cc/g/6oVnyL.png' }}
             style={{
               width: 35,
               height: 35,
@@ -42,7 +42,7 @@ const ImageStack = ({ data, count }: ImageStackProps) => {
             alignItems: 'center',
             position: 'absolute',
             top: -24,
-            right: -10,
+            right: 0,
           }}>
           <Caption style={{ color: PURPLE, lineHeight: 15 }}>
             +{count - 3}

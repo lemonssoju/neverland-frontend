@@ -179,7 +179,7 @@ const DetailSection = ({
   return (
     <>
       <ImageBackground
-        source={{ uri: puzzle.puzzleImage || 'https://ifh.cc/g/Y9zo99.png' }}
+        source={{ uri: puzzle.puzzleImage || 'https://ifh.cc/g/6oVnyL.png' }}
         style={{ width: '100%', height: 300 }}
         imageStyle={{ width: '100%', height: 300 }}>
         <View
@@ -200,14 +200,14 @@ const DetailSection = ({
           <IconButton onPress={() => navigation.goBack()}>
             <ArrowIcon color={WHITE} />
           </IconButton>
-          {puzzle.isWriter && (
+          {/* {puzzle.isWriter && (
             <IconButton onPress={() => setDotPressed(!dotPressed)}>
               <DotsIcon
                 transform={[{ rotate: dotPressed ? '90deg' : '0deg' }]}
                 color={WHITE}
               />
             </IconButton>
-          )}
+          )} */}
           {dotPressed && (
             <EditButton
               editLabel="수정"
