@@ -9,14 +9,14 @@ interface ShareModalProps {
   modalVisible: boolean;
   setModalVisible: Dispatch<SetStateAction<boolean>>;
   code: number;
-  setFormVisible?: Dispatch<SetStateAction<boolean>>;
+  onPress?: () => void;
 }
 
 const ShareModal = ({
   code,
   modalVisible,
   setModalVisible,
-  setFormVisible,
+  onPress,
 }: ShareModalProps) => {
   const { width, height } = Dimensions.get('window');
   const onShare = async () => {
@@ -32,14 +32,7 @@ const ShareModal = ({
     <Modal visible={modalVisible} transparent>
       <Pressable
         style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
-        onPress={
-          setFormVisible
-            ? () => {
-                setFormVisible(false);
-                setModalVisible(false);
-              }
-            : () => setModalVisible(false)
-        }
+        onPress={onPress || (() => setModalVisible(false))}
       />
       <View
         style={{
@@ -54,9 +47,10 @@ const ShareModal = ({
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        {setFormVisible && (
+        {onPress && (
           <View>
             <Subtitle style={{ textAlign: 'center' }}>
+              그룹을 성공적으로 만들었습니다!{'\n'}
               코드를 공유해 그룹 멤버들을 초대해보세요!
             </Subtitle>
           </View>
