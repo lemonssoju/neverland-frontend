@@ -172,7 +172,7 @@ const PuzzleUpload = ({
         name: photo[0].fileName,
         type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
       };
-      formData.append('image', image);
+      if (photo[0].uri!.length > 0) formData.append('image', image);
       const response = await request.post(
         `/groups/${groupIdx}/puzzles`,
         formData,
@@ -263,6 +263,7 @@ const PuzzleUpload = ({
             <Input
               label="장소"
               isRequired
+              onPressIn={() => setPostModal(true)}
               value={puzzle.location}
               placeholder="장소를 입력해주세요."
               editable={false}
@@ -272,6 +273,7 @@ const PuzzleUpload = ({
           <TextInput
             value={puzzle.content}
             onChangeText={content => handleInputChange('content', content)}
+            autoCapitalize="none"
             style={{
               borderWidth: 1,
               borderColor: GRAY,
@@ -321,7 +323,7 @@ const PuzzleUpload = ({
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
                       source={{
-                        uri: profileImage || 'https://ifh.cc/g/Y9zo99.png',
+                        uri: profileImage || 'https://ifh.cc/g/6oVnyL.png',
                       }}
                       style={{ width: 36, height: 36, borderRadius: 180 }}
                       resizeMode={profileImage ? 'cover' : 'contain'}

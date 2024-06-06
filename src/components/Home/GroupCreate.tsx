@@ -278,7 +278,10 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
             }}
           />
           <IconButton
-            onPress={() => showPicker(true)}
+            onPress={() => {
+              Keyboard.dismiss();
+              showPicker(true);
+            }}
             style={{
               position: 'absolute',
               right: 5,
