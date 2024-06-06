@@ -10,7 +10,7 @@ interface ImageStackProps {
 const ImageStack = ({ data, count }: ImageStackProps) => {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-      {data.map((item, index) => {
+      {data.slice(0, count).reverse().map((item, index) => {
         return (
           <Image
             key={index}

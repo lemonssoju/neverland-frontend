@@ -179,7 +179,7 @@ const DetailSection = ({
   return (
     <>
       <ImageBackground
-        source={{ uri: puzzle.puzzleImage || 'https://ifh.cc/g/6oVnyL.png' }}
+        source={{ uri: puzzle.puzzleImage || 'https://ifh.cc/g/pWYfG4.png' }}
         style={{ width: '100%', height: 300 }}
         imageStyle={{ width: '100%', height: 300 }}>
         <View
