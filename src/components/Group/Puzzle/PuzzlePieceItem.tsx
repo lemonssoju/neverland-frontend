@@ -37,7 +37,12 @@ const PuzzlePieceItem = ({
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Image
           source={{ uri: profileImage || 'https://ifh.cc/g/6oVnyL.png' }}
-          style={{ width: 32, height: 32, borderRadius: 180, marginRight: 5 }}
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 180,
+            marginRight: 5,
+          }}
           resizeMode={profileImage ? 'cover' : 'contain'}
         />
         <Label>{nickname}</Label>
