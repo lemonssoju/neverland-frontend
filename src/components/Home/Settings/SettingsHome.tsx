@@ -118,21 +118,13 @@ const SettingsHome = ({
   const logout = () => {
     const logoutRequest = async () => {
       const accessToken = await getAccessToken();
-      if (accessToken) {
-        const response = await request.patch('/users/logout', {
-          Authorization: accessToken,
-        });
-        if (response.isSuccess) {
-          removeAccessToken();
-          removeRefreshToken();
-          setUser({ nickname: '', profileImage: '' });
-          navigationToAuth.replace('Auth');
-        } else {
-          Alert.alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
-        }
-      } else {
-        navigationToAuth.replace('Auth');
-      }
+      const response = await request.patch('/users/logout', {
+        Authorization: accessToken,
+      });
+      removeAccessToken();
+      removeRefreshToken();
+      setUser({ nickname: '', profileImage: '' });
+      navigationToAuth.replace('Auth');
     };
     Alert.alert(
       '알림',

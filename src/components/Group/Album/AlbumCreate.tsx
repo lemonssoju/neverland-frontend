@@ -203,7 +203,9 @@ const PuzzleCreate = ({
               setCreateModal(false);
               navigationToAlbum.navigate('Album', {
                 albumIdx: albumIdx,
-                albumImage: realComplete ? generatedImage : 'https://ifh.cc/g/r1jL05.jpg',
+                albumImage: realComplete
+                  ? generatedImage
+                  : 'https://ifh.cc/g/r1jL05.jpg',
               });
             }}
           />

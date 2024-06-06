@@ -179,8 +179,9 @@ const DetailSection = ({
   return (
     <>
       <ImageBackground
-        source={{ uri: puzzle.puzzleImage || 'https://ifh.cc/g/Y9zo99.png' }}
+        source={{ uri: puzzle.puzzleImage || 'https://ifh.cc/g/wZmLTn.png' }}
         style={{ width: '100%', height: 300 }}
+        resizeMode={puzzle.puzzleImage ? 'cover' : 'contain'}
         imageStyle={{ width: '100%', height: 300 }}>
         <View
           style={{
@@ -200,14 +201,14 @@ const DetailSection = ({
           <IconButton onPress={() => navigation.goBack()}>
             <ArrowIcon color={WHITE} />
           </IconButton>
-          {puzzle.isWriter && (
+          {/* {puzzle.isWriter && (
             <IconButton onPress={() => setDotPressed(!dotPressed)}>
               <DotsIcon
                 transform={[{ rotate: dotPressed ? '90deg' : '0deg' }]}
                 color={WHITE}
               />
             </IconButton>
-          )}
+          )} */}
           {dotPressed && (
             <EditButton
               editLabel="수정"
@@ -240,7 +241,10 @@ const DetailSection = ({
         <Label style={{ marginBottom: 5 }}>
           {puzzle.createdDate} | {puzzle.writer}
         </Label>
-        <ImageStack data={puzzle.memberImageList} count={puzzle.memberCount} />
+        <ImageStack
+          data={puzzle.memberImageList}
+          count={puzzle.memberCount + 1}
+        />
         <Subtitle style={{ marginBottom: 5 }}>{puzzle.title}</Subtitle>
         <Body style={{ marginBottom: 15 }}>{puzzle.content}</Body>
         <TouchableOpacity

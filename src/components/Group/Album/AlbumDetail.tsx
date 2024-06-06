@@ -93,7 +93,7 @@ const DetailSection = ({
             zIndex: -1,
           }}
         />
-        <View style={{ flexDirection: 'row', marginVertical: 15 }}>
+        <View style={{ marginVertical: 15 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TimeIcon />
             <Emphasis
@@ -105,7 +105,6 @@ const DetailSection = ({
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginLeft: 10,
             }}>
             <MarkerIcon width={20} height={20} color={BLACK} />
             <Emphasis

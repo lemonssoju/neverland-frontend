@@ -36,8 +36,9 @@ const PuzzleItem = ({ puzzle }: { puzzle: PuzzleItemProps }) => {
       }}
       style={{ marginLeft: 10, marginBottom: 10, width: width / 2 - 15 }}>
       <ImageBackground
-        source={{ uri: puzzleImage || 'https://ifh.cc/g/Y9zo99.png' }}
+        source={{ uri: puzzleImage || 'https://ifh.cc/g/wZmLTn.png' }}
         style={{ width: '100%', height: 250 }}
+        resizeMode={puzzleImage ? 'cover' : 'contain'}
         imageStyle={{ borderRadius: 8 }}>
         <View
           style={{

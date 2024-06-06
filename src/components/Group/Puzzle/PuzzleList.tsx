@@ -37,44 +37,6 @@ import { useRecoilState } from 'recoil';
 import Request from '../../../services/requests';
 import { userState } from '../../../recoil/userState';
 
-// const data = [
-//   // {
-//   //   writer: '지소민',
-//   //   title: '작년 여름 제주에서',
-//   //   date: '2023.08.21',
-//   //   location: '제주시 한림읍',
-//   //   rep_pic: require('../../assets/tmp/feed1.jpeg'),
-//   // },
-//   {
-//     writer: '곽서진',
-//     title: '유럽 돌려보내줘',
-//     date: '2022.06.30',
-//     location: '체코 프라하',
-//     rep_pic: require('../../assets/tmp/feed2.jpeg'),
-//   },
-//   {
-//     writer: '한서연',
-//     title: '깡총깡총 토끼',
-//     date: '2023.05.19',
-//     location: '전라북도 군산시',
-//     rep_pic: require('../../assets/tmp/feed5.png'),
-//   },
-//   {
-//     writer: '김중현',
-//     title: '목포가 여긴가',
-//     date: '2020.02.16',
-//     location: '전라남도 목포시',
-//     rep_pic: require('../../assets/tmp/feed3.jpeg'),
-//   },
-//   {
-//     writer: '이혜인',
-//     title: '벚꽃엔딩',
-//     date: '2017.04.02',
-//     location: '서울시 강동구',
-//     rep_pic: require('../../assets/tmp/feed4.jpeg'),
-//   },
-// ];
-
 interface GroupProfileProps {
   admin: string;
   groupName: string;
