@@ -36,7 +36,6 @@ import {
   PURPLE,
   WHITE,
 } from '../../../styles/GlobalColor';
-import moment from 'moment';
 import PuzzleIcon from '../../../assets/common/Puzzle.svg';
 
 import DotsIcon from '../../../assets/common/Dots.svg';
@@ -85,6 +84,7 @@ const DetailSection = ({
 }) => {
   const [dotPressed, setDotPressed] = useState<boolean>(false);
   const [user, setUser] = useRecoilState<UserProps>(userState);
+  const [groupIdx, setGroupIdx] = useRecoilState(groupState);
 
   let isPuzzleComplete = puzzle.memberCount + 1 === puzzle.writeCount;
   let puzzleButtonEnabled = !puzzle.hasAlbum
@@ -102,7 +102,7 @@ const DetailSection = ({
   const onDelete = () => {
     const deleteRequest = async () => {
       const response = await request.patch(
-        `/puzzles/${puzzle.puzzleIdx}/delete`,
+        `/groups/${groupIdx}/puzzles/${puzzle.puzzleIdx}/delete`,
         {},
       );
       if (response.isSuccess) navigation.replace('PuzzleList');
@@ -201,14 +201,14 @@ const DetailSection = ({
           <IconButton onPress={() => navigation.goBack()}>
             <ArrowIcon color={WHITE} />
           </IconButton>
-          {/* {puzzle.isWriter && (
+          {puzzle.isWriter && (
             <IconButton onPress={() => setDotPressed(!dotPressed)}>
               <DotsIcon
                 transform={[{ rotate: dotPressed ? '90deg' : '0deg' }]}
                 color={WHITE}
               />
             </IconButton>
-          )} */}
+          )}
           {dotPressed && (
             <EditButton
               editLabel="수정"
@@ -382,26 +382,6 @@ const PuzzleDetail = ({
     }, [puzzleIdx, puzzlePieceModal]),
   );
 
-  const onDelete = () => {
-    Alert.alert(
-      '알림',
-      '추억 퍼즐을 삭제하시겠습니까?',
-      [
-        {
-          text: '예',
-          onPress: () => {
-            navigation.replace('PuzzleDetail', { puzzleIdx: 1 });
-          },
-          style: 'destructive',
-        },
-        {
-          text: '아니오',
-          style: 'cancel',
-        },
-      ],
-      { cancelable: false },
-    );
-  };
   return (
     <>
       <FlatList
@@ -422,10 +402,6 @@ const PuzzleDetail = ({
               background={randomColors[index % 4]}
               isLast={puzzle.puzzlePieces.length - 1 === index}
               puzzlePiece={item}
-              onEdit={() => {
-                setPuzzlePieceModal(true);
-              }}
-              onDelete={onDelete}
             />
           );
         }}

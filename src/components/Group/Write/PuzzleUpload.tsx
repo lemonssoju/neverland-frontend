@@ -154,42 +154,82 @@ const PuzzleUpload = ({
       Alert.alert('빈칸을 모두 채워주세요!');
     } else {
       const formData = new FormData();
-      formData.append('createPuzzleRequest', {
-        string: JSON.stringify({
-          title: puzzle.title,
-          puzzleDate: puzzle.puzzleDate
-            .toISOString()
-            .split('T')[0]
-            .substring(0, 10),
-          content: puzzle.content,
-          location: puzzle.location,
-          puzzlerList: puzzle.puzzlerList,
-        }),
-        type: 'application/json',
-      });
-      const image = {
-        uri: photo[0].uri,
-        name: photo[0].fileName,
-        type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
-      };
-      if (photo[0].uri!.length > 0) formData.append('image', image);
-      const response = await request.post(
-        `/groups/${groupIdx}/puzzles`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/formdata; boundary="boundary"',
-          },
-          transformRequest: () => {
-            return formData;
-          },
-        },
-      );
-      if (response.isSuccess) {
-        navigation.goBack();
-        navigation.navigate('PuzzleDetail', {
-          puzzleIdx: response.result.puzzleIdx,
+      if (puzzleIdx) {
+        formData.append('editPuzzleRequest', {
+          string: JSON.stringify({
+            title: puzzle.title,
+            puzzleDate: puzzle.puzzleDate
+              .toISOString()
+              .split('T')[0]
+              .substring(0, 10),
+            content: puzzle.content,
+            location: puzzle.location,
+            puzzlerList: puzzle.puzzlerList,
+          }),
+          type: 'application/json',
         });
+        const image = {
+          uri: photo[0].uri,
+          name: photo[0].fileName,
+          type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
+        };
+        if (photo[0].uri!.length > 0) formData.append('newImage', image);
+        const response = await request.patch(
+          `/groups/${groupIdx}/puzzles/${puzzleIdx}/edit`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/formdata; boundary="boundary"',
+            },
+            transformRequest: () => {
+              return formData;
+            },
+          },
+        );
+        if (response.isSuccess) {
+          navigation.goBack();
+          navigation.navigate('PuzzleDetail', {
+            puzzleIdx: response.result.puzzleIdx,
+          });
+        }
+      } else {
+        formData.append('createPuzzleRequest', {
+          string: JSON.stringify({
+            title: puzzle.title,
+            puzzleDate: puzzle.puzzleDate
+              .toISOString()
+              .split('T')[0]
+              .substring(0, 10),
+            content: puzzle.content,
+            location: puzzle.location,
+            puzzlerList: puzzle.puzzlerList,
+          }),
+          type: 'application/json',
+        });
+        const image = {
+          uri: photo[0].uri,
+          name: photo[0].fileName,
+          type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
+        };
+        if (photo[0].uri!.length > 0) formData.append('image', image);
+        const response = await request.post(
+          `/groups/${groupIdx}/puzzles`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/formdata; boundary="boundary"',
+            },
+            transformRequest: () => {
+              return formData;
+            },
+          },
+        );
+        if (response.isSuccess) {
+          navigation.goBack();
+          navigation.navigate('PuzzleDetail', {
+            puzzleIdx: response.result.puzzleIdx,
+          });
+        }
       }
     }
   };
