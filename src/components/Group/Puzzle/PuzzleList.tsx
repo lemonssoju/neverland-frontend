@@ -9,6 +9,7 @@ import {
   Pressable,
   Dimensions,
   Share,
+  Platform,
 } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { PuzzleStackParams } from '../../../pages/Group/PuzzleStack';
@@ -36,6 +37,7 @@ import { groupState } from '../../../recoil/groupState';
 import { useRecoilState } from 'recoil';
 import Request from '../../../services/requests';
 import { userState } from '../../../recoil/userState';
+import { getStatusBarHeight } from 'react-native-safearea-height';
 
 interface GroupProfileProps {
   admin: string;
@@ -174,13 +176,13 @@ const PuzzleList = ({
               setDotPressed(false);
             }}
             onDelete={onDelete}
-            style={{ top: 90, right: 15 }}
+            style={{ top: Platform.OS === 'ios' ? 90 : 50, right: 15 }}
           />
         ) : (
           <EditButton
             editLabel="나가기"
             onEdit={onQuit}
-            style={{ top: 90, right: 15 }}
+            style={{ top: Platform.OS === 'ios' ? 90 : 50, right: 15 }}
           />
         ))}
 
@@ -259,7 +261,7 @@ const HeaderSection = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 5px;
+  padding: ${Platform.OS === 'ios' ? 0 : 5}px 5px;
 `;
 
 const BannerSection = styled.View`

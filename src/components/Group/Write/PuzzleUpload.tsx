@@ -43,6 +43,7 @@ import Request from '../../../services/requests';
 import { groupState } from '../../../recoil/groupState';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../../recoil/userState';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export interface PuzzleProps {
   title: string;
@@ -174,6 +175,7 @@ const PuzzleUpload = ({
           type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
         };
         if (photo[0].uri!.length > 0) formData.append('newImage', image);
+        console.log(formData)
         const response = await request.patch(
           `/groups/${groupIdx}/puzzles/${puzzleIdx}/edit`,
           formData,
@@ -242,171 +244,166 @@ const PuzzleUpload = ({
           navigation.goBack();
         }}
       />
-      <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={10}
-        style={{ flex: 1 }}>
-        <ScrollView
-          contentContainerStyle={{
-            paddingHorizontal: 25,
-            paddingBottom: 20,
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 25,
+          paddingBottom: 20,
+        }}>
+        <View style={{ alignItems: 'center', paddingVertical: 5 }}>
+          <PaintIcon style={{ marginVertical: 20 }} />
+          <Title>사진과 함께 추억 퍼즐을 생성해드려요</Title>
+          <Content style={{ color: GRAY, textAlign: 'center', fontSize: 12 }}>
+            사진이 없으시다면, 내용을 기반으로 AI 화가가 추억 퍼즐을 그려드려요.
+          </Content>
+        </View>
+        <PhotoBox>
+          <PhotoButton photo={photo} setPhoto={setPhoto} />
+        </PhotoBox>
+        <Input
+          label="제목"
+          value={puzzle.title}
+          onChangeText={title => handleInputChange('title', title)}
+          isRequired
+          placeholder="제목을 작성해주세요."
+        />
+        <View
+          onLayout={(event: LayoutChangeEvent) => {
+            setInputHeight(event.nativeEvent.layout.height);
           }}>
-          <View style={{ alignItems: 'center', paddingVertical: 5 }}>
-            <PaintIcon style={{ marginVertical: 20 }} />
-            <Title>사진과 함께 추억 퍼즐을 생성해드려요</Title>
-            <Content style={{ color: GRAY, textAlign: 'center', fontSize: 12 }}>
-              사진이 없으시다면, 내용을 기반으로 AI 화가가 추억 퍼즐을
-              그려드려요.
-            </Content>
-          </View>
-          <PhotoBox>
-            <PhotoButton photo={photo} setPhoto={setPhoto} />
-          </PhotoBox>
           <Input
-            label="제목"
-            value={puzzle.title}
-            onChangeText={title => handleInputChange('title', title)}
+            value={
+              isDatePicked
+                ? moment(puzzle.puzzleDate)
+                    .format('YYYY년 MM월 DD일')
+                    .toString()
+                : undefined
+            }
+            placeholder="추억 날짜를 입력해주세요."
+            label="날짜"
             isRequired
-            placeholder="제목을 작성해주세요."
+            editable={false}
           />
-          <View
-            onLayout={(event: LayoutChangeEvent) => {
-              setInputHeight(event.nativeEvent.layout.height);
+          <IconButton
+            onPress={() => showPicker(true)}
+            style={{
+              position: 'absolute',
+              top: inputHeight / 2 - 15,
+              right: 3,
+              zIndex: 1,
             }}>
-            <Input
-              value={
-                isDatePicked
-                  ? moment(puzzle.puzzleDate)
-                      .format('YYYY년 MM월 DD일')
-                      .toString()
-                  : undefined
-              }
-              placeholder="추억 날짜를 입력해주세요."
-              label="날짜"
-              isRequired
-              editable={false}
-            />
-            <IconButton
-              onPress={() => showPicker(true)}
-              style={{
-                position: 'absolute',
-                top: inputHeight / 2 - 15,
-                right: 3,
-                zIndex: 1,
-              }}>
-              <CalendarIcon />
-            </IconButton>
-          </View>
-          <TouchableOpacity
-            style={{ zIndex: 1 }}
-            onPress={() => setPostModal(true)}>
-            <Input
-              label="장소"
-              isRequired
-              onPressIn={() => setPostModal(true)}
-              value={puzzle.location}
-              placeholder="장소를 입력해주세요."
-              editable={false}
-            />
-          </TouchableOpacity>
-          <Label>내용 *</Label>
-          <TextInput
-            value={puzzle.content}
-            onChangeText={content => handleInputChange('content', content)}
-            autoCapitalize="none"
-            style={{
-              borderWidth: 1,
-              borderColor: GRAY,
-              borderRadius: 2,
-              padding: 10,
-              marginBottom: 20,
-              height: 150,
-              color: BLACK,
-              fontSize: 14,
-              fontFamily: 'Pretendard Variable',
-            }}
-            multiline
+            <CalendarIcon />
+          </IconButton>
+        </View>
+        <TouchableOpacity
+          style={{ zIndex: 1 }}
+          onPress={() => setPostModal(true)}>
+          <Input
+            label="장소"
+            isRequired
+            onPressIn={() => setPostModal(true)}
+            value={puzzle.location}
+            placeholder="장소를 입력해주세요."
+            editable={false}
           />
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Label>퍼즐러 * </Label>
-            <InfoIcon />
-            <Caption style={{ color: GRAY }}>
-              {' '}
-              함께 추억을 공유할 퍼즐러들을 초대하세요.
-            </Caption>
-          </View>
-          <FlatList
-            data={puzzlerList}
-            scrollEnabled={false}
-            keyExtractor={item => item.nickname}
-            style={{
-              borderWidth: 1,
-              borderRadius: 2,
-              borderColor: GRAY,
-              marginBottom: 20,
-            }}
-            ItemSeparatorComponent={() => (
-              <View style={{ height: 1, backgroundColor: GRAY }} />
-            )}
-            renderItem={({ item, index }) => {
-              const { profileImage, nickname, userIdx } = item;
-              const isInvited = puzzle.puzzlerList!.includes(userIdx);
-              return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                  }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image
-                      source={{
-                        uri: profileImage || 'https://ifh.cc/g/6oVnyL.png',
-                      }}
-                      style={{ width: 36, height: 36, borderRadius: 180 }}
-                      resizeMode={profileImage ? 'cover' : 'contain'}
-                    />
-                    <Label style={{ marginLeft: 10 }}>{nickname}</Label>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      isInvited
-                        ? handleInputChange(
-                            'puzzlerList',
-                            puzzle.puzzlerList.filter(
-                              member => member !== userIdx,
-                            ),
-                          )
-                        : handleInputChange('puzzlerList', [
-                            ...puzzle.puzzlerList,
-                            userIdx,
-                          ]);
+        </TouchableOpacity>
+        <Label>내용 *</Label>
+        <TextInput
+          value={puzzle.content}
+          onChangeText={content => handleInputChange('content', content)}
+          autoCapitalize="none"
+          textAlignVertical="top"
+          style={{
+            borderWidth: 1,
+            borderColor: GRAY,
+            borderRadius: 2,
+            padding: 10,
+            marginBottom: 20,
+            height: 150,
+            color: BLACK,
+            fontSize: 14,
+            fontFamily: 'Pretendard Variable',
+          }}
+          multiline
+        />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Label>퍼즐러 * </Label>
+          <InfoIcon />
+          <Caption style={{ color: GRAY }}>
+            {' '}
+            함께 추억을 공유할 퍼즐러들을 초대하세요.
+          </Caption>
+        </View>
+        <FlatList
+          data={puzzlerList}
+          scrollEnabled={false}
+          keyExtractor={item => item.nickname}
+          style={{
+            borderWidth: 1,
+            borderRadius: 2,
+            borderColor: GRAY,
+            marginBottom: 20,
+          }}
+          ItemSeparatorComponent={() => (
+            <View style={{ height: 1, backgroundColor: GRAY }} />
+          )}
+          renderItem={({ item, index }) => {
+            const { profileImage, nickname, userIdx } = item;
+            const isInvited = puzzle.puzzlerList.includes(userIdx);
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image
+                    source={{
+                      uri: profileImage || 'https://ifh.cc/g/6oVnyL.png',
                     }}
-                    style={{
-                      width: 80,
-                      height: 25,
-                      backgroundColor: isInvited ? LIGHTPURPLE : PURPLE,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: 12,
-                    }}>
-                    <Caption
-                      style={{
-                        color: isInvited ? PURPLE : WHITE,
-                        fontWeight: '700',
-                      }}>
-                      {isInvited ? '추가 완료' : '추가'}
-                    </Caption>
-                  </TouchableOpacity>
+                    style={{ width: 36, height: 36, borderRadius: 180 }}
+                    resizeMode={profileImage ? 'cover' : 'contain'}
+                  />
+                  <Label style={{ marginLeft: 10 }}>{nickname}</Label>
                 </View>
-              );
-            }}
-          />
-          <BottomButton label="등록" onPress={onCreate} />
-        </ScrollView>
-      </KeyboardAvoidingView>
+                <TouchableOpacity
+                  onPress={() => {
+                    isInvited
+                      ? handleInputChange(
+                          'puzzlerList',
+                          puzzle.puzzlerList.filter(
+                            member => member !== userIdx,
+                          ),
+                        )
+                      : handleInputChange('puzzlerList', [
+                          ...puzzle.puzzlerList,
+                          userIdx,
+                        ]);
+                  }}
+                  style={{
+                    width: 80,
+                    height: 25,
+                    backgroundColor: isInvited ? LIGHTPURPLE : PURPLE,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 12,
+                  }}>
+                  <Caption
+                    style={{
+                      color: isInvited ? PURPLE : WHITE,
+                      fontWeight: '700',
+                    }}>
+                    {isInvited ? '추가 완료' : '추가'}
+                  </Caption>
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+        />
+        <BottomButton label="등록" onPress={onCreate} />
+      </KeyboardAwareScrollView>
       <DatePicker
         modal
         open={show}

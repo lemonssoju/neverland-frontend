@@ -17,6 +17,7 @@ import {
   Alert,
   Dimensions,
   LayoutChangeEvent,
+  Platform,
 } from 'react-native';
 import CustomHeader from '../common/CustomHeader';
 import { BLACK, GRAY, WHITE } from '../../styles/GlobalColor';
@@ -33,6 +34,7 @@ import IconButton from '../common/IconButton';
 import Request from '../../services/requests';
 import ShareModal from '../common/ShareModal';
 import { PuzzlerProps } from '../Group/Write/PuzzleUpload';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface GroupCreateProps {
   groupIdx?: number;
@@ -223,30 +225,24 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
           setPhoto([]);
         }}
       />
-      <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={10}
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        scrollEnabled={keyboardOpen}
+        contentContainerStyle={{ justifyContent: 'space-between', flexGrow: 1 }}
         style={{
-          paddingHorizontal: 25,
-          flex: 1,
-          justifyContent: 'space-between',
+          paddingHorizontal: 20,
         }}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{ marginVertical: 10 }}
-          contentContainerStyle={{ alignItems: 'center' }}
-          scrollEnabled={keyboardOpen}>
-          <Image
-            source={require('../../assets/Puzzle2.png')}
-            style={{ width: 170, height: 180 }}
-          />
-          <Title style={{ marginTop: 15, fontWeight: '600' }}>
-            추억을 함께할 그룹을 만들어보아요!
-          </Title>
-          <Body style={{ color: GRAY }}>
-            추억 퍼즐을 맞추고 모아볼 수 있어요
-          </Body>
-        </ScrollView>
+        <Image
+          source={require('../../assets/Puzzle2.png')}
+          style={{ width: 170, height: 180, alignSelf: 'center' }}
+        />
+        <Title
+          style={{ marginTop: 15, fontWeight: '600', textAlign: 'center' }}>
+          추억을 함께할 그룹을 만들어보아요!
+        </Title>
+        <Body style={{ color: GRAY, textAlign: 'center' }}>
+          추억 퍼즐을 맞추고 모아볼 수 있어요
+        </Body>
         <PhotoBox>
           <PhotoButton photo={photo} setPhoto={setPhoto} />
         </PhotoBox>
@@ -291,15 +287,14 @@ const GroupCreate = ({ groupIdx, setFormVisible }: GroupCreateProps) => {
             <CalendarIcon />
           </IconButton>
         </View>
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: Platform.OS === 'ios' ? 20 : 0 }}>
           <BottomButton label="등록" onPress={onCreate} />
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
       {show && (
         <View style={{ alignItems: 'center' }}>
           <MonthPicker
             onChange={onValueChange}
-            // onChange={() => handleInputChange('date', date);}
             value={group.date}
             minimumDate={new Date(1970, 1)}
             maximumDate={new Date()}

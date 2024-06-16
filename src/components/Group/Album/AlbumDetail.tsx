@@ -113,7 +113,7 @@ const DetailSection = ({
                 fontSize: 20,
                 marginLeft: 5,
                 fontWeight: '600',
-                width: '70%',
+                width: '95%'
               }}>
               {album.location}
             </Emphasis>
@@ -231,28 +231,6 @@ const DetailSection = ({
     </>
   );
 };
-
-const commentData = [
-  {
-    writer: '김중현',
-    date: '2024.03.22',
-    content: '우리 사진을 이렇게 만들어주니까 이쁘네',
-    profile: 'https://ifh.cc/g/5ZL9HY.png',
-  },
-  {
-    writer: '이혜인',
-    date: '2023.04.01',
-    content: '나도 같이 갔으면 좋았을텐데ㅜㅜ',
-    profile:
-      'https://static.wikia.nocookie.net/pokemon/images/3/3f/%EC%9D%B4%EB%B8%8C%EC%9D%B4_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170405085011&path-prefix=ko',
-  },
-  {
-    writer: '곽서진',
-    date: '2024.05.23',
-    content: '나 오랜만에 이거 보러 다시 왔잖아',
-    profile: 'https://dimg.donga.com/wps/NEWS/IMAGE/2023/06/22/119900215.1.jpg',
-  },
-];
 
 const AlbumDetail = ({
   navigation,

@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,6 +8,7 @@ import {
   Keyboard,
   Alert,
   TextInput,
+  Platform,
 } from 'react-native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import CustomHeader from '../common/CustomHeader';
@@ -18,6 +19,7 @@ import { RootStackParams } from '../../../App';
 import { AuthStackParams } from '../../pages/AuthStack';
 import Request from '../../services/requests';
 import { setAccessToken, setRefreshToken } from '../../services/storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
   const navigationToTab = useNavigation<StackNavigationProp<RootStackParams>>();
@@ -44,21 +46,42 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
       }
     }
   };
-  const passwordRef = useRef<TextInput>(null)
+  const [keyboardOpen, setKeyboardOpen] = useState<boolean>(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardOpen(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardOpen(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader label="로그인" onBack={() => navigation.goBack()} />
-      <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={10}
-        style={{
-          paddingHorizontal: 20,
-          flex: 1,
-          justifyContent: 'space-between',
-        }}>
+      <KeyboardAwareScrollView
+        style={{ paddingHorizontal: 20 }}
+        enableOnAndroid
+        scrollEnabled={keyboardOpen}
+        contentContainerStyle={{ justifyContent: 'space-between', flex: 1 }}>
         <Pressable
-          style={{ width: '100%', height: '100%', position: 'absolute', flex: 1 }}
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            flex: 1,
+          }}
           onPress={() => Keyboard.dismiss()}
         />
         <View style={{ justifyContent: 'center', marginTop: 30 }}>
@@ -90,8 +113,11 @@ const Login = ({ navigation }: StackScreenProps<AuthStackParams, 'Login'>) => {
             placeholder="비밀번호를 입력해주세요."
           />
         </View>
-        <BottomButton label="로그인" onPress={login} />
-      </KeyboardAvoidingView>
+        <BottomButton
+          label="로그인"
+          onPress={login}
+        />
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

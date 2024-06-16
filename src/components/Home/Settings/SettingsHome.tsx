@@ -4,6 +4,7 @@ import {
   Image,
   Keyboard,
   LayoutChangeEvent,
+  Platform,
   Pressable,
   SafeAreaView,
   TextInput,
@@ -174,6 +175,8 @@ const SettingsHome = ({
                 fontFamily: 'Pretendard Variable',
                 fontWeight: '700',
                 fontSize: 20,
+                marginTop: Platform.OS === 'ios' ? 0 : -15,
+                color: BLACK
               }}
               editable={editable}
               autoFocus={editable}

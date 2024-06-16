@@ -4,6 +4,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   LayoutChangeEvent,
+  Platform,
   Pressable,
   SafeAreaView,
   View,
@@ -20,6 +21,7 @@ import Request from '../../services/requests';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../../../App';
 import { setAccessToken, setRefreshToken } from '../../services/storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface FormTypes {
   loginId: string;
@@ -115,23 +117,39 @@ const SignUp = ({
     }
   };
   const [inputHeight, setInputHeight] = useState<number>(0);
+  const [keyboardOpen, setKeyboardOpen] = useState<boolean>(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardOpen(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardOpen(false);
+      },
+    );
 
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader label="회원정보 입력" onBack={() => navigation.goBack()} />
-      <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={10}
-        style={{
-          paddingHorizontal: 20,
-          flex: 1,
-          justifyContent: 'space-between',
-        }}>
-        <Pressable
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        scrollEnabled={keyboardOpen}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}
+        style={{ flex: 1, paddingHorizontal: 20 }}>
+        {/* <Pressable
           style={{ width: '100%', height: '100%', position: 'absolute' }}
           onPress={() => Keyboard.dismiss()}
-        />
-        <View style={{ justifyContent: 'center', flex: 1 }}>
+        /> */}
+        <InputContainer>
           <View>
             <Input
               label="아이디"
@@ -209,9 +227,9 @@ const SignUp = ({
             isAlert={!check.password}
             alert="비밀번호가 일치하지 않습니다."
           />
-        </View>
+        </InputContainer>
         <BottomButton label="가입" onPress={signup} />
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
@@ -228,4 +246,8 @@ const DuplicateButton = styled.TouchableOpacity`
   background: ${PURPLE};
 `;
 
+const InputContainer = styled.View`
+  justify-content: center;
+  flex: 1;
+`;
 export default SignUp;

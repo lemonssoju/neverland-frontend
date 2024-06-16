@@ -54,6 +54,7 @@ const Input = ({
           borderRadius: 2,
           fontSize: 14,
           color: BLACK,
+          fontFamily: 'Pretendard Variable',
         }}
         {...rest}
       />

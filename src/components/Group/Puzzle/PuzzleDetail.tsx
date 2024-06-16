@@ -18,6 +18,7 @@ import {
   Alert,
   Pressable,
   Image,
+  Platform,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import EditButton from '../../common/EditButton';
@@ -59,6 +60,7 @@ import { userState } from '../../../recoil/userState';
 import { UserProps } from '../../Home/Settings/SettingsHome';
 import { useFocusEffect } from '@react-navigation/native';
 import ImageResizer from 'react-native-image-resizer';
+import { getStatusBarHeight } from 'react-native-safearea-height';
 
 interface PuzzleDetailProps extends PuzzleItemProps {
   content: string;
@@ -176,6 +178,8 @@ const DetailSection = ({
     setCreateModal(true);
   };
 
+  const statusBarHeight = getStatusBarHeight();
+
   return (
     <>
       <ImageBackground
@@ -196,12 +200,12 @@ const DetailSection = ({
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginTop: 60,
+            marginTop: statusBarHeight
           }}>
           <IconButton onPress={() => navigation.goBack()}>
             <ArrowIcon color={WHITE} />
           </IconButton>
-          {puzzle.isWriter && (
+          {puzzle.isWriter && !puzzle.hasAlbum && (
             <IconButton onPress={() => setDotPressed(!dotPressed)}>
               <DotsIcon
                 transform={[{ rotate: dotPressed ? '90deg' : '0deg' }]}
@@ -225,7 +229,7 @@ const DetailSection = ({
         </View>
         <View
           style={{
-            marginTop: 140,
+            marginTop: 150,
             marginLeft: 10,
           }}>
           <Title style={{ color: WHITE }}>{puzzle.puzzleDate}</Title>
