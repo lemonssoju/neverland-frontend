@@ -85,6 +85,7 @@ const SubfeedUpload = ({
           placeholder={
             '추억 퍼즐 내용을 작성해 주세요.\n\n해당 퍼즐 내용을 모아 추억 퍼즐이 완성되니 신중하게 적어주세요.'
           }
+          textAlignVertical="top"
           placeholderTextColor={GRAY}
           style={{
             padding: 10,

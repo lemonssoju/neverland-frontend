@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, SafeAreaView, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, SafeAreaView, View } from 'react-native';
 import CustomHeader from '../../common/CustomHeader';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { SettingsStackParams } from '../../../pages/HomeStack';
@@ -72,7 +72,9 @@ const Withdraw = ({
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader label="회원 탈퇴" onBack={() => navigation.goBack()} />
-      <View
+      <KeyboardAvoidingView
+        behavior='padding'
+        keyboardVerticalOffset={10}
         style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 20 }}>
         <Emphasis style={{ textAlign: 'center', marginBottom: 80 }}>
           정말로 탈퇴하시겠습니까?
@@ -99,7 +101,7 @@ const Withdraw = ({
           isAlert={!check}
           alert="비밀번호가 일치하지 않습니다."
         />
-      </View>
+      </KeyboardAvoidingView>
       <View style={{ paddingHorizontal: 20 }}>
         <BottomButton label="회원 탈퇴" onPress={withdraw} />
       </View>
