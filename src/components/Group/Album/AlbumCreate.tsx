@@ -26,6 +26,7 @@ import { groupState } from '../../../recoil/groupState';
 import ImageResizer from 'react-native-image-resizer';
 import { generateImageToImage } from '../../../stable-diffusion/ImageToImage';
 import { generateTextToImage } from '../../../stable-diffusion/TextToImage';
+import { getStatusBarHeight } from 'react-native-safearea-height';
 
 interface PuzzleCreateProps {
   date: string;
@@ -129,10 +130,11 @@ const PuzzleCreate = ({
     sendText();
   }, []);
 
+  const statusBarHeight = getStatusBarHeight();
   return (
     <View style={{ backgroundColor: '#100125', flex: 1 }}>
       <IconButton
-        style={{ marginTop: 60 }}
+        style={{ marginTop: statusBarHeight }}
         onPress={() => {
           setCreateModal(false);
         }}>
@@ -140,25 +142,24 @@ const PuzzleCreate = ({
       </IconButton>
       <View
         style={{
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
           paddingHorizontal: 20,
-          paddingVertical: 10,
+          paddingVertical: 15,
           flex: 1,
         }}>
-        <View style={{ height: 80 }}>
-          {(complete || realComplete) && (
-            <>
-              <Emphasis
-                style={{ fontSize: 36, color: WHITE, textAlign: 'center' }}>
-                {date}
-              </Emphasis>
-              <Emphasis
-                style={{ fontSize: 30, color: WHITE, textAlign: 'center' }}>
-                {location}
-              </Emphasis>
-            </>
-          )}
+        <View>
+          <Emphasis
+            style={{
+              fontSize: 36,
+              color: complete || realComplete ? WHITE : 'transparent',
+              textAlign: 'center',
+            }}>
+            {date}
+          </Emphasis>
+          <Emphasis style={{ fontSize: 30, color: complete || realComplete ? WHITE : 'transparent', textAlign: 'center' }}>
+            {location}
+          </Emphasis>
         </View>
         {realComplete ? (
           <Image
@@ -167,7 +168,6 @@ const PuzzleCreate = ({
               width: 320,
               height: 360,
               borderRadius: 8,
-              marginVertical: 30,
             }}
           />
         ) : complete ? (
@@ -177,7 +177,6 @@ const PuzzleCreate = ({
               width: 320,
               height: 360,
               borderRadius: 8,
-              marginVertical: 30,
             }}
           />
         ) : (
@@ -191,12 +190,11 @@ const PuzzleCreate = ({
             repeat
           />
         )}
-        <Emphasis
-          style={{ color: WHITE, textAlign: 'center', marginBottom: 90 }}>
+        <Emphasis style={{ color: WHITE, textAlign: 'center' }}>
           AI 화가가 추억 퍼즐을{'\n'}
           {complete || realComplete ? '완성했어요!' : '완성하는 중이에요!'}
         </Emphasis>
-        {(complete || realComplete) && (
+        {(complete || realComplete) ? (
           <BottomButton
             label="구경하러 가기"
             onPress={() => {
@@ -209,7 +207,7 @@ const PuzzleCreate = ({
               });
             }}
           />
-        )}
+        ) : <View style={{height: 50}} />}
       </View>
     </View>
   );

@@ -11,6 +11,7 @@ import {
   FlatList,
   Image,
   Modal,
+  Platform,
   Pressable,
   SafeAreaView,
   View,
@@ -38,13 +39,15 @@ import Request from '../../services/requests';
 import { UserProps } from './Settings/SettingsHome';
 import { userState } from '../../recoil/userState';
 import { useRecoilState } from 'recoil';
+import { getStatusBarHeight } from 'react-native-safearea-height';
 
 const HeaderSection = ({ navigation }: { navigation: any }) => {
+  const statusBarHeight = getStatusBarHeight();
   return (
     <View
       style={{
         backgroundColor: PURPLE,
-        paddingTop: 60,
+        paddingTop: statusBarHeight,
         paddingHorizontal: 20,
         paddingBottom: 10,
       }}>
