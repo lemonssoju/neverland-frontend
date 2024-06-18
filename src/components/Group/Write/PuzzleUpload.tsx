@@ -118,19 +118,31 @@ const PuzzleUpload = ({
       `/groups/${groupIdx}/puzzles/${puzzleIdx}`,
     );
     if (response.isSuccess) {
-      const { title, puzzleDate, location, content, puzzlerList } =
+      const { title, puzzleDate, location, content, memberNicknameList } =
         response.result;
-      setPuzzle({
+
+      const currentPuzzlerList = [...puzzlerList];
+
+      const newPuzzlerList: number[] = memberNicknameList.map(
+        (nickname: string) => {
+          const existingPuzzler = currentPuzzlerList.find(
+            puzzler => puzzler.nickname === nickname,
+          );
+          return existingPuzzler?.userIdx;
+        },
+      );
+      setPuzzle(puzzle => ({
+        ...puzzle,
         title: title,
         puzzleDate: new Date(puzzleDate),
         location: location,
         content: content,
-        puzzlerList: puzzlerList,
-      });
+        puzzlerList: newPuzzlerList,
+      }));
       if (response.result.puzzleImage)
         setPhoto([
           {
-            fileName: 'group-profile',
+            fileName: 'puzzleImage',
             width: 0,
             height: 0,
             uri: response.result.puzzleImage,
@@ -141,8 +153,13 @@ const PuzzleUpload = ({
 
   useEffect(() => {
     getPuzzler();
-    if (puzzleIdx) getPuzzleDetail();
   }, []);
+
+  useEffect(() => {
+    if (puzzleIdx && puzzlerList.length > 0) {
+      getPuzzleDetail();
+    }
+  }, [puzzlerList]);
 
   const onCreate = async () => {
     if (
@@ -174,8 +191,7 @@ const PuzzleUpload = ({
           name: photo[0].fileName,
           type: photo[0].uri!.endsWith('.jpg') ? 'image/jpeg' : 'image/png',
         };
-        if (photo[0].uri!.length > 0) formData.append('newImage', image);
-        console.log(formData)
+        formData.append('newImage', image);
         const response = await request.patch(
           `/groups/${groupIdx}/puzzles/${puzzleIdx}/edit`,
           formData,
@@ -191,7 +207,7 @@ const PuzzleUpload = ({
         if (response.isSuccess) {
           navigation.goBack();
           navigation.navigate('PuzzleDetail', {
-            puzzleIdx: response.result.puzzleIdx,
+            puzzleIdx: puzzleIdx,
           });
         }
       } else {
