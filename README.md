@@ -23,19 +23,29 @@ This enhances the diversity and efficiency of the memory archiving process.
 ## 🚀 Getting Started
 ### Development
 1. Clone client repository<br>
-``` $ git clone https://github.com/lemonssoju/neverland-client.git ```
-2. Install node packages with yarn<br>
-``` $ yarn install ```
-3. Add Info.plist in ios/neverland and install pod<br>
-``` $ cd ios && pod install ```
-4. Set environment variables<br>
+```
+$ git clone https://github.com/lemonssoju/neverland-client.git
+```
+3. Install node packages with yarn or npm<br>
+```
+$ yarn install
+$ npm install --force
+```
+5. Add Info.plist in ios/neverland and install pod<br>
+```
+$ cd ios && pod install
+```
+7. Set environment variables<br>
 ```
 - .env: API_URL, STABILITY_API_KEY
 - env.d.ts
 - android/local.properties: google_map_api_key
 ```
 5. Start developing<br>
-``` $ yarn start ```
+```
+$ yarn start
+$ npm start
+```
 <br>
 
 ## 📌 System Architecture
